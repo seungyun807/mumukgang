@@ -31,8 +31,8 @@ public class HomeController {
 	//}
 
 
-	@RequestMapping(value="/chat")
-	public String viewChat() {
-		return "chat-ws";
-	}
+//	@RequestMapping(value="/chat")
+//	public String viewChat() {
+//		return "chat-ws";
+//	}
 }

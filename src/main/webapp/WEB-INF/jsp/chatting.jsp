@@ -26,10 +26,19 @@ $(function() {
 			
 			//받은 데이터
 			var content = JSON.parse(chat.body);
-			 alert(content);
+			 alert(content.chatContent);
+			 appendMessage(content.chatContent);
 			});
                             
        });
+       
+    	function appendMessage(msg) {
+    		$("#chatMessageArea").append(msg + "<br>");
+    		var chatAreaHeight = $("#chatArea").height();
+    		var maxScroll = $("#chatMessageArea").height() - chatAreaHeight;
+    		$("#chatArea").scrollTop(maxScroll);
+    	}
+    	
        function sendmsg() {
     	   var message =  $("#message").val();
     	   client.send('/app/hello/' + roomNo, {}, JSON
@@ -38,6 +47,7 @@ $(function() {
        				memberId : "${loginMember.memberId}"
 
        	}));
+    	   $("#message").val("");
 	}
     	
        $(document).ready(function() {

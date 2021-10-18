@@ -10,7 +10,7 @@ public class HomeController {
 
 	@RequestMapping(value="/home")
 	public String viewhome() {
-		return "home";
+		return "Home";
 	}
 	
 	@RequestMapping(value ="/menupick/{idx}")

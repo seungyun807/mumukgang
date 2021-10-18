@@ -25,7 +25,7 @@ public class ChatController {
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
 		chat.setSendDate(new Date());
-		System.out.println("chatContent = " + chat.getChatContent());
+		System.out.println("chatContent = " + chat);
 		
 		return chat;
 	}

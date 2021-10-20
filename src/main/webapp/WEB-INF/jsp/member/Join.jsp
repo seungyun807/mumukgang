@@ -1,11 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
       <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Join · 머먹겡</title>
 </head>
 <script src="../../js/jquery-3.6.0.js"></script>
@@ -13,17 +12,115 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <script type="text/javascript">
+var kakaojoin = false;
+var json = "";
 
-function gotoLogin() {
-	var link = "/login";
-	location.href = link;
+$(function() {
+	json = JSON.parse(sessionStorage.getItem("cast"));
+	if(json != null){
+		document.getElementById('email').value=json.email;
+		document.getElementById('email').readOnly = true;
+		sessionStorage.removeItem("cast");
+		kakaojoin = true;
+	}
+    $("#email").keyup(function() {
+    
+        //userid 를 param.
+        var userid =  $("#email").val();
+        if (userid == "") {
+        	$("#id_check").text("\u00a0");
+		}
+        else if(userid.includes("@")){
+        $.ajax({
+            type : 'GET',
+            data : {
+    			"checkId": $("#email").val()			
+    		},
+            url : "<c:url value='idcheck'/>",
+            dataType : 'json',
+            contentType: "application/json; charset=UTF-8",
+            success : function(returnData, status) {
+            	console.log(returnData);
+            	if(status == "success") {
+    				if(returnData.usedCnt > 0 ){
+    					$("#id_check").css("color", "red");
+    					$("#id_check").text("사용할수 없는 아이디입니다.");
+    				}else{
+    					$("#id_check").css("color", "blue");
+    					$("#id_check").text("사용가능한 아이디입니다.");
+    				}
+    			}else{ alert("ERROR!" + error);return;} 
+            }
+        });
+        }
+    });
+});
+
+$(function() {
+	 $("#pwconfirm").keyup(function() {
+		
+		 var pw =  $("#pw").val();
+		 var pwconfirm =  $("#pwconfirm").val();
+		 if (pw == "" || pwconfirm == "" ) {
+			 $("#pw_confirm").text("\u00a0");
+			}		 
+		 else if(pw != pwconfirm){
+	 		$("#pw_confirm").css("color", "red");
+	 		$("#pw_confirm").text("비밀번호가 일치하지 않습니다.");		
+	 	} else{
+	 		$("#pw_confirm").css("color", "blue");
+	 		$("#pw_confirm").text("비밀번호가 일치합니다.");
+	 	}
+	 });
+	 $("#pw").keyup(function() {
+		 var pw =  $("#pw").val();
+		 var pwconfirm =  $("#pwconfirm").val();
+		 if (pw == "" || pwconfirm == "" ) {
+			 $("#pw_confirm").text("\u00a0");
+			}		
+		 else if(pw != pwconfirm){
+	 		$("#pw_confirm").css("color", "red");
+	 		$("#pw_confirm").text("비밀번호가 일치하지 않습니다.");		
+	 	} else{
+	 		$("#pw_confirm").css("color", "blue");
+	 		$("#pw_confirm").text("비밀번호가 일치합니다.");
+	 	}
+	 });
+});
+
+function checkId() {
+	 const idcheck = document.getElementById('id_check')
+	 console.log(idcheck.innerText);
+	 if(idcheck.innerText == "사용가능한 아이디입니다." || kakaojoin){
+		 return true;
+	 } else {
+		 alert('사용할수 없는 아이디입니다.')
+		 return false;
+	 }
 }
 
-function gotoJoin() {
-	var link = "/Join";
-	location.href = link;
-	
+function checkPw() {
+	 const pwconfirm = document.getElementById('pw_confirm')
+	 console.log(pwconfirm.innerText);
+	 if(pwconfirm.innerText == "비밀번호가 일치합니다."){
+		 return true;
+	 } else {
+		 alert('비밀번호가 일치하지 않습니다.')
+		 return false;
+	 }
 }
+
+function checkIdPw(){
+	 console.log(checkIdPw);
+	 if(checkId()&&checkPw()){
+		 console.log(true);
+		 return true;
+	 }else{
+		 console.log(false);
+		 return false;
+	 }
+}
+
 </script>
 <style>
 
@@ -53,7 +150,7 @@ function gotoJoin() {
 }
 
 .firstdiv{
-	height: 380px;
+	height: 490px;
 	width: 400px;
 	text-align: center;
 	border: 1px solid gray;
@@ -61,27 +158,37 @@ function gotoJoin() {
 	background-color: white;
 	padding: 20px;
 }
-
 </style>
 
 <body>
+
 <div class="intro">
 
+	<form action="/join" onsubmit="return checkIdPw()" method="post">
 	<div class="firstdiv">
 		<h1>머먹겡</h1>
 		<br>
-		 <div class="form-group">
-            <input name="user_id" type="text" class="form-control" placeholder="아이디" />
+		
+		 <div class="form-group" >
+            <input name="email" id="email" type="email" class="form-control" placeholder="이메일"  />
+             <div id="id_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+
+            <input name="password" type="password" id="pw" class="form-control" placeholder="비밀번호"/>
             <br>
-            <input name="password" type="password" class="form-control" placeholder="비밀번호"/>
+            <input name="pwconfirm" type="password" id="pwconfirm" class="form-control" placeholder="비밀번호 확인"/>
+            <div id="pw_confirm" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+        	
+            <input name="nickname" id="nickname" type="text" class="form-control" placeholder="닉네임"/>
             <br>
-            <input name="password" type="password" class="form-control" placeholder="비밀번호확인"/>
+            <input name="comp_name" id="comp_name" type="text" class="form-control" placeholder="회사명" />
+  		
         </div>
+        
 		 <hr class="my-2" style="width: 90%">
 		
-		<button class="btn" onclick="gotoJoin()" style="margin-top: 5px;">회원가입</button>
+		<button type="submit" class="btn" style="margin-top: 5px;">회원가입</button>
 	</div>
-
+</form>
 	
 </div>
 

@@ -22,12 +22,12 @@ $(document).ready(function(){
 
 function gotoLogin() {
 	Kakao.Auth.authorize({
-		redirectUri: 'http://localhost/user/loginpage_kakao_callback'
+		redirectUri: 'http://localhost/loginpage_kakao_callback'
 		}); 
 }
 
 function gotoJoin() {
-	var link = "/join";
+	var link = "/joinview";
 	location.href = link;
 	
 }
@@ -35,13 +35,42 @@ function gotoJoin() {
 function loginWithKakao() {
     Kakao.Auth.login({
       success: function(authObj) {
-    	
-        alert("성공 = "+JSON.stringify(authObj))
+    	  Kakao.API.request({
+    		  url: '/v2/user/me',
+    		  success: function(result) {
+				var id = result.id;
+				var kakao_account = result.kakao_account
+				var email = kakao_account.email;
+				console.log("email = "+kakao_account.email +", gender = "+kakao_account.gender + ", age_range"+kakao_account.age_range);
+				
+				fetch('/idcheck?checkId='+email)
+				.then(function(response){
+					return response.json();
+				})
+				.then(function(myJson) {
+					console.log(JSON.stringify(myJson));
+					if(myJson.usedCnt > 0){ //존재하는 이메일 로그인 성공
+						var cast = { "email" : email };
+						sessionStorage.setItem("cast", JSON.stringify(cast));
+						var link = "/login";
+						location.href = link;
+					}
+					else { // 존재하지 않는 이메일 가입 페이지로 이동
+						var cast = { "email" : email };
+						sessionStorage.setItem("cast", JSON.stringify(cast));
+						var link = "/joinview";
+						location.href = link;
+					}
+				});
+			}
+    	  })
+        alert("성공 = "+JSON.stringify(authObj));
       },
       fail: function(err) {
         alert(JSON.stringify(err))
       },
     })
+    
   }
   
 </script>
@@ -50,13 +79,23 @@ function loginWithKakao() {
 .intro {
 	display:flex;
 	justify-content:center;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: center;
 	position:fixed;
 	height: 100%;
 	width: 100%;
 	z-index: 1;
 }
+
+.intro2 {
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:center;
+	align-items: center;
+	position:fixed;
+	width: 40%;
+}
+
 .intro::after{
 	height: 100%;
 	width: 100%;
@@ -71,7 +110,17 @@ function loginWithKakao() {
 	width: 70%;
 }
 .firstdiv{
-	height: 380px;
+	height: 350px;
+	width: 400px;
+	text-align: center;
+	border: 1px solid gray;
+	border-radius: 2em;
+	background-color: white;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+.seconddiv{
+	height: 120px;
 	width: 400px;
 	text-align: center;
 	border: 1px solid gray;
@@ -79,11 +128,37 @@ function loginWithKakao() {
 	background-color: white;
 	padding: 20px;
 }
+a {
+ 	text-decoration:none;
+	color: black;
+  }
+ a:hover {
+  	text-decoration:none;
+  	color: black;
+  	}
+  	.hr-sect {
+        display: flex;
+        flex-basis: 100%;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.35);
+        font-size: 13px;
+        margin: 8px 0px;
+      }
+      .hr-sect::before,
+      .hr-sect::after {
+        content: "";
+        flex-grow: 1;
+        background: rgba(0, 0, 0, 0.35);
+        height: 1px;
+        font-size: 0px;
+        line-height: 0px;
+        margin: 0px 16px;
+      }
 </style>
 
 <body>
 <div class="intro">
-
+	<form action="/login" method="post">
 	<div class="firstdiv">
 		<h1>머먹겡</h1>
 		<br>
@@ -93,19 +168,20 @@ function loginWithKakao() {
             <input name="password" type="password" class="form-control" placeholder="비밀번호"/>
         </div>
         <br>
-		<button class="btn btn-primary" onclick="gotoLogin()" style="margin-bottom: 5px;">로그인</button><br>
-		<p>or</p>
+		<button class="btn btn-primary" type="submit" style="margin-bottom: 5px;">로그인</button><br>
+		<div class="hr-sect">또는</div>
 		<a id="custom-login-btn" href="javascript:loginWithKakao()">
   		<img src="/images/egovframework/intro/kakaolink_btn_small.png" width="20px"/>
   		카카오톡으로 시작하기</a>
-		<br>
-		 <hr class="my-2" style="width: 90%">
-		 <p>계정이 없으신가요?</p>
+	</div>
+	</form>
+	<div class="seconddiv">
+		<p>계정이 없으신가요?</p>
 		<button class="btn" onclick="gotoJoin()">회원가입</button>
 	</div>
-
 	
 </div>
-
+	
+	
 </body>
 </html>

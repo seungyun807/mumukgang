@@ -22,8 +22,9 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		HttpSession httpSession = request.getSession();
 		
-		String loginId = (String)request.getSession().getAttribute("user");
+		String loginId = (String)request.getSession().getAttribute("email");
 		System.out.println("preHandle >>>  Controller 실행 전 실행");
+		System.out.println("loginId = " + loginId);
 		if(loginId != null) {return true;}
 		else {
 			String destUri = request.getRequestURI();
@@ -31,7 +32,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
             String dest = (destQuery == null) ? destUri : destUri+"?"+destQuery;
             request.getSession().setAttribute("dest", dest);
         
-            response.sendRedirect("/loginview.do");
+            response.sendRedirect("/intro");
             return false;
 		}
         
@@ -40,7 +41,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
     	HttpSession httpSession = request.getSession();
-    	String loginId = (String)request.getSession().getAttribute("user");
+    	String loginId = (String)request.getSession().getAttribute("email");
     	
     	//ModelMap modelMap = modelAndView.getModelMap();
 

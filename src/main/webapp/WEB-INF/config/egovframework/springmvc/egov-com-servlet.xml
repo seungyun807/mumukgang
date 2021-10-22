@@ -13,14 +13,19 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/*"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/intro"/>
+            <mvc:exclude-mapping path="/logout"/>
+            <mvc:exclude-mapping path="/join"/>
+            <mvc:exclude-mapping path="/joinview"/>
+            <mvc:exclude-mapping path="/idcheck"/> 
+            <mvc:exclude-mapping path="/kakaologin"/> 
             <!-- 
             <mvc:exclude-mapping path="/homeview.do"/>
-            <mvc:exclude-mapping path="/login.do"/>
-            <mvc:exclude-mapping path="/logout.do"/>
+            
+           
             <mvc:exclude-mapping path="/loginview.do"/>
-            <mvc:exclude-mapping path="/join.do"/>
-            <mvc:exclude-mapping path="/joinview.do"/>
-            <mvc:exclude-mapping path="/idcheck.do"/> -->
+           -->
             <bean class="egovframework.mumukgang.cmmn.web.MyInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

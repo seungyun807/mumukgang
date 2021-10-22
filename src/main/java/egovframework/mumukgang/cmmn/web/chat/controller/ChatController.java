@@ -33,7 +33,7 @@ public class ChatController {
 	@RequestMapping("/enter/chat/{roomNo}")
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model) {
 		model.addAttribute("roomNo", roomNo);
-		return "chatting";
+		return "chat/chatting";
 	}
 
 }

@@ -20,6 +20,8 @@ $(function() {
 	if(json != null){
 		document.getElementById('email').value=json.email;
 		document.getElementById('email').readOnly = true;
+		document.getElementById('pw').readOnly = true;
+		document.getElementById('pwconfirm').readOnly = true;
 		sessionStorage.removeItem("cast");
 		kakaojoin = true;
 	}

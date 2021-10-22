@@ -5,14 +5,19 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.json.Json;
+import javax.naming.spi.DirStateFactory.Result;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
 
 import egovframework.mumukgang.cmmn.web.mapper.MemberMapper;
 
@@ -22,6 +27,10 @@ public class LoginController {
 	@Resource
 	MemberMapper membermapper;
 	
+	/***
+	 * 회원가입
+	 * 
+	 */
 	@RequestMapping(value="/joinview")
 	public String viewJoin() {return "member/Join"; }
 	
@@ -29,14 +38,6 @@ public class LoginController {
 	public void Join(@RequestParam HashMap<String, Object> params) throws Exception{
 		System.out.println("/join param = " + params);
 		membermapper.UserJoin(params);
-		
-	}
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public void login(@RequestParam HashMap<String, Object> params, HttpSession session, Model model) throws Exception{
-		Json json = (Json) session.getAttribute("cast");
-		
-		System.out.println("/login param = " + json);
-		
 	}
 	
 	@RequestMapping(value="/idcheck")
@@ -49,4 +50,57 @@ public class LoginController {
 		System.out.println(result);
 		return map;
 	}
+	
+	/***
+	 * 로그인 성공
+	 * 
+	 */
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(@RequestParam HashMap<String, Object> params, HttpSession session, Model model) throws Exception{
+		Map<String, String> map = new HashMap<String, String>();
+		
+		
+		int result = membermapper.loginCheck(params);
+
+		String email = params.get("email").toString();
+		System.out.println("/login email = " + email);
+		model.addAttribute("map", map);
+		
+		if(result != 0) {
+			  session.setAttribute("email", email);
+			  map.put("userName", email);
+			  map.put("msg", "success");
+			  
+	      } else {
+	    	  System.out.println("아이디 또는 비밀번호가 일치하지 않습니다.");
+	    	  map.put("msg", "failure");
+	    	  return "forward:/intro";
+	      }
+		
+		return "forward:/home";
+	}
+	
+	/***
+	 * 카카오 로그인 성공
+	 * 
+	 */
+	@ResponseBody
+	@PostMapping(value="/kakaologin")
+	public String kakaologin(@RequestParam HashMap<String, Object> param, HttpSession session) throws Exception {
+		String email = (String)param.get("email");
+		
+		if (email != null) {
+			System.out.println("kakaologin = " + email );
+			session.setAttribute("email", email);
+			return "/home";
+		}
+		return "/intro";
+	}
+	
+	@RequestMapping(value="/logout")
+	public String logOut(HttpSession session) throws Exception{
+		session.invalidate();
+		return "redirect:/";
+	}
+	
 }

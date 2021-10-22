@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
       <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,10 +51,18 @@ function loginWithKakao() {
 				.then(function(myJson) {
 					console.log(JSON.stringify(myJson));
 					if(myJson.usedCnt > 0){ //존재하는 이메일 로그인 성공
-						var cast = { "email" : email };
-						sessionStorage.setItem("cast", JSON.stringify(cast));
-						var link = "/login";
-						location.href = link;
+						$.ajax({
+							url :'/kakaologin',
+							type : 'post',
+							dataType : 'json',
+							data : { "email" : email, 
+									"kakao" : true
+								},
+								success: function(data){
+									location.href=data;
+									} 
+								});
+
 					}
 					else { // 존재하지 않는 이메일 가입 페이지로 이동
 						var cast = { "email" : email };
@@ -101,8 +110,8 @@ function loginWithKakao() {
 	width: 100%;
 	 content: "";
 	  position: absolute;
-	  opacity:0.3;
-  background: url("/images/egovframework/intro/intro.png");
+	  opacity:0.45;
+  background: url("/images/egovframework/intro/intro.png") right center #f89b00;
   z-index: -1;
 }
 .form-group{
@@ -163,7 +172,7 @@ a {
 		<h1>머먹겡</h1>
 		<br>
 		 <div class="form-group">
-            <input name="user_id" type="text" class="form-control" placeholder="아이디" />
+            <input name="email" type="text" class="form-control" placeholder="아이디" />
             <br>
             <input name="password" type="password" class="form-control" placeholder="비밀번호"/>
         </div>
@@ -174,12 +183,20 @@ a {
   		<img src="/images/egovframework/intro/kakaolink_btn_small.png" width="20px"/>
   		카카오톡으로 시작하기</a>
 	</div>
+    	
 	</form>
+	
+    	<c:if test="${map.msg == 'failure'}">
+    		<script type="text/javascript">
+    			alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+    		</script>
+    	</c:if>
 	<div class="seconddiv">
 		<p>계정이 없으신가요?</p>
 		<button class="btn" onclick="gotoJoin()">회원가입</button>
 	</div>
 	
+		
 </div>
 	
 	

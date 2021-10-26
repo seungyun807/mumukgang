@@ -16,5 +16,25 @@
 	<select id="userInfo" parameterType="hashmap" resultType="hashmap">
 	
 	</select>
+	
+	<select id="findfriendsemail" parameterType="hashmap" resultType="Hashmap">
+		SELECT email, nickname FROM user WHERE email=#{email}
+	</select>
+	
+	<select id="findfriendsnickname" parameterType="hashmap" resultType="Hashmap">
+		SELECT email, nickname FROM user WHERE nickname=#{nickname}
+	</select>
 
+	<select id="friendslist" parameterType="hashmap" resultType="egovMap">
+		SELECT friend_email FROM friends_list WHERE email=#{email}
+	</select>
+	
+	<insert id="requestfriends" parameterType="hashmap">
+		INSERT INTO friends_request VALUES(#{req_email}, #{res_email}, #{request_time})
+	</insert>
+
+	<select id="receivedfriendrequest" parameterType="hashmap" resultType="hashmap">
+		SELECT req_email FROM friends_request WHERE res_email=#{res_email}
+	</select>
+	
 </mapper>

@@ -73,7 +73,7 @@ function loginWithKakao() {
 				});
 			}
     	  })
-        alert("성공 = "+JSON.stringify(authObj));
+        
       },
       fail: function(err) {
         alert(JSON.stringify(err))
@@ -111,7 +111,7 @@ function loginWithKakao() {
 	 content: "";
 	  position: absolute;
 	  opacity:0.45;
-  background: url("/images/egovframework/intro/intro.png") right center #f89b00;
+  background: url("/images/egovframework/intro/intro.png");
   z-index: -1;
 }
 .form-group{

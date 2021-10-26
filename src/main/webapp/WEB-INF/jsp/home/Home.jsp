@@ -40,7 +40,7 @@
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">친구목록</span>
                     </a>
-                     <a class="nav__link" onclick="gotoFriendsList()">
+                     <a href="/findfriends"class="nav__link" onclick="gotoFriendsList()">
                         <ion-icon name="search-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">친구찾기</span>
                     </a>
@@ -82,7 +82,7 @@
                         <span class="nav_name">Settings</span>
                     </a>
                 </div>
-                <a href="#" class="nav__link">
+                <a href="#" class="nav__link" onclick="gotoLogout()">
                     <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">로그아웃</span>
                 </a>

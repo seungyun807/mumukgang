@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,27 +10,6 @@
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 </head>
-<script type="text/javascript">
-
-
-$(function () { 
-	//화면 로딩후 시작 
-	$("2").auto
-	$("#searchInput").autocomplete({
-		//오토 컴플릿트 시작 
-		source: "조인트리", // source는 data.js파일 내부의 List 배열 
-		focus : function(event, ui) {
-			// 방향키로 자동완성단어 선택 가능하게 만들어줌 
-			return false; 
-			}, 
-			minLength: 1,// 최소 글자수 
-			delay: 100, //autocomplete 딜레이 시간(ms) 
-			//disabled: true, //자동완성 기능 끄기 
-			}); 
-	});
-
-</script>
-
 <style>
 	.thirddiv{
 		display: grid;
@@ -81,47 +58,59 @@ $(function () {
 #custom-search-input .glyphicon-search{
     font-size: 23px;
 }
-
-	
 </style>
 <body>
-			<jsp:include page="Home.jsp" flush="false"></jsp:include>
-			<h2>친구목록</h2>
-			
-			<div class="thirddiv" >
+	<jsp:include page="Home.jsp" flush="true"></jsp:include>
+	
+	
+	<div class="thirddiv" >
+	<div class="item">
+	<h1>친구찾기</h1></div>
+	<form action="/findfriendsdo" method="post">
 				<div class="item">
-
+	
 	<div id="custom-search-input">
                 <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-lg" id="searchInput" placeholder="친구찾기" />
+                    <input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="친구찾기" />
                     <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
+                        <button class="btn btn-info btn-lg" type="submit">
                            <ion-icon name="search-outline"></ion-icon>
                         </button>
                     </span>
                 </div>
             </div>
-</div>
-				<div class="item">
-				<ul class="list-group">
-				<c:forEach var="friendslist" items="${friendslist}" varStatus="status">
-				
-				</c:forEach>
-            <li class="list-group-item">${friendslist.friendemail}</li>
-          
-          </ul>
-				</div>
-	<div class="item">
-	
-	<ul class="list-group">
-            <li class="list-group-item">Lorem</li>
-            <li class="list-group-item">Ipsum</li>
-            <li class="list-group-item">Dolor</li>
-          </ul>
+            
 	</div>
-	
+	</form>
+			<form action="/requestfriends" method="post">
+				<div class="item" >
+					${findfriend.nickname} 
+					<input name="res_email" type="hidden" value="${findfriend.email}" id="res_email"/>
+					<button class="btn btn-primary" type="submit" >친구요청</button>
+				</div>
+			</form>
+			
+			<div class="item">
+				<h1>친구요청</h1>
+			</div>
+			
+			<div class="item">
 	
 			</div>
+			
+			<div class="item">
+			<c:forEach var="resfriend" items="${resfriends}" varStatus="status">
+				<div class="card text-white bg-info mb-3" style="max-width: 20rem; height: 100px;">
+  					<div class="card-body">
+    					<h5 class="card-title">${resfriend.req_email}</h5>
+   					 	<p class="card-text">email</p>
+ 					</div>
+  				</div>
+			</c:forEach>
+			</div>
+		
+		
+		</div>
 			
 </body>
 </html>

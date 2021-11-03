@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.mumukgang.cmmn.web.mapper.ChannelMapper">
+
+	<insert id="createchannel" parameterType="egovframework.mumukgang.cmmn.web.vo.Channel">
+		<selectKey keyProperty="ch_num" resultType="int" order="BEFORE">
+			SELECT ifnull(MAX(ch_num),0)+1 AS ch_num
+			FROM channel_info
+		</selectKey>
+		INSERT INTO channel_info VALUES(#{ch_num}, #{ch_name}, #{ch_create_email}, #{ch_date});
+	</insert>
+	
+	<insert id="channelmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
+		INSERT INTO channel VALUES (#{ch_num}, #{email})
+	</insert>
+	
+	<select id="authoritychannel" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
+		SELECT COUNT(*) FROM channel WHERE ch_num = #{ch_num} AND email = #{email}
+	</select>
+	
+	<select id="participatingch" parameterType="hashmap" resultType="egovMap">
+		SELECT * FROM channel WHERE email = #{email}
+	</select>
+	
+	<select id="selectchname" parameterType="hashmap" resultType="hashmap">
+		SELECT ch_name FROM channel_info WHERE ch_num = #{ch_num}
+	</select>
+	
+</mapper>

@@ -12,16 +12,32 @@
 </head>
 
 <script type="text/javascript">
+	function gotoMenuPick() {
+		var link = "/menupick/1";
+		location.href = link;
+	}
+
+	function gotoFriendsList() {
+		var link = "/friendslist"
+		location.href = link;
+	}
+	
+	function gotoFindFriends() {
+		var link = "/findfriends"
+		location.href = link;
+	}
+	
+	function gotoChannel() {
+		var link = "/channel"
+		location.href = link;
+	}
+	
 	function gotoLogout(){
 		var link = "/logout";
 		location.href = link;
 	}
 	
-	function gotoFriendsList() {
-		var link = "/friendslist"
-		location.href = link;
-		
-	}
+	
 </script>
 <body id="body-pd">
     <div class="l-navbar" id="navbar">
@@ -32,60 +48,28 @@
                     <a href="/home" class="nav__logo">머먹겡</a>
                 </div>
                 <div class="nav__list">
-                    <a href="/menupick/1" class="nav__link active">
+                    <a href="#" class="nav__link active" id="menupick" onclick="gotoMenuPick()">
                         <ion-icon name="home-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">menupick test</span>
+                        <span class="nav_name">메뉴고르기</span>
                     </a>
-                    <a class="nav__link" onclick="gotoFriendsList()">
+                    <a href="#" class="nav__link"  id="friendlist" onclick="gotoFriendsList()">
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">친구목록</span>
                     </a>
-                     <a href="/findfriends"class="nav__link" onclick="gotoFriendsList()">
+                     <a href="#"class="nav__link" id="findfriend" onclick="gotoFindFriends()">
                         <ion-icon name="search-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">친구찾기</span>
                     </a>
-                     <a class="nav__link" onclick="gotoFriendsList()">
+                     <a class="nav__link" id="channel"  onclick="gotoChannel()" >
                         <ion-icon name="chatbubble-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">채널</span>
                     </a>
-
-                    <div href="#" class="nav__link collapse">
-                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Projects</span>
-
-                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-
-                        <ul class="collapse__menu">
-                            <a href="#" class="collapse__sublink">Data</a>
-                            <a href="#" class="collapse__sublink">Group</a>
-                            <a href="#" class="collapse__sublink">Members</a>
-                        </ul>
-                    </div>
-
-                   
-
-                    <div href="#" class="nav__link collapse">
-                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Team</span>
-
-                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-
-                        <ul class="collapse__menu">
-                            <a href="#" class="collapse__sublink">Data</a>
-                            <a href="#" class="collapse__sublink">Group</a>
-                            <a href="#" class="collapse__sublink">Members</a>
-                        </ul>
-                    </div>
-
-                    <a href="#" class="nav__link">
-                        <ion-icon name="settings-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">Settings</span>
-                    </a>
-                </div>
+                
                 <a href="#" class="nav__link" onclick="gotoLogout()">
                     <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">로그아웃</span>
                 </a>
+                </div>
             </div>
         </nav>
     </div>
@@ -94,5 +78,6 @@
     <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <!-- JS -->
     <script src="../../js/main.js"></script>
+    <script src="../../js/jquery-3.6.0.js"></script>
 </body>
 </html>

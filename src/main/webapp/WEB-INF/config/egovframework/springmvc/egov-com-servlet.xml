@@ -20,10 +20,10 @@
             <mvc:exclude-mapping path="/joinview"/>
             <mvc:exclude-mapping path="/idcheck"/> 
             <mvc:exclude-mapping path="/kakaologin"/> 
-            <!-- 
-            <mvc:exclude-mapping path="/homeview.do"/>
             
-           
+            <mvc:exclude-mapping path="/nickcheck"/>
+            
+           <!-- 
             <mvc:exclude-mapping path="/loginview.do"/>
            -->
             <bean class="egovframework.mumukgang.cmmn.web.MyInterceptor" />

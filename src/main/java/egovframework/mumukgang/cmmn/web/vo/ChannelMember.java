@@ -7,6 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Friends{
-	private String nickname;
+public class ChannelMember{
+	private int ch_num;
+	private String email;
 }

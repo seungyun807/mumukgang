@@ -14,7 +14,15 @@
 <title>Insert title here</title>
 </head>
 <script>
+$( document ).ready(function() {
+	$("#menupick").addClass("active");
+	$("#friendlist").removeClass("active");
+	$("#findfriend").removeClass("active");
+});
+
+
 $(function(){
+	
 	$('#onDisplay').click(function(){
 		if($("#noneDiv").css("display") == "none"){
 			$('#noneDiv').css("display", "inline");

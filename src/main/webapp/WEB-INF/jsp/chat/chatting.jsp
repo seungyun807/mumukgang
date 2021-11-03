@@ -11,7 +11,13 @@
 
 <script>
 $(function() {
+	$("#menupick").removeClass("active");
+	$("#friendlist").removeClass("active");
+	$("#findfriend").removeClass("active");
+	$("#channel").addClass("active");
+	
 	var roomNo = "${roomNo}";
+	
 	var messageInput = $("#message").val();
 	var sock = new SockJS(
 				"${pageContext.request.contextPath}/endpoint");
@@ -68,6 +74,7 @@ $(function() {
     			disconnect();
     		});
     	});
+	
 });
 
 
@@ -81,6 +88,7 @@ $(function() {
 }
 </style>
 <body>
+<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
 	이름:
 	<input type="text" id="nickname">
 	<input type="button" id="enterBtn" value="입장">

@@ -35,15 +35,39 @@ public class LoginController {
 	public String viewJoin() {return "member/Join"; }
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public void Join(@RequestParam HashMap<String, Object> params) throws Exception{
+	public String Join(@RequestParam HashMap<String, Object> params) throws Exception{
 		System.out.println("/join param = " + params);
-		membermapper.UserJoin(params);
+		int result = membermapper.UserJoin(params);
+		if(result > 0) {
+			return "redirect:/intro";
+		}else {
+			return null;
+		}
 	}
 	
+	/***
+	 * 아이디 중복확인
+	 * 
+	 */
 	@RequestMapping(value="/idcheck")
 	@ResponseBody
 	public Map<String, Object> idCheck(@RequestParam Map<String, Object> param) throws Exception{
 		int result = membermapper.UserIdCheck((String) param.get("checkId"));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("usedCnt", result);
+		System.out.println(result);
+		return map;
+	}
+	
+	/***
+	 * 닉네임 중복확인
+	 * 
+	 */
+	@RequestMapping(value="/nickcheck")
+	@ResponseBody
+	public Map<String, Object> nickCheck(@RequestParam Map<String, Object> param) throws Exception{
+		int result = membermapper.UserNickCheck((String) param.get("checkNick"));
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("usedCnt", result);
@@ -61,7 +85,7 @@ public class LoginController {
 		
 		
 		int result = membermapper.loginCheck(params);
-
+		
 		String email = params.get("email").toString();
 		System.out.println("/login email = " + email);
 		model.addAttribute("map", map);

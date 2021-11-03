@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,105 +11,141 @@
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 </head>
-<script type="text/javascript">
 
-
-</script>
 
 <style>
-	.thirddiv{
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		grid-column-gap:10px;
-		margin-left: 100px;
-		margin-top: 20px;
-		margin-right: 100px;
-		
-		
-	}
-	.item:nth-child(1) {
-	grid-column: 1 / 3;
-	grid-row: 1 / 2;
+.listdiv {
+	display: grid;
+	grid-template-columns: 1fr 5fr 0.7fr;
+	text-align: left;
+	width: 380px;
+	height: 80px;
+	align-items: center;
+	border-bottom: 1px solid #d3d3d3;
+}
+ion-icon {
+  font-size: 20px;
+}
+.listdivitem:nth-child(1) {
+	grid-column: 1/2;
+	grid-row: 1/3;
+}
+
+.listdivitem:nth-child(2) {
+	grid-column: 2/3;
+	grid-row: 1/3;
+}
+
+.listdivitem:nth-child(3) {
+	grid-column: 3/4;
+	grid-row: 1/3;
+	margin-top: 25px;
+}
+
+.thirddiv {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 10px;
+	margin-left: 100px;
+	margin-top: 20px;
+	margin-right: 100px;
+}
+
+.item:nth-child(1) {
+	grid-column: 1/3;
+	grid-row: 1/2;
 	margin-bottom: 20px;
 }
-#custom-search-input{
-    padding: 3px;
-    border: solid 1px #E4E4E4;
-    border-radius: 6px;
-    background-color: #fff;
+
+#custom-search-input {
+	padding: 3px;
+	border: solid 1px #E4E4E4;
+	border-radius: 6px;
+	background-color: #fff;
 }
 
-#custom-search-input input{
-    border: 0;
-    box-shadow: none;
+#custom-search-input input {
+	border: 0;
+	box-shadow: none;
 }
 
-#custom-search-input button{
-    margin: 2px 0 0 0;
-    background: none;
-    box-shadow: none;
-    border: 0;
-    color: #666666;
-    padding: 0 8px 0 10px;
-    border-left: solid 1px #ccc;
+#custom-search-input button {
+	margin: 2px 0 0 0;
+	background: none;
+	box-shadow: none;
+	border: 0;
+	color: #666666;
+	padding: 0 8px 0 10px;
+	border-left: solid 1px #ccc;
 }
 
-#custom-search-input button:hover{
-    border: 0;
-    box-shadow: none;
-    border-left: solid 1px #ccc;
+#custom-search-input button:hover {
+	border: 0;
+	box-shadow: none;
+	border-left: solid 1px #ccc;
 }
 
-
-#custom-search-input .glyphicon-search{
-    font-size: 23px;
+#custom-search-input .glyphicon-search {
+	font-size: 23px;
 }
-
-	
 </style>
 <body>
-			<jsp:include page="Home.jsp" flush="true"></jsp:include>
-			<h2>친구목록</h2>
-			
-			<div class="thirddiv" >
-				<div class="item">
+	<jsp:include page="Home.jsp" flush="true"></jsp:include>
 
-	<div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input type="text" class="form-control input-lg" id="searchInput" placeholder="친구찾기" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-lg" type="button">
-                           <ion-icon name="search-outline"></ion-icon>
-                        </button>
-                    </span>
-                </div>
-            </div>
-				</div>
-				
-				<div class="item">
-				
-					<ul class="list-group">
-						<c:forEach var="friendlist" items="${friendslist}" varStatus="status">
-							<li class="list-group-item">${friendlist.friendEmail}</li>
-						</c:forEach>
-						
-				 		
-				 		
-						
-					</ul>
-          		
-				</div>
-	<div class="item">
-	
-	<ul class="list-group">
-            <li class="list-group-item">Lorem<button>12</button></li>
-            <li class="list-group-item">Ipsum</li>
-            <li class="list-group-item">Dolor</li>
-          </ul>
+
+	<div class="thirddiv">
+		<div class="item">
+			<h3>친구목록</h3>
+		</div>
+
+		<div class="item">
+
+			<ul class="list-group">
+				<c:forEach var="friendlist" items="${friendslist}" varStatus="status">
+					<div class="listdiv">
+						<div class="listdivitem">
+							<img width="40px" src="../../images/egovframework/profile/profile2.png">
+						</div>
+						<div class="listdivitem">
+							<li>${friendlist.friendNickname}</li>
+							<li style="font-size: 14px;">${friendlist.friendEmail}</li>
+						</div>
+						<div class="listdivitem">
+							<button class="btn delfriendbtn" value="${friendlist.friendEmail}">
+								<ion-icon name="trash-outline"></ion-icon>
+							</button>
+						</div>
+					</div>
+				</c:forEach>
+			</ul>
+		</div>
 	</div>
-	
-	
-			</div>
-			
 </body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#menupick").removeClass("active");
+		$("#friendlist").addClass("active");
+		$("#findfriend").removeClass("active");
+		$("#channel").removeClass("active");
+		
+		$(".delfriendbtn").on('click', function() {
+			 var delemail = $(this).attr("value");
+			 $.ajax({
+					type : 'post',
+					data : {"delemail" : delemail},
+					url : "/delfriend",
+					success : function(returnData, status) {
+					console.log(returnData);
+					if (returnData) {
+						
+					} else {
+					}
+					var link = '/friendslist';
+					location.href = link;
+					}
+						
+				});
+		});
+	});
+</script>
 </html>

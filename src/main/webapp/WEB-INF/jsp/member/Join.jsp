@@ -18,10 +18,10 @@ var json = "";
 $(function() {
 	json = JSON.parse(sessionStorage.getItem("cast"));
 	if(json != null){
-		document.getElementById('email').value=json.email;
-		document.getElementById('email').readOnly = true;
-		document.getElementById('pw').readOnly = true;
-		document.getElementById('pwconfirm').readOnly = true;
+		$('#email').val(json.email);
+	
+		$('#email').attr("readonly", true);
+		
 		sessionStorage.removeItem("cast");
 		kakaojoin = true;
 	}
@@ -56,6 +56,39 @@ $(function() {
         });
         }
     });
+    
+    $("#nickname").keyup(function() {
+        
+        //userid 를 param.
+        var nickname =  $("#nickname").val();
+        if (nickname == "") {
+        	$("#nickname_check").text("\u00a0");
+		}
+        else{
+        $.ajax({
+            type : 'GET',
+            data : {
+    			"checkNick": nickname	
+    		},
+            url : "<c:url value='nickcheck'/>",
+            dataType : 'json',
+            contentType: "application/json; charset=UTF-8",
+            success : function(returnData, status) {
+            	console.log(returnData);
+            	if(status == "success") {
+    				if(returnData.usedCnt > 0 ){
+    					$("#nickname_check").css("color", "red");
+    					$("#nickname_check").text("사용할수 없는 닉네임입니다.");
+    				}else{
+    					$("#nickname_check").css("color", "blue");
+    					$("#nickname_check").text("사용가능한 닉네임입니다.");
+    				}
+    			}else{ alert("ERROR!" + error);return;} 
+            }
+        });
+        }
+    });
+    
 });
 
 $(function() {
@@ -91,9 +124,8 @@ $(function() {
 });
 
 function checkId() {
-	 const idcheck = document.getElementById('id_check')
-	 console.log(idcheck.innerText);
-	 if(idcheck.innerText == "사용가능한 아이디입니다." || kakaojoin){
+	 var idcheck = $('#id_check').text();
+	 if((idcheck == "사용가능한 아이디입니다.") || kakaojoin){
 		 return true;
 	 } else {
 		 alert('사용할수 없는 아이디입니다.')
@@ -101,10 +133,19 @@ function checkId() {
 	 }
 }
 
+function checkNickName() {
+	 var nickname = $('#nickname_check').text();
+	 if(nickname == "사용가능한 닉네임입니다."){
+		 return true;
+	 } else {
+		 alert('사용할수 없는 닉네임입니다.')
+		 return false;
+	 }
+}
+
 function checkPw() {
-	 const pwconfirm = document.getElementById('pw_confirm')
-	 console.log(pwconfirm.innerText);
-	 if(pwconfirm.innerText == "비밀번호가 일치합니다."){
+	 var pwconfirm = $('#pw_confirm').text();
+	 if(pwconfirm == "비밀번호가 일치합니다."){
 		 return true;
 	 } else {
 		 alert('비밀번호가 일치하지 않습니다.')
@@ -114,12 +155,12 @@ function checkPw() {
 
 function checkIdPw(){
 	 console.log(checkIdPw);
-	 if(checkId()&&checkPw()){
+	 if((checkId()&& checkPw()) && checkNickName()){
 		 console.log(true);
 		 return true;
 	 }else{
 		 console.log(false);
-		 return false;
+		 return false
 	 }
 }
 
@@ -166,7 +207,7 @@ function checkIdPw(){
 
 <div class="intro">
 
-	<form action="/join" onsubmit="return checkIdPw()" method="post">
+	<form action="/join" onsubmit="return checkIdPw();" method="post">
 	<div class="firstdiv">
 		<h1>머먹겡</h1>
 		<br>
@@ -181,7 +222,8 @@ function checkIdPw(){
             <div id="pw_confirm" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
         	
             <input name="nickname" id="nickname" type="text" class="form-control" placeholder="닉네임"/>
-            <br>
+            <div id="nickname_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+            
             <input name="comp_name" id="comp_name" type="text" class="form-control" placeholder="회사명" />
   		
         </div>

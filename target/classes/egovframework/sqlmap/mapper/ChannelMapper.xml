@@ -22,6 +22,10 @@
 		SELECT * FROM channel WHERE email = #{email}
 	</select>
 	
+	<select id="chhost" parameterType="hashmap" resultType="egovMap">
+		SELECT ch_num FROM channel_info WHERE ch_create_email = #{email}
+	</select>
+	
 	<select id="selectchname" parameterType="hashmap" resultType="hashmap">
 		SELECT ch_name FROM channel_info WHERE ch_num = #{ch_num}
 	</select>

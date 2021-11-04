@@ -9,6 +9,7 @@ import org.antlr.codegen.ObjCTarget;
 
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
+import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -24,4 +25,6 @@ public interface ChannelMapper {
 	public List<HashMap<String, Object>> participatingch(HashMap<String, Object> map);
 	
 	public HashMap<String, Object> selectchname(HashMap<String, Object> map);
+	
+	public List<HashMap<String, Object>> chhost (HashMap<String, Object> map);
 }

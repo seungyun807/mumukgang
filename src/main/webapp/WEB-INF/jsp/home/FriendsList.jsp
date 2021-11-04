@@ -46,7 +46,7 @@ ion-icon {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
-	margin-left: 100px;
+	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
 }

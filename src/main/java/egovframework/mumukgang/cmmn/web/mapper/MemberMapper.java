@@ -43,4 +43,6 @@ public interface MemberMapper {
 	public int finddupfriends(HashMap<String, Object> map);
 	
 	public void delfriend(HashMap<String, Object> map);
+	
+	public int selectfriendrequest(HashMap<String, Object> map);
 }

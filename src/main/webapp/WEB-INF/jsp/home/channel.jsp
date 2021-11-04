@@ -42,7 +42,7 @@ ion-icon {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
-	margin-left: 100px;
+	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
 }
@@ -264,7 +264,7 @@ ul.mylist2 li, ol.mylist2 li {
 						</div>
 						<div class="listdivitem">
 							<li>${namelist}</li>
-							<li style="font-size: 14px;"></li>
+							
 						</div>
 						<div class="listdivitem">
 							<button class="btn enterchbtn" value="${chlist[status.index].chNum}"  title="입장">
@@ -424,6 +424,8 @@ ul.mylist2 li, ol.mylist2 li {
 
                     if(retVal.code == "OK") {
                         alert(retVal.message);
+                        var link = "/channel";
+                        location.href = link;
                     } else {
                         alert(retVal.message);
                     }

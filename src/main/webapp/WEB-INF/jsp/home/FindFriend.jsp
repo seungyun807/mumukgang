@@ -16,7 +16,7 @@
 .thirddiv {
 	display: grid;
 	grid-column-gap: 10px;
-	margin-left: 100px;
+	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
 }
@@ -248,6 +248,10 @@
 										var link = "/findfriends";
 										location.href = link;
 
+									}
+									else{
+										alert(returnData);
+										
 									}
 
 								}

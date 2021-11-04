@@ -32,7 +32,7 @@ public class ChatController {
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
 		chat.setSendDate(new Date());
-		System.out.println("chatContent = " + chat);
+		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
 		
 		return chat;
 	}
@@ -41,6 +41,7 @@ public class ChatController {
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
 		String loginid = (String)session.getAttribute("email");
 		ChannelMember channelmember = new ChannelMember();
+		
 		
 		channelmember.setCh_num(roomNo);
 		channelmember.setEmail(loginid);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.enterprise.inject.New;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
 import egovframework.mumukgang.cmmn.web.mapper.MemberMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
+import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
 
 @Controller
@@ -45,6 +47,7 @@ public class ChannelController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<HashMap<String, Object>> friendslist;
 		List<HashMap<String, Object>> chlist;
+		List<HashMap<String, Object>> chcreater = new ArrayList<HashMap<String, Object>>();
 		List<String> namelist = new ArrayList<String>();
 
 		String loginemail = (String) session.getAttribute("email");
@@ -52,17 +55,58 @@ public class ChannelController {
 		
 		System.out.println("mapper 전");
 		
+		
 		friendslist = membermapper.friendslist(map);
+		
+		//참여중인 채널 번호
 		chlist = channelmapper.participatingch(map);
+		//loginid가 만든 채널번호
+		chcreater = channelmapper.chhost(map);
+		
+		System.out.println(chcreater);
+		
 		map.clear();
 	
+		//List<String> templist = new ArrayList<String>();
+		
+		//templist.contains()
+		
+//		for(int i = 0; i < chcreater.size(); i++) {
+//			templist.add(chcreater.get(i).toString());
+//		}
+//		
+//		System.out.println(templist);
+//		if (templist.contains("{ch_num=1}")) {
+//			System.out.println("들어옴");
+//		}
+//		
+//		//equles
+//		if (templist.contains("{ch_num="+data.get("chNum")+"}")) {
+//			System.out.println("들어옴");
+//		}
+		System.out.println(chcreater.get(0));
+		
+		if (chcreater.contains("{chNum=1}")) {
+			System.out.println("들어옴");
+		}
+			
+		//참여중인 채널의 제목
 		for(Map<String, Object> data : chlist) {
 			
 			map.put("ch_num", data.get("chNum"));
+
+			
+
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");
 			namelist.add(chname);
 			
+			
+			
+			
 		}
+		
+		
+		
 		System.out.println(namelist);
 		
 		model.addAttribute("namelist", namelist);

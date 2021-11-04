@@ -160,8 +160,9 @@ public class HomeController {
 	public String requestFriends(@RequestParam HashMap<String, Object> param, HttpSession session) {
 		System.out.println("requestFriends");
 		System.out.println("requestFriends = " + param);
-		List<Map<String, Object>> map2;
-		map2 = membermapper.receivedfriendrequest(param);
+		String loginEmail = (String) session.getAttribute("email");
+		
+		param.put("email", loginEmail);
 		
 				//중복 거르기
 		if(membermapper.finddupfriends(param) > 0) {
@@ -169,12 +170,12 @@ public class HomeController {
 			System.out.println(membermapper.receivedfriendrequest(param));
 			return "이미 등록된 친구입니다.";
 		} 
-		else if (map2.isEmpty() == false) {
+		else if (membermapper.selectfriendrequest(param) > 0) {
 			return "이미 요청된 친구입니다.";
 		}
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		String loginEmail = (String) session.getAttribute("email");
+		
 		
 		map.put("email", loginEmail);
 		map = membermapper.selectnickname(map); 

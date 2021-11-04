@@ -82,7 +82,7 @@ public class LoginController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(@RequestParam HashMap<String, Object> params, HttpSession session, Model model) throws Exception{
 		Map<String, String> map = new HashMap<String, String>();
-		
+		HashMap<String, Object> nickname = new HashMap<String, Object>();
 		
 		int result = membermapper.loginCheck(params);
 		
@@ -91,7 +91,11 @@ public class LoginController {
 		model.addAttribute("map", map);
 		
 		if(result != 0) {
+			  nickname = membermapper.findfriendsemail(params);
+			 
 			  session.setAttribute("email", email);
+			  session.setAttribute("nickname", (String)nickname.get("nickname"));
+			  
 			  map.put("userName", email);
 			  map.put("msg", "success");
 			  
@@ -110,12 +114,17 @@ public class LoginController {
 	 */
 	@ResponseBody
 	@PostMapping(value="/kakaologin")
-	public String kakaologin(@RequestParam HashMap<String, Object> param, HttpSession session) throws Exception {
-		String email = (String)param.get("email");
+	public String kakaologin(@RequestParam HashMap<String, Object> params, HttpSession session) throws Exception {
+		HashMap<String, Object> nickname = new HashMap<String, Object>();
+
+		String email = (String)params.get("email");
+		
 		
 		if (email != null) {
 			System.out.println("kakaologin = " + email );
+			nickname = membermapper.findfriendsemail(params);
 			session.setAttribute("email", email);
+			session.setAttribute("nickname", (String)nickname.get("nickname"));
 			return "/home";
 		}
 		return "/intro";

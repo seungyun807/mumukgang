@@ -31,7 +31,7 @@
 	</select>
 	
 	<select id="finddupfriends" parameterType="hashmap" resultType="int">
-		SELECT count(*) FROM friends_list WHERE email=#{res_email}
+		SELECT count(*) FROM friends_list WHERE friend_email=#{res_email} AND email=#{email} 
 	</select>
 	
 	<insert id="requestfriends" parameterType="hashmap">
@@ -40,6 +40,10 @@
 
 	<select id="receivedfriendrequest" parameterType="hashmap" resultType="egovMap">
 		SELECT * FROM friends_request WHERE res_email=#{res_email}
+	</select>
+	
+	<select id="selectfriendrequest" parameterType="hashmap" resultType="int">
+		SELECT count(*) FROM friends_request WHERE req_email=#{email} AND res_email=#{res_email}
 	</select>
 	
 	<select id="selectnickname" parameterType="hashmap" resultType="hashmap">

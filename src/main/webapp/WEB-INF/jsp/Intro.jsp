@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 function gotoLogin() {
 	Kakao.Auth.authorize({
-		redirectUri: 'http://localhost/loginpage_kakao_callback'
+		redirectUri: 'http://192.168.33.91/loginpage_kakao_callback'
 		}); 
 }
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,7 @@ import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
+import reactor.util.annotation.Nullable;
 
 @Controller
 public class ChannelController {
@@ -47,7 +49,7 @@ public class ChannelController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<HashMap<String, Object>> friendslist;
 		List<HashMap<String, Object>> chlist;
-		List<HashMap<String, Object>> chcreater = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> chcreater;
 		List<String> namelist = new ArrayList<String>();
 
 		String loginemail = (String) session.getAttribute("email");
@@ -66,42 +68,22 @@ public class ChannelController {
 		System.out.println(chcreater);
 		
 		map.clear();
-	
-		//List<String> templist = new ArrayList<String>();
-		
-		//templist.contains()
-		
-//		for(int i = 0; i < chcreater.size(); i++) {
-//			templist.add(chcreater.get(i).toString());
-//		}
-//		
-//		System.out.println(templist);
-//		if (templist.contains("{ch_num=1}")) {
-//			System.out.println("들어옴");
-//		}
-//		
-//		//equles
-//		if (templist.contains("{ch_num="+data.get("chNum")+"}")) {
-//			System.out.println("들어옴");
-//		}
-		System.out.println(chcreater.get(0));
-		
-		if (chcreater.contains("{chNum=1}")) {
-			System.out.println("들어옴");
-		}
+
 			
 		//참여중인 채널의 제목
 		for(Map<String, Object> data : chlist) {
 			
 			map.put("ch_num", data.get("chNum"));
 
-			
-
-			String chname = (String)channelmapper.selectchname(map).get("ch_name");
-			namelist.add(chname);
-			
-			
-			
+			if (String.valueOf(chcreater).contains(data.get("chNum").toString())) {
+				System.out.println("들어옴");
+				String chname = "*" + (String)channelmapper.selectchname(map).get("ch_name");
+				namelist.add(chname);
+			}
+			else {
+				String chname = (String)channelmapper.selectchname(map).get("ch_name");
+				namelist.add(chname);
+			}
 			
 		}
 		
@@ -123,9 +105,13 @@ public class ChannelController {
 	 * */
 	@RequestMapping(value="/createchannel", method=RequestMethod.POST)
 	@ResponseBody
-	public Object  requestFriends(@RequestParam(value="selectlist[]") List<String> list, @RequestParam(value="channelname") String chname, HttpSession session) {
-		System.out.println(chname);
-		System.out.println(list);
+	public Object requestFriends(
+			@RequestParam(value="selectlist[]", required = false) List<String> list,
+			@RequestParam(value="channelname") String chname,
+			@RequestParam(value="chtype") Boolean chtype,
+			HttpSession session) {
+		System.out.println("createchannel 진입");
+		System.out.println("chtype == " + chtype);
 		String loginid = (String) session.getAttribute("email");
 		
 		SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");		
@@ -138,7 +124,7 @@ public class ChannelController {
 		channel.setCh_create_email(loginid);
 		channel.setCh_name(chname);
 		channel.setCh_date(latestDate);
-		
+		channel.setCh_type(chtype);
 		
 		channelmapper.createchannel(channel);
 		int createChnum = channel.getCh_num();
@@ -154,10 +140,7 @@ public class ChannelController {
 			channelmapper.channelmember(channelMember2);
 			System.out.println("list = " + channelMember2);
 		}
-		
-
-
-		
+				
 		//리턴값
         Map<String, Object> retVal = new HashMap<String, Object>();
         
@@ -170,4 +153,53 @@ public class ChannelController {
 	}
 	
 	
+	/***
+	 * 채널 삭제
+	 * 
+	 * */
+	@RequestMapping(value="/deletechannel", method=RequestMethod.POST)
+	@ResponseBody
+	public Object deleteChannel(@RequestParam(value="roomNo") String roomNo, HttpSession session) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("roomNo", roomNo);
+		map.put("email", session.getAttribute("email"));
+		int result = channelmapper.delauthority(map);
+		
+		Map<String, Object> retVal = new HashMap<String, Object>();
+		if (result > 0) {
+			channelmapper.delchannel(map);
+			//리턴값
+	        retVal.put("code", "OK");
+	        retVal.put("message", "삭제에 성공 하였습니다.");
+			return retVal;
+		}else {
+			  retVal.put("code", "NO");
+		        retVal.put("message", "삭제 권한이 없습니다.");
+				return retVal;
+		}
+		
+	}
+	
+	
+	/***
+	 * 채널찾기 view
+	 * 
+	 * */
+	@RequestMapping(value="/findchannel")
+	public String findChannel(Model model) {
+		model.addAttribute("chlist", channelmapper.findpublicch());
+		return "home/FindChannel";
+	}
+	
+	/***
+	 * 채널검색
+	 * 
+	 * */
+	@RequestMapping(value="/searchch", method=RequestMethod.POST)
+	public String searchChannel(@RequestParam HashMap<String, Object> map, Model model) {
+		String keyword = (String) map.get("findchannel");
+		System.out.println(channelmapper.searchpublicch(keyword));
+		model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
+		return "home/FindChannel";
+	}
 }

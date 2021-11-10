@@ -35,13 +35,15 @@ public class LoginController {
 	public String viewJoin() {return "member/Join"; }
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String Join(@RequestParam HashMap<String, Object> params) throws Exception{
+	public String Join(@RequestParam HashMap<String, Object> params, Model model) throws Exception{
 		System.out.println("/join param = " + params);
 		int result = membermapper.UserJoin(params);
 		if(result > 0) {
-			return "redirect:/intro";
+			model.addAttribute("joinmsg", "success");
+			return "forward:/joinview";
 		}else {
-			return null;
+			model.addAttribute("joinmsg", "failed");
+			return "forward:/joinview";
 		}
 	}
 	
@@ -105,7 +107,7 @@ public class LoginController {
 	    	  return "forward:/intro";
 	      }
 		
-		return "forward:/home";
+		return "forward:/findchannel";
 	}
 	
 	/***
@@ -125,7 +127,7 @@ public class LoginController {
 			nickname = membermapper.findfriendsemail(params);
 			session.setAttribute("email", email);
 			session.setAttribute("nickname", (String)nickname.get("nickname"));
-			return "/home";
+			return "/findchannel";
 		}
 		return "/intro";
 	}

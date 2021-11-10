@@ -13,9 +13,13 @@ import lombok.ToString;
 public class Chat{ //implements Serializable {
 	//private int no;
 	private String memberId;
-	//private int srNo;
+	private String pickid;
+	private String ispick;
 	private String chatContent;
+	private String agree;
+	private String result;
 	private Date sendDate;
+	
 	
 	//private String vaildYN;
 }

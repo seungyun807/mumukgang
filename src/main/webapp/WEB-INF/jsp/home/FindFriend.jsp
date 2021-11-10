@@ -24,113 +24,13 @@
 .item {
 	margin-bottom: 20px;
 }
-
-.card-body {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+.itemflex:nth-child(1) {
+	flex-grow: 1;
+	text-align: right;
+	/* flex-grow: 0; */ /* 기본값 */
 }
 
-#custom-search-input {
-	padding: 3px;
-	border: solid 1px #E4E4E4;
-	border-radius: 6px;
-	background-color: #fff;
-}
 
-#custom-search-input input {
-	border: 0;
-	box-shadow: none;
-}
-
-#custom-search-input button {
-	margin: 2px 0 0 0;
-	background: none;
-	box-shadow: none;
-	border: 0;
-	color: #666666;
-	padding: 0 8px 0 10px;
-	border-left: solid 1px #ccc;
-}
-
-#custom-search-input button:hover {
-	border: 0;
-	box-shadow: none;
-	border-left: solid 1px #ccc;
-}
-
-#custom-search-input .glyphicon-search {
-	font-size: 23px;
-}
-
-/*-- POPUP --*/
-.modal-wrapper {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background: rgba(128, 128, 128, 0.8);
-	visibility: hidden;
-	opacity: 0;
-	transition: all 0.25s ease-in-out;
-}
-
-.modal-wrapper.open {
-	opacity: 1;
-	visibility: visible;
-}
-
-.modal {
-	width: 600px;
-	height: 400px;
-	display: block;
-	margin: 50% 0 0 -300px;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	background: #fff;
-	opacity: 0;
-	transition: all 0.5s ease-in-out;
-}
-
-.modal-wrapper.open .modal {
-	margin-top: -200px;
-	opacity: 1;
-}
-
-.head {
-	width: 100%;
-	height: 50px;
-	padding: 12px 30px;
-	overflow: hidden;
-	background: #f89b00;
-}
-
-.btn-close {
-	font-size: 20px;
-	display: block;
-	float: right;
-	color: #fff;
-}
-
-.content {
-	padding: 10%;
-}
-
-.good-job {
-	text-align: center;
-	font-family: 'Montserrat', Arial, Helvetica, sans-serif;
-	color: black;
-}
-
-.good-job .fa-thumbs-o-up {
-	font-size: 60px;
-}
-
-.good-job h1 {
-	font-size: 45px;
-}
 </style>
 <body>
 	<jsp:include page="Home.jsp" flush="true"></jsp:include>
@@ -170,7 +70,8 @@
 							<p class="card-title">${resfriend.reqNickname}</p>
 							<p class="card-text">${resfriend.reqEmail}</p>
 						</div>
-						<div style="margin-left: 50px; margin-top: 5px;">
+						<br>
+						<div class = "itemflex" style="margin-left: 50px; margin-top: 5px;">
 							<button class="btn btn-secondary acceptfriend" id="${resfriend.index}">
 								<ion-icon name="person-add-outline"></ion-icon>
 							</button>
@@ -202,8 +103,7 @@
 <script type="text/javascript">
 	function findfriends() {
 		console.log($("#searchInput").val());
-		$
-				.ajax({
+		$.ajax({
 					type : 'post',
 					data : {
 						"nickname" : $("#searchInput").val()
@@ -263,7 +163,7 @@
 	}
 
 	$(document).ready(function() {
-		$("#menupick").removeClass("active");
+		$("#findchannel").removeClass("active");
 		$("#friendlist").removeClass("active");
 		$("#findfriend").addClass("active");
 		$("#channel").removeClass("active");

@@ -11,6 +11,94 @@
 <link rel="shortcut icon" href="#">
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+<style>
+
+.intro {
+	display:flex;
+	justify-content:center;
+	flex-direction: row;
+	align-items: center;
+	position:fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+}
+.intro::after{
+	height: 100%;
+	width: 100%;
+	 content: "";
+	  position: absolute;
+	  opacity:0.3;
+  background: url("/images/egovframework/intro/intro.png");
+  z-index: -1;
+}
+
+.form-group{
+	display: inline-block;
+	width:70%;
+}
+
+.firstdiv{
+	height: 490px;
+	width: 400px;
+	text-align: center;
+	border: 1px solid gray;
+	border-radius: 2em;
+	background-color: white;
+	padding: 20px;
+}
+</style>
+
+<body>
+
+<div class="intro">
+
+	<form action="/join" onsubmit="return checkIdPw();" method="post">
+	<div class="firstdiv">
+		<h1>머먹겡</h1>
+		<br>
+		 <div class="form-group" >
+            <input name="email" id="email" type="email" class="form-control" placeholder="이메일"  />
+             <div id="id_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+
+            <input name="password" type="password" id="pw" class="form-control" placeholder="비밀번호"/>
+            <br>
+            <input name="pwconfirm" type="password" id="pwconfirm" class="form-control" placeholder="비밀번호 확인"/>
+            <div id="pw_confirm" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+        	
+            <input name="nickname" id="nickname" type="text" class="form-control" placeholder="닉네임"/>
+            <div id="nickname_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
+            
+            <input name="comp_name" id="comp_name" type="text" class="form-control" placeholder="회사명" />
+  		
+        </div>
+        
+		 <hr class="my-2" style="width: 90%">
+		
+		<button type="submit" class="btn" style="margin-top: 5px;">회원가입</button>
+	</div>
+		<c:choose>
+			<c:when test="${joinmsg eq'success'}">
+				<script type="text/javascript">
+    				alert('가입되었습니다.');
+    				location.href="/intro";
+    			</script>
+			</c:when>
+			
+			<c:when test="${joinmsg eq'failed'}">
+				<script type="text/javascript">
+    				alert('가입에 실패하였습니다.');
+    				location.href="/joinview";
+    			</script>
+			</c:when>
+		</c:choose> 
+
+</form>
+	
+</div>
+
+</body>
 <script type="text/javascript">
 var kakaojoin = false;
 var json = "";
@@ -165,76 +253,4 @@ function checkIdPw(){
 }
 
 </script>
-<style>
-
-.intro {
-	display:flex;
-	justify-content:center;
-	flex-direction: row;
-	align-items: center;
-	position:fixed;
-	height: 100%;
-	width: 100%;
-	z-index: 1;
-}
-.intro::after{
-	height: 100%;
-	width: 100%;
-	 content: "";
-	  position: absolute;
-	  opacity:0.3;
-  background: url("/images/egovframework/intro/intro.png");
-  z-index: -1;
-}
-
-.form-group{
-	display: inline-block;
-	width:70%;
-}
-
-.firstdiv{
-	height: 490px;
-	width: 400px;
-	text-align: center;
-	border: 1px solid gray;
-	border-radius: 2em;
-	background-color: white;
-	padding: 20px;
-}
-</style>
-
-<body>
-
-<div class="intro">
-
-	<form action="/join" onsubmit="return checkIdPw();" method="post">
-	<div class="firstdiv">
-		<h1>머먹겡</h1>
-		<br>
-		
-		 <div class="form-group" >
-            <input name="email" id="email" type="email" class="form-control" placeholder="이메일"  />
-             <div id="id_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
-
-            <input name="password" type="password" id="pw" class="form-control" placeholder="비밀번호"/>
-            <br>
-            <input name="pwconfirm" type="password" id="pwconfirm" class="form-control" placeholder="비밀번호 확인"/>
-            <div id="pw_confirm" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
-        	
-            <input name="nickname" id="nickname" type="text" class="form-control" placeholder="닉네임"/>
-            <div id="nickname_check" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
-            
-            <input name="comp_name" id="comp_name" type="text" class="form-control" placeholder="회사명" />
-  		
-        </div>
-        
-		 <hr class="my-2" style="width: 90%">
-		
-		<button type="submit" class="btn" style="margin-top: 5px;">회원가입</button>
-	</div>
-</form>
-	
-</div>
-
-</body>
 </html>

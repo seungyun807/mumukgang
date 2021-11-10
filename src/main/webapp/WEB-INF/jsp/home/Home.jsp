@@ -12,8 +12,8 @@
 </head>
 
 <script type="text/javascript">
-	function gotoMenuPick() {
-		var link = "/menupick/1";
+	function gotoFindChannel() {
+		var link = "/findchannel";
 		location.href = link;
 	}
 
@@ -45,12 +45,12 @@
             <div>
                 <div class="nav__brand">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <a href="/home" class="nav__logo">머먹겡</a>
+                    <span href="#" class="nav__logo">${nickname }</a>
                 </div>
                 <div class="nav__list">
-                    <a href="#" class="nav__link active" id="menupick" onclick="gotoMenuPick()">
+                    <a href="#" class="nav__link active" id="findchannel" onclick="gotoFindChannel()">
                         <ion-icon name="home-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">메뉴고르기</span>
+                        <span class="nav_name">채널찾기</span>
                     </a>
                     <a href="#" class="nav__link"  id="friendlist" onclick="gotoFriendsList()">
                         <ion-icon name="people-outline" class="nav__icon"></ion-icon>

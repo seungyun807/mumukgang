@@ -7,7 +7,7 @@
 			SELECT ifnull(MAX(ch_num),0)+1 AS ch_num
 			FROM channel_info
 		</selectKey>
-		INSERT INTO channel_info VALUES(#{ch_num}, #{ch_name}, #{ch_create_email}, #{ch_date});
+		INSERT INTO channel_info (ch_num, ch_name, ch_create_email, ch_date, ch_type)VALUES(#{ch_num}, #{ch_name}, #{ch_create_email}, #{ch_date}, #{ch_type});
 	</insert>
 	
 	<insert id="channelmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
@@ -29,5 +29,35 @@
 	<select id="selectchname" parameterType="hashmap" resultType="hashmap">
 		SELECT ch_name FROM channel_info WHERE ch_num = #{ch_num}
 	</select>
+	
+	<select id="searchpublicch" parameterType="string" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1
+	</select>
+	
+	<select id="selectfood"  resultType="egovMap">
+		SELECT * FROM menu
+	</select>
+	
+	<select id="countchmem" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM channel WHERE ch_num = #{roomNo}
+	</select>
+	
+	<select id="delauthority" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM channel_info WHERE ch_num = #{roomNo} AND ch_create_email = #{email}
+	</select>
+	
+	<delete id="delchannel" parameterType="hashmap">
+		DELETE FROM channel WHERE ch_num = #{roomNo}
+		<!-- DELETE * FROM channel_info WHERE ch_num = #{roomNo} -->
+	</delete>
+	
+	<select id="findpublicch" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_type = 1
+	</select>
+	
+	<select id="ispublicch" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
+		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num}
+	</select>
+	
 	
 </mapper>

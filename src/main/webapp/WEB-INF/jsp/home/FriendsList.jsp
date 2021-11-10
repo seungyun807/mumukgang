@@ -123,7 +123,7 @@ ion-icon {
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#menupick").removeClass("active");
+		$("#findchannel").removeClass("active");
 		$("#friendlist").addClass("active");
 		$("#findfriend").removeClass("active");
 		$("#channel").removeClass("active");

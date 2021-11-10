@@ -52,111 +52,8 @@ ion-icon {
 	grid-row: 1/2;
 	margin-bottom: 20px;
 }
-/*-- POPUP --*/
-.modal-wrapper {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background: rgba(128, 128, 128, 0.8);
-	visibility: hidden;
-	opacity: 0;
-	transition: all 0.25s ease-in-out;
-}
 
-.modal-wrapper.open {
-	opacity: 1;
-	visibility: visible;
-}
 
-.modal {
-	width: 600px;
-	height: 450px;
-	display: block;
-	margin: 50% 0 0 -300px;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	background: #fff;
-	opacity: 0;
-	transition: all 0.5s ease-in-out;
-}
-
-.modal-wrapper.open .modal {
-	margin-top: -200px;
-	opacity: 1;
-}
-
-.modal-wrapper2 {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background: rgba(128, 128, 128, 0.8);
-	visibility: hidden;
-	opacity: 0;
-	transition: all 0.25s ease-in-out;
-}
-
-.modal-wrapper2.open {
-	opacity: 1;
-	visibility: visible;
-}
-
-.modal2 {
-	width: 500px;
-	height: 450px;
-	display: block;
-	margin: 50% 0 0 -255px;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	background: #fff;
-	opacity: 0;
-	transition: all 0.5s ease-in-out;
-}
-
-.modal-wrapper2.open .modal2 {
-	margin-top: -200px;
-	opacity: 1;
-}
-
-.head {
-	width: 100%;
-	height: 50px;
-	padding: 12px 30px;
-	overflow: hidden;
-	background: #f89b00;
-}
-
-.btn-close {
-	font-size: 20px;
-	display: block;
-	float: right;
-	color: #fff;
-}
-
-.content {
-	padding-top: 5%;
-	padding-left: 10%;
-	padding-right: 10%;
-}
-
-.good-job {
-	text-align: center;
-	font-family: 'Montserrat', Arial, Helvetica, sans-serif;
-	color: black;
-}
-
-.good-job .fa-thumbs-o-up {
-	font-size: 60px;
-}
-
-.good-job h1 {
-	font-size: 45px;
-}
 
 #chatArea {
 	width: 400px;
@@ -170,43 +67,11 @@ ion-icon {
 	align-content: center;
 }
 
-#custom-search-input {
-	padding: 3px;
-	border: solid 1px #E4E4E4;
-	border-radius: 6px;
-	background-color: #fff;
-}
-
-#custom-search-input input {
-	border: 0;
-	box-shadow: none;
-}
-
-#custom-search-input button {
-	margin: 2px 0 0 0;
-	background: none;
-	box-shadow: none;
-	border: 0;
-	color: #666666;
-	padding: 0 8px 0 10px;
-	border-left: solid 1px #ccc;
-}
-
-#custom-search-input button:hover {
-	border: 0;
-	box-shadow: none;
-	border-left: solid 1px #ccc;
-}
-
-#custom-search-input .glyphicon-search {
-	font-size: 23px;
-}
 #createfriendslist{
 	height: 230px;
 	margin-bottom: 15px;
 	overflow: auto;
 	overflow-x: hidden;
-	overflow: auto;
 }
 #selectaddfriends{
 	height: 200px;
@@ -229,6 +94,7 @@ ul.mylist li, ol.mylist li {
 	margin-bottom: 5px;
 	border-bottom: 1px solid #efefef;
 	font-size: 12px;
+	cursor: pointer;
 }
 
 ul.mylist2 li, ol.mylist2 li {
@@ -241,6 +107,18 @@ ul.mylist2 li, ol.mylist2 li {
 	background-color: lightgray;
 	color: white;
 }
+
+label {
+    font: 1rem 'Fira Sans', sans-serif;
+    margin-left: 4px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
+#radio {
+    margin-bottom: .4rem;
+}
+
 </style>
 
 <body>
@@ -290,6 +168,11 @@ ul.mylist2 li, ol.mylist2 li {
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
 
 					<div class="form-group">
+						<div id="radio">
+							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
+							
+							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
+						</div>
 						<input id="channelname" type="email" class="form-control" placeholder="채널이름" /> <br>
 
 						<div class="form-control" id="selectaddfriends">
@@ -298,10 +181,11 @@ ul.mylist2 li, ol.mylist2 li {
 							</ul>
 							<!-- </nav> -->
 						</div>
-
-						<button class="btn trigger2" style="float: right;">친구추가＋</button>
+						
+								<button class="btn trigger2" id="addfriend" style="float: right;">친구추가＋</button>
+						
 						<br> <br>
-						<button class="btn btn-primary trigger" id='createchannel'>만들기</button>
+						<button class="btn btn-primary" id='createchannel'>만들기</button>
 					</div>
 				</div>
 			</div>
@@ -349,11 +233,12 @@ ul.mylist2 li, ol.mylist2 li {
 <script type="text/javascript">
 	$(document).ready(function() {
 		localStorage.clear();
-		$("#menupick").removeClass("active");
+		$("#findchannel").removeClass("active");
 		$("#friendlist").removeClass("active");
 		$("#findfriend").removeClass("active");
 		$("#channel").addClass("active");
-
+		
+		var chtype = false;
 		$('.trigger').click(function() {
 			$('.modal-wrapper').toggleClass('open');
 			
@@ -369,6 +254,19 @@ ul.mylist2 li, ol.mylist2 li {
 			$('.modal-wrapper2').toggleClass('open');
 			
 		});
+		
+		//공개, 비공개
+		$('#onlyfriend, #public').click(function() {
+			$("input[name='chtype']:checked").each(function(){	
+				if ($(this).val() == "onlyfriend") {
+					chtype = false;
+				}else{
+					chtype = true;
+				}
+			});
+			
+		});
+		
 
 		$('ul.mylist li').click(function() {
 			$(this).toggleClass('change_back');
@@ -402,18 +300,25 @@ ul.mylist2 li, ol.mylist2 li {
 		});
 		
 		$('#createchannel').click(function() {
+			if ($('#channelname').val() == "") {
+				alert("채널 이름을 입력해주세요.");
+			}
+			else {
+				
 			
-			var array = [];
+			var array = new Array();
 			
 			for(var i = 0; i < localStorage.length; i++){
 				array.push(localStorage.getItem(localStorage.key(i)));
 			}
 			
+			
 			var objParams = {
 					"channelname" : $('#channelname').val(),
+					"chtype" : chtype,
 					"selectlist" : array
 			};
-			
+
 			$.ajax({
                 url         :   "/createchannel",
                 dataType    :   "json",
@@ -435,6 +340,8 @@ ul.mylist2 li, ol.mylist2 li {
                     console.log("AJAX_ERROR");
                 }
             });
+			$('.modal-wrapper2').toggleClass('open');
+			}
 		});
 
 	});

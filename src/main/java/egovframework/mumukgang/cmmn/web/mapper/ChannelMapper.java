@@ -10,6 +10,7 @@ import org.antlr.codegen.ObjCTarget;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import egovframework.mumukgang.cmmn.web.vo.Chnum;
+import egovframework.mumukgang.cmmn.web.vo.Food;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -27,4 +28,18 @@ public interface ChannelMapper {
 	public HashMap<String, Object> selectchname(HashMap<String, Object> map);
 	
 	public List<HashMap<String, Object>> chhost (HashMap<String, Object> map);
+	
+	public List<Food> selectfood ();
+	
+	public int countchmem (int roomNo);
+	
+	public int delauthority (HashMap<String, Object> map);
+	
+	public void delchannel (HashMap<String, Object> map);
+	
+	public List<HashMap<String, Object>> findpublicch();
+	
+	public int ispublicch (ChannelMember channelmember);
+	
+	public  List<HashMap<String, Object>> searchpublicch (String keyword);
 }

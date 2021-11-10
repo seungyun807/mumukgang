@@ -3,6 +3,8 @@ package egovframework.mumukgang.cmmn.web.chat.controller;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -41,17 +43,34 @@ public class ChatController {
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
 		String loginid = (String)session.getAttribute("email");
 		ChannelMember channelmember = new ChannelMember();
-		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		List<HashMap<String, Object>> chcreater;
 		
 		channelmember.setCh_num(roomNo);
 		channelmember.setEmail(loginid);
+		map.put("email", loginid);
+		chcreater = channelmapper.chhost(map);
+		int chtype = channelmapper.ispublicch(channelmember);
 		
 		int result = channelmapper.authoritychannel(channelmember);
-		System.out.println(result);
+		int countchmem = channelmapper.countchmem(roomNo);
 		
+		model.addAttribute("chcreater", chcreater);
+		model.addAttribute("countchmem", countchmem);
 		model.addAttribute("roomNo", roomNo);
+		model.addAttribute("foodlist", channelmapper.selectfood());
+		System.out.println(channelmapper.selectfood());
 		
-		if(result > 0) {
+		if (chtype > 0) {
+			map.put("ch_num", roomNo);
+			String chname = (String)channelmapper.selectchname(map).get("ch_name");
+			model.addAttribute("chname", chname);
+			return "chat/chatting";
+		}
+		else if(result > 0) {
+			map.put("ch_num", roomNo);
+			String chname = (String)channelmapper.selectchname(map).get("ch_name");
+			model.addAttribute("chname", chname);
 			return "chat/chatting";
 		}
 		else {

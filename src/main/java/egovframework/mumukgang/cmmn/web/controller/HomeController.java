@@ -28,12 +28,6 @@ public class HomeController {
 	@Resource
 	MemberMapper membermapper;
 	
-	@RequestMapping(value="/home")
-	public String viewHome() {
-		return "home/Home";
-	}
-	
-	
 	/***
 	 * 친구 리스트 불러오기
 	 * 

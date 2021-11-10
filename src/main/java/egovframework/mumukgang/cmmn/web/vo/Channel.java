@@ -14,6 +14,6 @@ public class Channel{
 	private String ch_name;
 	private String ch_create_email;
 	private String ch_date;
-	
+	private boolean ch_type;
 	
 }

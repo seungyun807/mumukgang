@@ -64,12 +64,15 @@ public class ChatController {
 		if (chtype > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");
+			//String chtype = (String)channelmapper.selectchtype(map).get("ch_type");
 			model.addAttribute("chname", chname);
+			model.addAttribute("chtype", Integer.toString(chtype));
 			return "chat/chatting";
 		}
 		else if(result > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");
+			model.addAttribute("chtype", Integer.toString(chtype));
 			model.addAttribute("chname", chname);
 			return "chat/chatting";
 		}

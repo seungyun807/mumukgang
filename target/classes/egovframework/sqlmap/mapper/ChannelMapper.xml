@@ -7,31 +7,43 @@
 			SELECT ifnull(MAX(ch_num),0)+1 AS ch_num
 			FROM channel_info
 		</selectKey>
-		INSERT INTO channel_info (ch_num, ch_name, ch_create_email, ch_date, ch_type)VALUES(#{ch_num}, #{ch_name}, #{ch_create_email}, #{ch_date}, #{ch_type});
+		INSERT INTO channel_info (ch_num, ch_name, ch_create_email, ch_date, ch_type, ch_region)VALUES(#{ch_num}, #{ch_name}, #{ch_create_email}, #{ch_date}, #{ch_type}, #{ch_region});
 	</insert>
 	
 	<insert id="channelmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
-		INSERT INTO channel VALUES (#{ch_num}, #{email})
+		INSERT INTO channel_member (ch_num, email) VALUES (#{ch_num}, #{email})
 	</insert>
 	
 	<select id="authoritychannel" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
-		SELECT COUNT(*) FROM channel WHERE ch_num = #{ch_num} AND email = #{email}
+		SELECT COUNT(*) FROM channel_member WHERE ch_num = #{ch_num} AND email = #{email} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="participatingch" parameterType="hashmap" resultType="egovMap">
-		SELECT * FROM channel WHERE email = #{email}
+		SELECT * FROM channel_member WHERE email = #{email} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="chhost" parameterType="hashmap" resultType="egovMap">
-		SELECT ch_num FROM channel_info WHERE ch_create_email = #{email}
+		SELECT ch_num FROM channel_info WHERE ch_create_email = #{email} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="selectchname" parameterType="hashmap" resultType="hashmap">
-		SELECT ch_name FROM channel_info WHERE ch_num = #{ch_num}
+		SELECT ch_name FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N'
+	</select>
+	
+	<select id="selectchtype" parameterType="hashmap" resultType="hashmap">
+		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="searchpublicch" parameterType="string" resultType="egovMap">
 		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1
+	</select>
+	
+	<select id="searchpublicchregion" parameterType="string" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_region = #{region} AND ch_type = 1 AND DEL_YN = 'N'
+	</select>
+	
+	<select id="searchpublicchwithregion" parameterType="hashmap" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND region = #{region} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="selectfood"  resultType="egovMap">
@@ -39,25 +51,27 @@
 	</select>
 	
 	<select id="countchmem" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM channel WHERE ch_num = #{roomNo}
+		SELECT COUNT(*) FROM channel_member WHERE ch_num = #{roomNo} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="delauthority" parameterType="hashmap" resultType="int">
 		SELECT COUNT(*) FROM channel_info WHERE ch_num = #{roomNo} AND ch_create_email = #{email}
 	</select>
 	
-	<delete id="delchannel" parameterType="hashmap">
-		DELETE FROM channel WHERE ch_num = #{roomNo}
+	<update id="delchannel" parameterType="hashmap">
+		UPDATE channel_member SET DEL_YN = 'Y' WHERE ch_num = #{roomNo};
+		UPDATE channel_info SET DEL_YN = 'Y' WHERE ch_num = #{roomNo};
 		<!-- DELETE * FROM channel_info WHERE ch_num = #{roomNo} -->
-	</delete>
+	</update>
 	
 	<select id="findpublicch" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_type = 1
+		SELECT * FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N'
 	</select>
 	
 	<select id="ispublicch" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
-		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num}
+		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N'
 	</select>
+	
 	
 	
 </mapper>

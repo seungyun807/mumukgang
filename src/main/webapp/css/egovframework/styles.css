@@ -311,3 +311,16 @@ a {
 #custom-search-input .glyphicon-search {
 	font-size: 23px;
 }
+ion-icon {
+ pointer-events: none;
+}
+
+.listdiv {
+	display: grid;
+	grid-template-columns: 55px 1fr 55px ;
+	text-align: left;
+	width: 80%;
+	height: 80px;
+	align-items: center;
+	border-bottom: 1px solid #d3d3d3;
+}

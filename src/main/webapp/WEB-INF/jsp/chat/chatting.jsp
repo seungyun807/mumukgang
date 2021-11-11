@@ -87,7 +87,16 @@ input{
 	<div class="mydiv">
 		<div class="item">
 			<h3>채널</h3>
-			<h6>${chname}</h6>
+			<h6>${chname}&nbsp;
+			<c:choose>
+				<c:when test="${chtype eq '0'}"><span title="비공개방"><ion-icon name="lock-closed-outline"></ion-icon></span></c:when>
+				<c:otherwise><span title="공개방"><ion-icon name="lock-open-outline"></ion-icon></span></c:otherwise>
+			</c:choose>
+			
+			<c:if test=""></c:if>
+			
+			</h6>
+			
 		</div>
 
 		<div class="item"></div>

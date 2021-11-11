@@ -10,15 +10,6 @@
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 </head>
 <style>
-.listdiv {
-	display: grid;
-	grid-template-columns: 1fr 4fr 0.7fr;
-	text-align: left;
-	width: 380px;
-	height: 80px;
-	align-items: center;
-	border-bottom: 1px solid #d3d3d3;
-}
 .listdivitem:nth-child(1) {
 	grid-column: 1/2;
 	grid-row: 1/3;
@@ -49,8 +40,13 @@ ion-icon {
 
 .item:nth-child(1) {
 	grid-column: 1/3;
-	grid-row: 1/2;
 	margin-bottom: 20px;
+}
+.item:nth-child(2) {
+	grid-column: 1/3;
+}
+.item:nth-child(3) {
+	grid-column: 1/3;
 }
 
 
@@ -118,7 +114,10 @@ label {
 #radio {
     margin-bottom: .4rem;
 }
-
+#chaddbtn{
+	float: right;
+	margin-left: 20%;
+}
 </style>
 
 <body>
@@ -129,11 +128,12 @@ label {
 		</div>
 
 		<div class="item">
-			<button class="btn btn-primary trigger">채널만들기+</button>
+			<button class="btn btn-primary trigger" id="chaddbtn">채널만들기+</button>
 		</div>
 
 		<div class="item">
-
+			<h6>내가 참여중인 채널</h6>
+			<hr>
 			<ul class="list-group">
 				<c:forEach var="namelist" items="${namelist}" varStatus="status">
 					<div class="listdiv">
@@ -170,8 +170,28 @@ label {
 					<div class="form-group">
 						<div id="radio">
 							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
-							
 							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
+						</div>
+						<div id="regiondiv" style="display: none;">
+							<select class="form-select form-select-sm" name="region" id="region">
+   								<option value="">지역선택</option>
+   								<option value="전체">전체</option>
+   				 				<option value="경기">경기</option>
+    			 				<option value="서울">서울</option>
+    			 				<option value="인천">인천</option>
+    			 				<option value="대전">대전</option>
+    			 				<option value="대구">대구</option>
+    			 				<option value="울산">울산</option>
+    			 				<option value="부산">부산</option>
+    			 				<option value="광주">광주</option>
+    			 				<option value="강원">강원</option>
+    			 				<option value="충남">충남</option>
+    			 				<option value="충북">충북</option>
+    			 				<option value="경북">경북</option>
+    			 				<option value="경남">경남</option> 
+    			 				<option value="전북">전북</option>
+    			 				<option value="전남">전남</option> 
+							</select>
 						</div>
 						<input id="channelname" type="email" class="form-control" placeholder="채널이름" /> <br>
 
@@ -239,6 +259,8 @@ label {
 		$("#channel").addClass("active");
 		
 		var chtype = false;
+		var chregion = "";
+		
 		$('.trigger').click(function() {
 			$('.modal-wrapper').toggleClass('open');
 			
@@ -260,11 +282,17 @@ label {
 			$("input[name='chtype']:checked").each(function(){	
 				if ($(this).val() == "onlyfriend") {
 					chtype = false;
+					$('#regiondiv').css('display', 'none');
 				}else{
 					chtype = true;
+					$('#regiondiv').css('display', 'inline');
 				}
 			});
 			
+		});
+		
+		$('.form-select-sm').change(function (){
+			chregion = $('#region option:selected').text();
 		});
 		
 
@@ -316,8 +344,10 @@ label {
 			var objParams = {
 					"channelname" : $('#channelname').val(),
 					"chtype" : chtype,
+					"chregion" : chregion,
 					"selectlist" : array
 			};
+			console.log(objParams);
 
 			$.ajax({
                 url         :   "/createchannel",

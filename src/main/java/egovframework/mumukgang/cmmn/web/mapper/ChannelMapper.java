@@ -27,6 +27,8 @@ public interface ChannelMapper {
 	
 	public HashMap<String, Object> selectchname(HashMap<String, Object> map);
 	
+	public HashMap<String, Object> selectchtype(HashMap<String, Object> map);
+	
 	public List<HashMap<String, Object>> chhost (HashMap<String, Object> map);
 	
 	public List<Food> selectfood ();
@@ -42,4 +44,8 @@ public interface ChannelMapper {
 	public int ispublicch (ChannelMember channelmember);
 	
 	public  List<HashMap<String, Object>> searchpublicch (String keyword);
+	
+	public  List<HashMap<String, Object>> searchpublicchregion (String ch_region);
+	
+	public  List<HashMap<String, Object>> searchpublicchwithregion (HashMap<String, Object> map);
 }

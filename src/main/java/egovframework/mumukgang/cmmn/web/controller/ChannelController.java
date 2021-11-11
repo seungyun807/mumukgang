@@ -87,15 +87,13 @@ public class ChannelController {
 			
 		}
 		
-		
-		
 		System.out.println(namelist);
 		
 		model.addAttribute("namelist", namelist);
 		model.addAttribute("chlist", chlist);
 		model.addAttribute("friendslist", friendslist);
 			
-		return "home/channel";
+		return "home/ChannelList";
 	}
 	
 	
@@ -109,6 +107,7 @@ public class ChannelController {
 			@RequestParam(value="selectlist[]", required = false) List<String> list,
 			@RequestParam(value="channelname") String chname,
 			@RequestParam(value="chtype") Boolean chtype,
+			@RequestParam(value="chregion", required = false) String chregion,
 			HttpSession session) {
 		System.out.println("createchannel 진입");
 		System.out.println("chtype == " + chtype);
@@ -125,6 +124,7 @@ public class ChannelController {
 		channel.setCh_name(chname);
 		channel.setCh_date(latestDate);
 		channel.setCh_type(chtype);
+		channel.setCh_region(chregion);
 		
 		channelmapper.createchannel(channel);
 		int createChnum = channel.getCh_num();
@@ -132,14 +132,15 @@ public class ChannelController {
 		channelMember2.setCh_num(createChnum);
 		channelMember2.setEmail(loginid);
 		channelmapper.channelmember(channelMember2);
-		
-	
-		for(int i=0; i < list.size(); i++) {
-			channelMember2.setCh_num(createChnum);
-			channelMember2.setEmail(list.get(i));
-			channelmapper.channelmember(channelMember2);
-			System.out.println("list = " + channelMember2);
+		if (list != null) {
+			for(int i=0; i < list.size(); i++) {
+				channelMember2.setCh_num(createChnum);
+				channelMember2.setEmail(list.get(i));
+				channelmapper.channelmember(channelMember2);
+				System.out.println("list = " + channelMember2);
+			}
 		}
+		
 				
 		//리턴값
         Map<String, Object> retVal = new HashMap<String, Object>();
@@ -182,24 +183,53 @@ public class ChannelController {
 	
 	
 	/***
-	 * 채널찾기 view
+	 * 채널찾기 view 및 검색
 	 * 
 	 * */
 	@RequestMapping(value="/findchannel")
-	public String findChannel(Model model) {
-		model.addAttribute("chlist", channelmapper.findpublicch());
-		return "home/FindChannel";
-	}
-	
-	/***
-	 * 채널검색
-	 * 
-	 * */
-	@RequestMapping(value="/searchch", method=RequestMethod.POST)
-	public String searchChannel(@RequestParam HashMap<String, Object> map, Model model) {
+	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map, Model model) {
 		String keyword = (String) map.get("findchannel");
-		System.out.println(channelmapper.searchpublicch(keyword));
-		model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
-		return "home/FindChannel";
+		String chregion = (String) map.get("region");
+		System.out.println(chregion);
+		//System.out.println(chregion.equals("전체"));
+		
+		if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
+			System.out.println("전체");
+			model.addAttribute("chlist", channelmapper.findpublicch());
+			return "home/FindChannel";
+		}
+		else if (keyword != null && chregion.equals("전체")) {
+			System.out.println("searchpublicch");
+			model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
+			return "home/FindChannel";
+		}
+		else if (keyword != null && chregion != null) {
+			System.out.println("searchpublicchwithregion");
+			System.out.println(map);
+			model.addAttribute("chlist", channelmapper.searchpublicchwithregion(map));
+			return "home/FindChannel";
+		}
+		else if(chregion != null){
+			System.out.println("searchpublicchregion");
+			model.addAttribute("chlist", channelmapper.searchpublicchregion(chregion));
+			return "home/FindChannel";
+		}
+		else {
+			model.addAttribute("chlist", channelmapper.findpublicch());
+			return "home/FindChannel";
+		}
+		
 	}
+//	
+//	/***
+//	 * 채널검색
+//	 * 
+//	 * */
+//	@RequestMapping(value="/searchch", method=RequestMethod.POST)
+//	public String searchChannel(@RequestParam HashMap<String, Object> map, Model model) {
+//		String keyword = (String) map.get("findchannel");
+//		System.out.println(channelmapper.searchpublicch(keyword));
+//		model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
+//		return "home/FindChannel";
+//	}
 }

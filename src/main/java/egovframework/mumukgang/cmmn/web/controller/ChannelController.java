@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import com.sun.mail.handlers.image_gif;
 import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
 import egovframework.mumukgang.cmmn.web.mapper.MemberMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
+import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
@@ -89,6 +91,7 @@ public class ChannelController {
 		
 		System.out.println(namelist);
 		
+		model.addAttribute("chinvited", channelmapper.selectchinvited(loginemail));
 		model.addAttribute("namelist", namelist);
 		model.addAttribute("chlist", chlist);
 		model.addAttribute("friendslist", friendslist);
@@ -112,13 +115,14 @@ public class ChannelController {
 		System.out.println("createchannel 진입");
 		System.out.println("chtype == " + chtype);
 		String loginid = (String) session.getAttribute("email");
-		
+		String loginnick = (String) session.getAttribute("nickname");
 		SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");		
 		String latestDate = currentDateTime.format(new Date()).toString();
 		
 		System.out.println(latestDate);
 		
-		ChannelMember channelMember2 = new ChannelMember();
+		ChannelMember channelMember = new ChannelMember();
+		ChannelInvited chInvited = new ChannelInvited(); 
 		Channel channel = new Channel();
 		channel.setCh_create_email(loginid);
 		channel.setCh_name(chname);
@@ -129,19 +133,24 @@ public class ChannelController {
 		channelmapper.createchannel(channel);
 		int createChnum = channel.getCh_num();
 		
-		channelMember2.setCh_num(createChnum);
-		channelMember2.setEmail(loginid);
-		channelmapper.channelmember(channelMember2);
+		channelMember.setCh_num(createChnum);
+		channelMember.setEmail(loginid);
+		
+		channelmapper.channelmember(channelMember);
+		
+			
 		if (list != null) {
-			for(int i=0; i < list.size(); i++) {
-				channelMember2.setCh_num(createChnum);
-				channelMember2.setEmail(list.get(i));
-				channelmapper.channelmember(channelMember2);
-				System.out.println("list = " + channelMember2);
+			chInvited.setReq_email(loginid);
+			chInvited.setCh_num(createChnum);
+			chInvited.setCh_name(chname);
+			chInvited.setRequest_time(latestDate);
+			chInvited.setNickname(loginnick);
+			
+			for(int i=0; i < list.size(); i++) {	
+				chInvited.setRes_email(list.get(i));
+				channelmapper.channelinvited(chInvited);
 			}
 		}
-		
-				
 		//리턴값
         Map<String, Object> retVal = new HashMap<String, Object>();
         
@@ -151,6 +160,30 @@ public class ChannelController {
         
         return retVal;
  
+	}
+	
+	/***
+	 * 채널 요청 수락여부
+	 * 
+	 */
+	@PostMapping(value="/chreqaon")
+	@ResponseBody
+	public Object chReqAcceptance(@RequestParam(value="chnum") int chnum, @RequestParam(value="acceptornot") boolean aon, HttpSession session) {	
+		Map<String, Object> retVal = new HashMap<String, Object>();
+		ChannelMember channelMember = new ChannelMember();
+		
+		String loginId = (String) session.getAttribute("email");
+		channelMember.setCh_num(chnum);
+		channelMember.setEmail(loginId);
+		if (aon) {
+			channelmapper.channelmember(channelMember);
+			retVal.put("code", "OK");
+		} else {
+			retVal.put("code", "NO");
+		}
+		channelmapper.deleteinvited(channelMember);
+		
+		return retVal;	
 	}
 	
 	

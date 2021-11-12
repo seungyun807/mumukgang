@@ -14,6 +14,18 @@
 		INSERT INTO channel_member (ch_num, email) VALUES (#{ch_num}, #{email})
 	</insert>
 	
+	<insert id="deleteinvited" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
+		DELETE FROM channel_invited WHERE ch_num = #{ch_num} AND res_email = #{email}
+	</insert>
+	
+	<insert id="channelinvited" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelInvited">
+		INSERT INTO channel_invited VALUES (#{ch_num}, #{ch_name}, #{res_email}, #{req_email}, #{nickname}, #{request_time})
+	</insert>
+	
+	<select id="selectchinvited" parameterType="String" resultType="egovMap">
+		SELECT * FROM channel_invited WHERE res_email = #{email}
+	</select>
+	
 	<select id="authoritychannel" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
 		SELECT COUNT(*) FROM channel_member WHERE ch_num = #{ch_num} AND email = #{email} AND DEL_YN = 'N'
 	</select>

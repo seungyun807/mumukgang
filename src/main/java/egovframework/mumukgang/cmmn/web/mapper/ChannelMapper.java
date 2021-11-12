@@ -8,6 +8,7 @@ import java.util.Map;
 import org.antlr.codegen.ObjCTarget;
 
 import egovframework.mumukgang.cmmn.web.vo.Channel;
+import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Food;
@@ -48,4 +49,10 @@ public interface ChannelMapper {
 	public  List<HashMap<String, Object>> searchpublicchregion (String ch_region);
 	
 	public  List<HashMap<String, Object>> searchpublicchwithregion (HashMap<String, Object> map);
+	
+	public void channelinvited(ChannelInvited channelInvited);
+	
+	public List<ChannelInvited> selectchinvited(String email);
+	
+	public void deleteinvited(ChannelMember channelmember);
 }

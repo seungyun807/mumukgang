@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.mumukgang.cmmn.web.mapper.MenuMapper">
+
+	<select id="selectKorean" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식'
+	</select>
+	
+	<select id="selectJapanese" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '일식'
+	</select>
+	
+	<select id="selectChinese" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '중국집'
+	</select>
+	
+	<select id="selectAsianWestern" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '아시안양식'
+	</select>
+	
+	<select id="selectConvenience" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '간편식'
+	</select>
+	
+	<select id="selectFastFood" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '패스트푸드'
+	</select>
+	
+	<select id="selectBunsick" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '분식'
+	</select>
+</mapper>

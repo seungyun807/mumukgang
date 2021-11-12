@@ -31,24 +31,12 @@ ion-icon {
 
 .thirddiv {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 10px;
 	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
 }
-
-.item:nth-child(1) {
-	grid-column: 1/3;
-	margin-bottom: 20px;
-}
-.item:nth-child(2) {
-	grid-column: 1/3;
-}
-.item:nth-child(3) {
-	grid-column: 1/3;
-}
-
 
 
 #chatArea {
@@ -118,6 +106,29 @@ label {
 	float: right;
 	margin-left: 20%;
 }
+
+.item:nth-child(1) {
+	grid-column: 1/4;
+	margin-bottom: 20px;
+}
+.item:nth-child(2) {
+	grid-column: 1/4;
+}
+.item:nth-child(3) {
+	grid-column: 1/4;
+}
+.item:nth-child(4) {
+	grid-column: 1/3;
+}
+.item:nth-child(5) {
+	margin-top:20px;
+	grid-column: 3/4;
+}
+.cardDiv {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
 </style>
 
 <body>
@@ -133,8 +144,10 @@ label {
 
 		<div class="item">
 			<h6>내가 참여중인 채널</h6>
-			<hr>
-			<ul class="list-group">
+			<hr style="border: solid 5px #f89b00;">
+		</div>
+		<div class="item">
+		<ul class="list-group">
 				<c:forEach var="namelist" items="${namelist}" varStatus="status">
 					<div class="listdiv">
 						<div class="listdivitem">
@@ -152,6 +165,30 @@ label {
 					</div>
 				</c:forEach>
 			</ul>
+			
+		</div>
+		<div class="item">
+		<h6>초대받은 채널</h6>
+		<hr  style="border: solid 1px;">
+			<c:forEach var="chinvited" items="${chinvited}" varStatus="status">
+				<div class="card bg-light mb-3">
+						 	<div class="card-header">${chinvited.chName}</div>
+						 	<div class="card-body">
+								<h6 class="card-title">${chinvited.nickname} </h6>
+								<div class="cardDiv">
+									<p class="card-text"><span style="font-size: 13px;">(${chinvited.reqEmail})</span> ${chinvited.requestTime}</p>	
+						<div class = "btn-group" role="group" style="margin-left: 50px; margin-top: 5px;">
+							<button class="btn btn-secondary acceptch" id="${chinvited.chNum}">
+								<ion-icon name="checkmark-outline" style="color:green;"></ion-icon>
+							</button>
+							<button class="btn btn-secondary refusech" id="${chinvited.chNum}">
+								<ion-icon name="close-outline" style="color:red;"></ion-icon>
+							</button>
+						</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
 		</div>
 	</div>
 
@@ -251,6 +288,29 @@ label {
 
 </body>
 <script type="text/javascript">
+
+//채널 수락여부 ajax
+function chreqaon(AorN, chnum) {
+	$.ajax({
+        url         :   "/chreqaon",
+        dataType    :   "json",
+        contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+        type        :   "post",
+        data        :   {"chnum" : chnum,
+        				"acceptornot" : AorN
+        	},
+        success     :   function(retVal){
+            if(retVal.code == "NO") {  
+            	alert(retVal.message);
+            }
+            var link = "/channel";
+            location.href = link;
+        },
+        error       :   function(request, status, error){
+            console.log("AJAX_ERROR");
+        }
+    });
+}
 	$(document).ready(function() {
 		localStorage.clear();
 		$("#findchannel").removeClass("active");
@@ -326,6 +386,20 @@ label {
 					var link = '/enter/chat/'+chnum;
 					location.href = link;
 		});
+		
+		//채널 수락여부
+		$(".acceptch").click(function() {
+			if (confirm("채널에 참가하시겠습니까?")) {
+				chreqaon(true, $(this).attr("id"));
+			}
+		});
+		$(".refusech").click(function() {
+			if (confirm("채널을 거절하시겠습니까?")) {
+				chreqaon(false, $(this).attr("id"));
+			}
+		});
+		
+		
 		
 		$('#createchannel').click(function() {
 			if ($('#channelname').val() == "") {

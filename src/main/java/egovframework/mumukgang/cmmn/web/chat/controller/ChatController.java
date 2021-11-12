@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.mumukgang.cmmn.web.chat.model.vo.Chat;
 import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
+import egovframework.mumukgang.cmmn.web.mapper.MenuMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ public class ChatController {
 	
 	@Resource
 	ChannelMapper channelmapper;
+	@Resource
+	MenuMapper menumapper;
 	
 	@MessageMapping("/hello/{roomNo}")
 	@SendTo("/subscribe/chat/{roomNo}")
@@ -42,6 +45,32 @@ public class ChatController {
 	@RequestMapping("/enter/chat/{roomNo}")
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
 		String loginid = (String)session.getAttribute("email");
+		
+		List<HashMap<String, Object>> korean;
+		List<HashMap<String, Object>> japan;
+		List<HashMap<String, Object>> china;
+		List<HashMap<String, Object>> asianweston;
+		List<HashMap<String, Object>> convenience;
+		List<HashMap<String, Object>> fastfood;
+		List<HashMap<String, Object>> bunsick;
+		
+		korean = menumapper.selectKorean();
+		japan = menumapper.selectJapanese();
+		china = menumapper.selectChinese();
+		asianweston = menumapper.selectAsianWestern();
+		convenience = menumapper.selectConvenience();
+		fastfood = menumapper.selectFastFood();
+		bunsick = menumapper.selectBunsick();
+		
+		model.addAttribute("korean", korean);
+		model.addAttribute("japan", japan);
+		model.addAttribute("china", china);
+		model.addAttribute("asianweston", asianweston);
+		model.addAttribute("convenience", convenience);
+		model.addAttribute("fastfood", fastfood);
+		model.addAttribute("bunsick", bunsick);
+		
+		
 		ChannelMember channelmember = new ChannelMember();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<HashMap<String, Object>> chcreater;
@@ -59,6 +88,8 @@ public class ChatController {
 		model.addAttribute("countchmem", countchmem);
 		model.addAttribute("roomNo", roomNo);
 		model.addAttribute("foodlist", channelmapper.selectfood());
+		
+		
 		System.out.println(channelmapper.selectfood());
 		
 		if (chtype > 0) {

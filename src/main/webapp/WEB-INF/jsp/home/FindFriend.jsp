@@ -15,21 +15,34 @@
 <style>
 .thirddiv {
 	display: grid;
+	grid-template-columns: 1fr 1fr;
 	grid-column-gap: 10px;
 	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
 }
 
-.item {
-	margin-bottom: 20px;
-}
 .itemflex:nth-child(1) {
 	flex-grow: 1;
 	text-align: right;
 	/* flex-grow: 0; */ /* 기본값 */
 }
+.card-body {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.item:nth-child(1) {
+	grid-column: 1/3;
+} 
+.item:nth-child(2) {
+	grid-column: 1/3;
+	margin-bottom: 50px;
+} 
 
+.item:nth-child(3) {
+	
+} 
 
 </style>
 <body>
@@ -41,9 +54,7 @@
 			<h3>친구찾기</h3>
 		</div>
 		<div class="item">
-
-			<div class="item">
-
+			<hr>
 				<div id="custom-search-input">
 					<div class="input-group col-md-12">
 						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="닉네임으로 검색해주세요" onkeyup="if(window.event.keyCode==13){findfriends()}" /> <span class="input-group-btn">
@@ -52,33 +63,39 @@
 							</button>
 						</span>
 					</div>
-				</div>
 
 			</div>
 
 		</div>
 
 		<div class="item">
-			<h3>친구요청</h3>
-		</div>
-
-		<div class="item">
+		<h6>받은 친구요청</h6>
+			<hr>
 			<c:forEach var="resfriend" items="${resfriends}" varStatus="status">
-				<div class="card text-white bg-info mb-3" style="max-width: 20rem; height: 100px;">
+				<div class="card card bg-light mb-3" style="height: 100px; max-width: 383px;">
 					<div class="card-body">
 						<div>
 							<p class="card-title">${resfriend.reqNickname}</p>
-							<p class="card-text">${resfriend.reqEmail}</p>
+							<p class="card-text" style="font-size: 13px">(${resfriend.reqEmail})</p>
 						</div>
 						<br>
-						<div class = "itemflex" style="margin-left: 50px; margin-top: 5px;">
-							<button class="btn btn-secondary acceptfriend" id="${resfriend.index}">
-								<ion-icon name="person-add-outline"></ion-icon>
-							</button>
+							<div class = "btn-group" role="group" style="margin-left: 30px; margin-top: 5px;">
+								<button class="btn btn-secondary acceptfriend" id="${resfriend.index}">
+									<ion-icon name="checkmark-outline" style="color:green;"></ion-icon>
+								</button>
+								<button class="btn btn-secondary refusech" id="${chinvited.chNum}">
+									<ion-icon name="close-outline" style="color:red;"></ion-icon>
+								</button>
 						</div>
 					</div>
 				</div>
 			</c:forEach>
+		</div>
+
+		<div class="item">
+			<h6>요청한 친구</h6>
+			<hr>
+			
 		</div>
 	</div>
 

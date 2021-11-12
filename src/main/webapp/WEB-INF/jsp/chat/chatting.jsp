@@ -81,6 +81,8 @@ input{
 	margin-left: 6px;
 	margin-bottom: 3px;
 }
+
+
 </style>
 <body>
 	<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
@@ -104,14 +106,53 @@ input{
 		<div class="item">
 			<div id="page-content-wrapper">
 				<div class="container-fluid">
-					<div class="col-md-5" id="noneDiv" style="display: none;">
-						<button class="btn btn-secondary">숨은버튼</button>
-					</div>
-					<c:forEach var="foodlist" items="${foodlist}" varStatus="status">
-								
-							
-						<button class="btn btn-secondary foodbtn" id="onDisplay" style="margin: 2px;">${foodlist.foodName}</button>
-					</c:forEach>
+					
+						<button class="btn btn-warning" id="korean">한식</button>
+							<div class="col-md-5" id="koreanDiv" style="display: none;">
+								<div id="koreanDiv"  style="display: inline">
+								<c:forEach var="korean" items="${korean}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${korean.foodName}</button>
+								</c:forEach>
+								</div>
+							</div>
+						<button class="btn btn-warning" id="bunsick">분식</button>
+							<div class="col-md-5" id="bunsickDiv" style="display: none;">
+								<c:forEach var="bunsick" items="${bunsick}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${bunsick.foodName}</button>
+								</c:forEach>
+							</div>
+						<button class="btn btn-warning" id="japan">일식</button>
+							<div class="col-md-5" id="japanDiv" style="display: none;">
+								<c:forEach var="japan" items="${japan}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${japan.foodName}</button>
+								</c:forEach>
+							</div>
+						<button class="btn btn-warning" id="asianweston">아시안·양식</button>
+							<div class="col-md-5" id="asianwestonDiv" style="display: none;">
+								<c:forEach var="asianweston" items="${asianweston}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${asianweston.foodName}</button>
+								</c:forEach>
+							</div>
+						<button class="btn btn-warning" id="china">중국집</button>
+							<div class="col-md-5" id="chinaDiv" style="display: none;">
+								<c:forEach var="china" items="${china}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${china.foodName}</button>
+								</c:forEach>
+							</div>
+						<button class="btn btn-warning" id="fastfood">패스트푸드</button>
+							<div class="col-md-5" id="fastfoodDiv" style="display: none;">
+								<c:forEach var="fastfood" items="${fastfood}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${fastfood.foodName}</button>
+								</c:forEach>
+							</div>
+						<button class="btn btn-warning" id="convenience">간편식</button>
+							<div class="col-md-5" id="convenienceDiv" style="display: none;">
+								<c:forEach var="convenience" items="${convenience}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${convenience.foodName}</button>
+								</c:forEach>
+							</div>
+					
+						
 				</div>
 			</div>
 			
@@ -192,16 +233,25 @@ input{
 <script type="text/javascript">
 $(function(){
 	
-	$('#onDisplay').click(function(){
-		if($("#noneDiv").css("display") == "none"){
-			$('#noneDiv').css("display", "inline");
+	
+	
+	$('.btn-warning').click(function(){
+		
+		var clicked = "#"+$(this).attr('id')+"Div";
+		console.log(clicked);
+		
+		if($(clicked).css("display") == "none"){
+			$(clicked).css("display", "inline");
+			$(clicked).slideDown(2000);
+			
+			
+			
 		}
 		else{
-			$('#noneDiv').css("display", "none");
+			$(clicked).css("display", "none");
 		}
+		
 	});
-	
-
 
 	
 	$('.trigger2').on('click', function() {

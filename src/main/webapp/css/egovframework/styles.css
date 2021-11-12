@@ -7,9 +7,7 @@
 
     /* Colores */
     --first-color: #cc6600;
-    /*#0c5df4*/
     --bg-color: #f89b00;
-    /*#12192c*/
     --sub-color: #b6cefc;
     --white-color: #fff;
 
@@ -166,7 +164,6 @@ a {
     transform: rotate(180deg);
     transition: .5s;
 }
-
 /*-- POPUP --*/
 .modal-wrapper {
 	width: 100%;
@@ -273,13 +270,6 @@ a {
 	font-size: 45px;
 }
 
-
-.card-body {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-
 #custom-search-input {
 	padding: 3px;
 	border: solid 1px #E4E4E4;
@@ -311,9 +301,7 @@ a {
 #custom-search-input .glyphicon-search {
 	font-size: 23px;
 }
-ion-icon {
- pointer-events: none;
-}
+
 
 .listdiv {
 	display: grid;

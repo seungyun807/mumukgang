@@ -79,11 +79,11 @@
 							<p class="card-text" style="font-size: 13px">(${resfriend.reqEmail})</p>
 						</div>
 						<br>
-							<div class = "btn-group" role="group" style="margin-left: 30px; margin-top: 5px;">
+							<div class = "btn-group" role="group" style="margin-left: 45px; margin-top: 5px;">
 								<button class="btn btn-secondary acceptfriend" id="${resfriend.index}">
 									<ion-icon name="checkmark-outline" style="color:green;"></ion-icon>
 								</button>
-								<button class="btn btn-secondary refusech" id="${chinvited.chNum}">
+								<button class="btn btn-secondary refusefriend" id="${resfriend.index}">
 									<ion-icon name="close-outline" style="color:red;"></ion-icon>
 								</button>
 						</div>
@@ -95,6 +95,20 @@
 		<div class="item">
 			<h6>요청한 친구</h6>
 			<hr>
+			<c:forEach var="reqfriends" items="${reqfriends}" varStatus="status">
+				<div class="card card bg-light mb-3" style="height: 100px; max-width: 383px;">
+					<div class="card-body">
+						<div>
+							<p class="card-title">${reqfriends.resNickname}</p>
+							<p class="card-text" style="font-size: 13px">(${reqfriends.resEmail})</p>
+						</div>
+						<br>
+								<button class="btn btn-secondary cancelreq" id="${reqfriends.index}" style="margin-left: 90px; margin-top: 5px;">
+									<ion-icon name="close-outline" style="color:red;"></ion-icon>
+								</button>
+					</div>
+				</div>
+			</c:forEach>
 			
 		</div>
 	</div>
@@ -174,9 +188,10 @@
 								}
 							});
 						});
+						$('.modal-wrapper').toggleClass('open');
 					}
+					
 				});
-		$('.modal-wrapper').toggleClass('open');
 	}
 
 	$(document).ready(function() {
@@ -200,12 +215,27 @@
 			findfriends();
 		});
 
-		$('.acceptfriend').on('click', function() {
+		$('.acceptfriend, .refusefriend, .cancelreq').on('click', function() {
 			var acceptId = $(this).attr("id");
+			var state = $(this).attr("class").substr(18, 1);
+			var msg = "";
+			var refuse = false;
+			console.log(state);
+			if (state.includes("a")) {
+				msg = "친구요청을 수락하시겠습니까?"
+			} else if (state.includes("r")) {
+				msg = "친구요청을 거절하시겠습니까?"
+				refuse = true;
+			} else {
+				msg = "친구요청을 취소하시겠습니까?"
+				refuse = true;
+			}
+			if(confirm(msg)){
 			$.ajax({
 				type : 'post',
 				data : {
-					"index" : acceptId
+					"index" : acceptId,
+					"refuse" : refuse
 				},
 				url : "/acceptfriends",
 				success : function(returnData, status) {
@@ -220,13 +250,16 @@
 						alert("ERROR!" + error);
 						return;
 					}
+					
 				}
 
 			})
 			var link = '/findfriends';
 			location.href = link;
+		}
+			
 		});
-
+		
 	});
 </script>
 </html>

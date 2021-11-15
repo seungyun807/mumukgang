@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sun.mail.handlers.image_gif;
 
 import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
-import egovframework.mumukgang.cmmn.web.mapper.MemberMapper;
+import egovframework.mumukgang.cmmn.web.mapper.FriendMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
@@ -36,9 +36,9 @@ import reactor.util.annotation.Nullable;
 public class ChannelController {
 	
 	@Resource
-	MemberMapper membermapper;
+	FriendMapper friendMapper;
 	@Resource
-	ChannelMapper channelmapper;
+	ChannelMapper channelMapper;
 	
 	
 	/***
@@ -60,12 +60,12 @@ public class ChannelController {
 		System.out.println("mapper 전");
 		
 		
-		friendslist = membermapper.friendslist(map);
+		friendslist = friendMapper.friendslist(map);
 		
 		//참여중인 채널 번호
-		chlist = channelmapper.participatingch(map);
+		chlist = channelMapper.participatingch(map);
 		//loginid가 만든 채널번호
-		chcreater = channelmapper.chhost(map);
+		chcreater = channelMapper.chhost(map);
 		
 		System.out.println(chcreater);
 		
@@ -79,11 +79,11 @@ public class ChannelController {
 
 			if (String.valueOf(chcreater).contains(data.get("chNum").toString())) {
 				System.out.println("들어옴");
-				String chname = "*" + (String)channelmapper.selectchname(map).get("ch_name");
+				String chname = "*" + (String)channelMapper.selectchname(map).get("ch_name");
 				namelist.add(chname);
 			}
 			else {
-				String chname = (String)channelmapper.selectchname(map).get("ch_name");
+				String chname = (String)channelMapper.selectchname(map).get("ch_name");
 				namelist.add(chname);
 			}
 			
@@ -91,7 +91,7 @@ public class ChannelController {
 		
 		System.out.println(namelist);
 		
-		model.addAttribute("chinvited", channelmapper.selectchinvited(loginemail));
+		model.addAttribute("chinvited", channelMapper.selectchinvited(loginemail));
 		model.addAttribute("namelist", namelist);
 		model.addAttribute("chlist", chlist);
 		model.addAttribute("friendslist", friendslist);
@@ -130,13 +130,13 @@ public class ChannelController {
 		channel.setCh_type(chtype);
 		channel.setCh_region(chregion);
 		
-		channelmapper.createchannel(channel);
+		channelMapper.createchannel(channel);
 		int createChnum = channel.getCh_num();
 		
 		channelMember.setCh_num(createChnum);
 		channelMember.setEmail(loginid);
 		
-		channelmapper.channelmember(channelMember);
+		channelMapper.channelmember(channelMember);
 		
 			
 		if (list != null) {
@@ -148,7 +148,7 @@ public class ChannelController {
 			
 			for(int i=0; i < list.size(); i++) {	
 				chInvited.setRes_email(list.get(i));
-				channelmapper.channelinvited(chInvited);
+				channelMapper.channelinvited(chInvited);
 			}
 		}
 		//리턴값
@@ -176,12 +176,12 @@ public class ChannelController {
 		channelMember.setCh_num(chnum);
 		channelMember.setEmail(loginId);
 		if (aon) {
-			channelmapper.channelmember(channelMember);
+			channelMapper.channelmember(channelMember);
 			retVal.put("code", "OK");
 		} else {
 			retVal.put("code", "NO");
 		}
-		channelmapper.deleteinvited(channelMember);
+		channelMapper.deleteinvited(channelMember);
 		
 		return retVal;	
 	}
@@ -197,11 +197,11 @@ public class ChannelController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("roomNo", roomNo);
 		map.put("email", session.getAttribute("email"));
-		int result = channelmapper.delauthority(map);
+		int result = channelMapper.delauthority(map);
 		
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		if (result > 0) {
-			channelmapper.delchannel(map);
+			channelMapper.delchannel(map);
 			//리턴값
 	        retVal.put("code", "OK");
 	        retVal.put("message", "삭제에 성공 하였습니다.");
@@ -228,27 +228,27 @@ public class ChannelController {
 		
 		if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
 			System.out.println("전체");
-			model.addAttribute("chlist", channelmapper.findpublicch());
+			model.addAttribute("chlist", channelMapper.findpublicch());
 			return "home/FindChannel";
 		}
 		else if (keyword != null && chregion.equals("전체")) {
 			System.out.println("searchpublicch");
-			model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
+			model.addAttribute("chlist", channelMapper.searchpublicch(keyword));
 			return "home/FindChannel";
 		}
 		else if (keyword != null && chregion != null) {
 			System.out.println("searchpublicchwithregion");
 			System.out.println(map);
-			model.addAttribute("chlist", channelmapper.searchpublicchwithregion(map));
+			model.addAttribute("chlist", channelMapper.searchpublicchwithregion(map));
 			return "home/FindChannel";
 		}
 		else if(chregion != null){
 			System.out.println("searchpublicchregion");
-			model.addAttribute("chlist", channelmapper.searchpublicchregion(chregion));
+			model.addAttribute("chlist", channelMapper.searchpublicchregion(chregion));
 			return "home/FindChannel";
 		}
 		else {
-			model.addAttribute("chlist", channelmapper.findpublicch());
+			model.addAttribute("chlist", channelMapper.findpublicch());
 			return "home/FindChannel";
 		}
 		
@@ -261,8 +261,8 @@ public class ChannelController {
 //	@RequestMapping(value="/searchch", method=RequestMethod.POST)
 //	public String searchChannel(@RequestParam HashMap<String, Object> map, Model model) {
 //		String keyword = (String) map.get("findchannel");
-//		System.out.println(channelmapper.searchpublicch(keyword));
-//		model.addAttribute("chlist", channelmapper.searchpublicch(keyword));
+//		System.out.println(channelMapper.searchpublicch(keyword));
+//		model.addAttribute("chlist", channelMapper.searchpublicch(keyword));
 //		return "home/FindChannel";
 //	}
 }

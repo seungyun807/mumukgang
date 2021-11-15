@@ -36,6 +36,8 @@ ion-icon {
 	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 100px;
+	width: 90%;
+    min-width: 870px;
 }
 
 

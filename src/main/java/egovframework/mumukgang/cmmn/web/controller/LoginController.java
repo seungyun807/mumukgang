@@ -93,7 +93,7 @@ public class LoginController {
 		model.addAttribute("map", map);
 		
 		if(result != 0) {
-			  nickname = membermapper.findfriendsemail(params);
+			  nickname = membermapper.selectEandNick(params);
 			 
 			  session.setAttribute("email", email);
 			  session.setAttribute("nickname", (String)nickname.get("nickname"));
@@ -124,7 +124,7 @@ public class LoginController {
 		
 		if (email != null) {
 			System.out.println("kakaologin = " + email );
-			nickname = membermapper.findfriendsemail(params);
+			nickname = membermapper.selectEandNick(params);
 			session.setAttribute("email", email);
 			session.setAttribute("nickname", (String)nickname.get("nickname"));
 			return "/findchannel";

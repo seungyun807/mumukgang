@@ -98,6 +98,7 @@ ion-icon {
 		$("#channel").removeClass("active");
 		
 		$(".delfriendbtn").on('click', function() {
+			if (confirm("친구를 삭제하시겠습니까?")){
 			 var delemail = $(this).attr("value");
 			 $.ajax({
 					type : 'post',
@@ -114,6 +115,7 @@ ion-icon {
 					}
 						
 				});
+			}
 		});
 	});
 </script>

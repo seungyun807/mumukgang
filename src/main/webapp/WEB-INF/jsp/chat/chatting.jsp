@@ -21,14 +21,16 @@
 <style>
 #pickBox{
 	width: 80%;
-	height: 80%;
-		overflow: auto;
+	height: 80px;
+	overflow: auto;
 	overflow-x: hidden;
 }
 #resultBox{
-	width: 80%;
-	height: 30%;
-	margin: 5px;
+	width: 200px;
+	height: 35px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	text-align: center;
 }
 #chatArea {
 	width: 100%;
@@ -38,18 +40,24 @@
 	
 }
 #sendBtn{
-	width: 32px;
-    height: 32px;
+	width: 60px;
+    height: 30px;
+	font-size: 12px;
+	margin-left : 1px;
+	border-color: transparent !important;
+	 white-space: nowrap;
 }
 
 .mydiv {
 	display: grid;
 	grid-template-columns: 3.5fr 1fr;
-	grid-template-rows: 100px 500px 100px;
+	grid-template-rows: 100px 500px 250px;
 	grid-column-gap: 10px;
 	margin-left: 50px;
 	margin-top: 20px;
 	margin-right: 50px;
+	width: 90%;
+    min-width: 870px;
 }
 
 .item:nth-child(1) {
@@ -62,10 +70,10 @@
 	overflow-x: hidden;
 	
 }
-.item:nth-child(5) {
-	align-items: center;
-    justify-content: center;
-	
+.item:nth-child(6) {
+	display: flex;
+    justify-content: flex-end;
+	 margin: auto 0 0 auto;
 }
 input{
 	width: 80%;
@@ -80,6 +88,16 @@ input{
  	cursor: pointer;
 	margin-left: 6px;
 	margin-bottom: 3px;
+}
+.boxDiv{
+	display: flex;
+	flex-direction: column;
+	background-color: #f0f0f0;
+	border-radius: 15px;
+	margin: 10px;
+	margin-right: 50px;
+	align-items: center;
+	padding: 20px;
 }
 
 
@@ -165,26 +183,30 @@ input{
 			<br>
 			<div class="inputdiv">
 			 <input type="text" id="message" class="form-control"/>
-			 <button class="btn btn-warning" id="sendBtn" ><ion-icon name="send-outline"></ion-icon></button>
+			 <button class="btn btn-secondary" id="sendBtn" >전송</button>
 			</div> <br>
 
 		</div>
 		<div class="item">
-			
+			<div class="boxDiv">
 			<div id="pickBox" class="form-control">
 			</div>
 			<div class="form-control" id="resultBox">
 				
 			</div>
-			<button class="btn btn-primary"  id="randomstart">랜덤뽑기</button>
-			<button class="btn btn-info"  id="findplace">주변음식점찾기</button>
+			
+			<div class = "btn-group" role="group">
+					<button class="btn btn-primary"  id="randomstart">랜덤뽑기</button>
+					<button class="btn btn-info"  id="findplace">주변음식점찾기</button>
+			</div>
+			</div>
 		</div>
 		<div class="item">
 				<c:set var = "roomNo" scope = "session" value = "${roomNo}"/>
 					<c:forEach var="chcreater" items="${chcreater}" varStatus="status">
 			 			<c:set var = "chcreaternum" scope = "session" value = "${chcreater.chNum}"/>
 							<c:if test= "${chcreaternum eq roomNo}">
-								<button class="btn btn-primary" id="delchannelbtn" >채널삭제</button>
+								<button class="btn btn-danger" id="delchannelbtn" style="width: 80px; font-size: 13px;" >채널삭제</button>
 							</c:if>
 					</c:forEach>
 			
@@ -197,15 +219,11 @@ input{
 			<div class="head">
 				<a class="btn-close trigger" href="#"> <i class="fa fa-times" aria-hidden="true"></i>
 				</a>
-
 			</div>
 			<div class="content">
 				<div class="good-job">
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-
 					<div class="form-group" id="findplacebox">
-						
-						
 					</div>
 				</div>
 				
@@ -232,8 +250,6 @@ input{
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2eebb72cbf45a61d75d2efc7638259a2"></script>
 <script type="text/javascript">
 $(function(){
-	
-	
 	
 	$('.btn-warning').click(function(){
 		
@@ -355,6 +371,7 @@ function locationclick(x, y) {
 
 		function doresult(msg) {
 			$('#resultBox').text(msg.result);
+			$('#resultBox').css("background-color", "lightyellow");
 		}
 		function sendmsg() {
 			var message = $("#message").val();
@@ -416,6 +433,7 @@ function locationclick(x, y) {
 			
 			$('#randomstart').click(function() {
 				//$('.modal-wrapper').toggleClass('open');
+				$('#resultBox').css("background-color", "transparent");
 				var ele = document.getElementById('pickBox');
 				var eleCount = ele.childElementCount;
 				var list = [];
@@ -423,7 +441,18 @@ function locationclick(x, y) {
 					list.push($('#pickBox').children().eq(i).attr('id'));
 				}
 				result = list[Math.floor(Math.random() * list.length)];
-				sendresult();
+				
+					for (var i = 0; i < eleCount; i++) {
+						(function(x) {
+							setTimeout(function() {
+								console.log(x);
+								$('#resultBox').text(list[x]);
+									}, 90*x);
+							})(i);
+						}
+
+				//sendresult();
+		 	
 				
 			});
 			

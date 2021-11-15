@@ -19,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import egovframework.mumukgang.cmmn.web.mapper.MemberMapper;
+import egovframework.mumukgang.cmmn.web.mapper.FriendMapper;
+import egovframework.mumukgang.cmmn.web.vo.FriendReq;
 import lombok.experimental.var;
 
 @Controller
-public class HomeController {
+public class FriendController {
 
 	@Resource
-	MemberMapper membermapper;
+	FriendMapper friendMapper;
 	
 	/***
 	 * 친구 리스트 불러오기
@@ -41,7 +42,7 @@ public class HomeController {
 		
 		System.out.println("mapper 전");
 		
-		map2 = membermapper.friendslist(map);
+		map2 = friendMapper.friendslist(map);
 		
 			System.out.println("friendlist = " + map2);
 			model.addAttribute("friendslist", map2);
@@ -59,65 +60,71 @@ public class HomeController {
 	@RequestMapping(value="/findfriends")
 	public String viewFindFriend(Model model, HttpSession session) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		List<Map<String, Object>> listmap;
-		
+		List<Map<String, Object>> receivedlist;
+		List<Map<String, Object>> requestlist;
 		
 		String loginEmail = (String) session.getAttribute("email");
-		map.put("res_email", loginEmail);
+		map.put("email", loginEmail);
 		
-		System.out.println(membermapper.receivedfriendrequest(map));
-		listmap = membermapper.receivedfriendrequest(map);
+		receivedlist = friendMapper.receivedfriendrequest(map);
+		requestlist = friendMapper.requestfriendslist(map);
 		
-		for(int i=0; i<listmap.size(); i++) {
-			listmap.get(i).put("index", i);
-			System.out.println(listmap.get(i));
+		for(int i=0; i<receivedlist.size(); i++) {
+			receivedlist.get(i).put("index", i);
 		}
 		
-		model.addAttribute("resfriends", listmap);
+		for(int i=0; i<requestlist.size(); i++) {
+			requestlist.get(i).put("index", i);
+		}
+		
+		model.addAttribute("resfriends", receivedlist);
+		model.addAttribute("reqfriends", requestlist);
 		return "home/FindFriend";
 	}
 	
 	/***
-	 * 친구요청 수락
+	 * 친구요청 수락 및 거절
 	 * 
 	 */
 	@RequestMapping(value="/acceptfriends", method=RequestMethod.POST)
 	@ResponseBody
-	public void acceptFriends(@RequestParam HashMap<String, Object> param, HttpSession session) {
-		System.out.println(param);
+	public void acceptFriends(@RequestParam(value="index") int req_index, @RequestParam(value="refuse") boolean refuse, HttpSession session) {
+		
 		String loginEmail = (String) session.getAttribute("email");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> map2;
+		FriendReq friendReq = new FriendReq();
 		
-		map.put("res_email", loginEmail);
+		map.put("email", loginEmail);
 		List<Map<String, Object>> listmap;
 		
-		// 요청한 사람 불러오기 listmap
-		listmap = membermapper.receivedfriendrequest(map);
+		if(!refuse) {
+			// 요청한 사람 불러오기 listmap
+			listmap = friendMapper.receivedfriendrequest(map);
+		} else {
+			listmap = friendMapper.requestfriendslist(map);
+		}
 		
-		int req_index = Integer.parseInt((String) param.get("index"));
 		map2 = listmap.get(req_index);
 		
-		String req_email = (String) map2.get("reqEmail");
-		String req_nickname = (String) map2.get("reqNickname");
-		String res_email = (String) map2.get("resEmail");
-		String res_nickname = (String) map2.get("resNickname");
+		//친구요청 거절시
+		friendMapper.acceptfriends(map2);
 		
-		HashMap<String, Object> map3 = new HashMap<String, Object>();
-		map3.put("req_email", req_email);
-		map3.put("req_nickname", req_nickname);
-		map3.put("res_email", res_email);
-		map3.put("res_nickname", res_nickname);
+		// 친구요청 수락시
+		if (!refuse) {
+			System.out.println("친구요청수락");
+			//INSERT
+			friendReq.setReq_email((String) map2.get("reqEmail"));
+			friendReq.setReq_nickname((String) map2.get("reqNickname"));
+			friendReq.setRes_email((String) map2.get("resEmail"));
+			friendReq.setRes_nickname((String) map2.get("resNickname"));
+			
+			friendMapper.addtofriends(friendReq);
+			friendMapper.addtofriends2(friendReq);
+		}
 		
-		//DELETE
-		membermapper.acceptfriends(map3);
-		
-		//INSERT
-		System.out.println(membermapper.addtofriends(map3));
-		System.out.println(membermapper.addtofriends2(map3));
-		
-		System.out.println(map2);
 	}
+
 	
 	/***
 	 * DB 친구 찾기
@@ -130,9 +137,9 @@ public class HomeController {
 		
 		
 		System.out.println("findfriendsdo = " + param);
-		System.out.println("membermapper.findfriendsnickname(param) = " + membermapper.findfriendsnickname(param));
+		System.out.println("friendMapper.findfriendsnickname(param) = " + friendMapper.findfriendsnickname(param));
 		
-		map = membermapper.findfriendsnickname(param);
+		map = friendMapper.findfriendsnickname(param);
 		
 		String findnick = (String)map.get("email");
 		String loginnick = (String)session.getAttribute("email");
@@ -159,12 +166,12 @@ public class HomeController {
 		param.put("email", loginEmail);
 		
 				//중복 거르기
-		if(membermapper.finddupfriends(param) > 0) {
-			System.out.println("중복거르기" + membermapper.finddupfriends(param));
-			System.out.println(membermapper.receivedfriendrequest(param));
+		if(friendMapper.finddupfriends(param) > 0) {
+			System.out.println("중복거르기" + friendMapper.finddupfriends(param));
+			System.out.println(friendMapper.receivedfriendrequest(param));
 			return "이미 등록된 친구입니다.";
 		} 
-		else if (membermapper.selectfriendrequest(param) > 0) {
+		else if (friendMapper.selectfriendrequest(param) > 0) {
 			return "이미 요청된 친구입니다.";
 		}
 		
@@ -172,7 +179,7 @@ public class HomeController {
 		
 		
 		map.put("email", loginEmail);
-		map = membermapper.selectnickname(map); 
+		map = friendMapper.selectnickname(map); 
 		String nickname = (String) map.get("nickname"); 
 		SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");		
 		String latestDate = currentDateTime.format(new Date()).toString();
@@ -180,7 +187,7 @@ public class HomeController {
 		param.put("req_email", loginEmail);
 		param.put("req_nickname", nickname);
 		param.put("request_time", latestDate);
-		int result = membermapper.requestfriends(param);
+		int result = friendMapper.requestfriends(param);
 		System.out.println("request result = " + result);
 		return "성공";
 		
@@ -198,7 +205,7 @@ public class HomeController {
 		
 		param.put("email", loginid);
 		
-		membermapper.delfriend(param);
+		friendMapper.delfriend(param);
 		
 		return "성공";
 		

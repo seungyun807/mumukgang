@@ -17,64 +17,9 @@
  	<select id="UserNickCheck" resultType="int">
             SELECT COUNT(*) from user where nickname=#{nickname}
     </select>
-	
-	<select id="findfriendsemail" parameterType="hashmap" resultType="Hashmap">
+    
+    <select id="selectEandNick" parameterType="hashmap" resultType="Hashmap">
 		SELECT email, nickname FROM user WHERE email=#{email}
 	</select>
 	
-	<select id="findfriendsnickname" parameterType="hashmap" resultType="Hashmap">
-		SELECT email, nickname FROM user WHERE nickname=#{nickname}
-	</select>
-
-	<select id="friendslist" parameterType="hashmap" resultType="egovMap">
-		SELECT friend_email, friend_nickname FROM friends_list WHERE email=#{email}
-	</select>
-	
-	<select id="finddupfriends" parameterType="hashmap" resultType="int">
-		SELECT count(*) FROM friends_list WHERE friend_email=#{res_email} AND email=#{email} 
-	</select>
-	
-	<insert id="requestfriends" parameterType="hashmap">
-		INSERT INTO friends_request VALUES(#{req_email}, #{req_nickname}, #{res_email}, #{res_nickname}, #{request_time})
-	</insert>
-
-	<select id="receivedfriendrequest" parameterType="hashmap" resultType="egovMap">
-		SELECT * FROM friends_request WHERE res_email=#{res_email}
-	</select>
-	
-	<select id="selectfriendrequest" parameterType="hashmap" resultType="int">
-		SELECT count(*) FROM friends_request WHERE req_email=#{email} AND res_email=#{res_email}
-	</select>
-	
-	<select id="selectnickname" parameterType="hashmap" resultType="hashmap">
-		SELECT nickname FROM user WHERE email=#{email}
-	</select>
-	
-	
-	<delete id="acceptfriends" parameterType="hashmap">
-		DELETE FROM friends_request WHERE res_email=#{res_email} AND req_email=#{req_email}
-	</delete>
-	
-	<insert id="addtofriends" parameterType="hashmap">
-		<!-- order="BEFORE" 삽입 전에 조회 -->
-		<!-- selectkey 구문 위치는 insert 쿼리 위 아래 상관 없이 위치 가능 -->
-		<selectKey keyProperty="relation_ID" resultType="String" order="BEFORE">
-			SELECT concat('RID_', LPAD(ifnull(MAX(substring(relation_ID,5)),0)+1,5,'0')) AS relation_ID
-			FROM friends_list
-		</selectKey>
-		INSERT INTO friends_list VALUES(#{relation_ID}, #{req_email}, #{res_email}, #{res_nickname});
-	</insert>
-	
-	<insert id="addtofriends2" parameterType="hashmap">
-		<selectKey keyProperty="relation_ID" resultType="String" order="BEFORE">
-			SELECT concat('RID_', LPAD(ifnull(MAX(substring(relation_ID,5)),0)+1,5,'0')) AS relation_ID
-			FROM friends_list
-		</selectKey>
-		INSERT INTO friends_list VALUES(#{relation_ID}, #{res_email}, #{req_email}, #{req_nickname});
-	</insert>
-	
-	<delete id="delfriend" parameterType="hashmap">
-		DELETE FROM friends_list WHERE email=#{email} AND friend_email=#{delemail};
-		DELETE FROM friends_list WHERE email=#{delemail} AND friend_email=#{email};
-	</delete>
 </mapper>

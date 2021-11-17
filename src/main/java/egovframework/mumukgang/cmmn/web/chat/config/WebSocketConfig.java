@@ -1,7 +1,8 @@
-package egovframework.mumukgang.cmmn.web.chat;
+package egovframework.mumukgang.cmmn.web.chat.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
@@ -16,13 +17,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import egovframework.mumukgang.cmmn.web.chat.StompHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
-		
+	
+    	@Autowired
+    	private StompHandler stompHandler;
 	
 		@Override
 		public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -36,6 +40,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
 					.setAllowedOrigins("*").withSockJS();
 		}
 	
-	
+	    @Override
+	    public void configureClientInboundChannel(ChannelRegistration registration) {
+	        registration.interceptors(stompHandler);
+	    }
 
 }

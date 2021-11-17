@@ -415,6 +415,8 @@ function locationclick(x, y) {
 			$('#exitBtn').click(function() {
 				disconnect();
 			});
+			
+			//메뉴 pick
 			$('.foodbtn').click(function() {
 				if($("#pickBox [id="+$(this).text()+"]").text() != ""){
 					alert("중복된 메뉴입니다.");
@@ -431,6 +433,7 @@ function locationclick(x, y) {
 				
 			});
 			
+			//랜덤뽑기
 			$('#randomstart').click(function() {
 				//$('.modal-wrapper').toggleClass('open');
 				$('#resultBox').css("background-color", "transparent");
@@ -451,7 +454,7 @@ function locationclick(x, y) {
 							})(i);
 						}
 
-				//sendresult();
+				sendresult();
 		 	
 				
 			});

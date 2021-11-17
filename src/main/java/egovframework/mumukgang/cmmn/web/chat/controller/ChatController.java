@@ -7,8 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.enterprise.context.Conversation;
 import javax.servlet.http.HttpSession;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -33,9 +38,17 @@ public class ChatController {
 	@Resource
 	MenuMapper menumapper;
 	
+	
+	//private final RedisPublisher redisPublisher;
+
 	@MessageMapping("/hello/{roomNo}")
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
+		//redisPublisher.publish(chat, message);
+		//HashOperations<String, String, Conversation> ho = redisTemplate.opsForHash();
+		
+		//System.out.println("redis haskey = " +ho.hasKey(chat.getMemberId(), chat.getChatContent()));
+		
 		chat.setSendDate(new Date());
 		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
 		
@@ -88,9 +101,7 @@ public class ChatController {
 		model.addAttribute("countchmem", countchmem);
 		model.addAttribute("roomNo", roomNo);
 		model.addAttribute("foodlist", channelmapper.selectfood());
-		
-		
-		System.out.println(channelmapper.selectfood());
+
 		
 		if (chtype > 0) {
 			map.put("ch_num", roomNo);

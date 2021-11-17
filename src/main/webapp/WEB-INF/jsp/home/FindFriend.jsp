@@ -144,8 +144,7 @@
 						console.log(returnData);
 						if (status == "success") {
 							if (returnData.nickname != null) {
-								console.log(returnData.email);
-								console.log(returnData.nickname);
+								console.log(returnData);
 
 								var str = "";
 								str += returnData.email;
@@ -157,7 +156,11 @@
 								str += "<button class='btn btn-primary' id='requestbtn'>친구요청</button>";
 								$("#test").empty();
 								$("#test").append(str);
-							} else {
+							} else if( returnData == null) {
+								var str = "친구를 찾을수 없습니다.";
+								$("#test").empty();
+								$("#test").append(str);
+								//$('.modal-wrapper').toggleClass('open');
 							}
 						} else {
 							alert("ERROR!" + error);

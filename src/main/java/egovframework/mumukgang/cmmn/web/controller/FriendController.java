@@ -11,6 +11,7 @@ import javax.print.DocFlavor.STRING;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,6 +63,15 @@ public class FriendController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, Object>> receivedlist;
 		List<Map<String, Object>> requestlist;
+		
+		
+		//redis 테스트
+		if (session.getAttribute("test") == null) {
+			session.setAttribute("test", "hi!!!!!!!!!!!");
+		} else {
+			System.out.println("redis = " + session.getAttribute("test"));
+		}
+		
 		
 		String loginEmail = (String) session.getAttribute("email");
 		map.put("email", loginEmail);
@@ -132,7 +142,7 @@ public class FriendController {
 	 */
 	@RequestMapping(value="/findfriendsdo", method=RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> findFriend(@RequestParam HashMap<String, Object> param, HttpSession session) {
+	public Object findFriend(@RequestParam HashMap<String, Object> param, HttpSession session) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		
@@ -146,6 +156,8 @@ public class FriendController {
 
 		if (findnick.equals(loginnick)) {
 			return null;
+		} else if(map == null) {
+			return "찾는 친구가 없습니다";
 		}
 		
 		return map;

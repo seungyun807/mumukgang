@@ -25,6 +25,16 @@
 	grid-row: 1/3;
 	margin-top: 25px;
 }
+
+.listdivitem:nth-child(4) {
+	grid-column: 4/5;
+	grid-row: 1/3;
+	margin-top: 25px;
+}
+
+.listdiv{
+	grid-template-columns: 55px 300px 55px 55px !important;
+}
 ion-icon {
   font-size: 25px;
 }
@@ -160,6 +170,13 @@ label {
 							
 						</div>
 						<div class="listdivitem">
+							<c:if test="${createrTorN[status.index] eq true}">
+								<button class="btn setting" value="${chlist[status.index].chNum}"  title="설정">
+									<ion-icon name="settings-outline"></ion-icon>
+								</button>
+							</c:if>
+							</div>
+							<div class="listdivitem">
 							<button class="btn enterchbtn" value="${chlist[status.index].chNum}"  title="입장">
 								<ion-icon name="log-in-outline"></ion-icon>
 							</button>
@@ -244,12 +261,15 @@ label {
 								<button class="btn trigger2" id="addfriend" style="float: right;">친구추가＋</button>
 						
 						<br> <br>
-						<button class="btn btn-primary" id='createchannel'>만들기</button>
+						<div id='modaldiv'>
+						<button class="btn btn-primary" id='createchannel'>생성</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<!-- Modal -->
 	<div class="modal-wrapper2">
 		<div class="modal2">
@@ -287,7 +307,63 @@ label {
 			</div>
 		</div>
 	</div>
+	<!-- 
+	<div class="modal-wrapper3">
+		<div class="modal3">
+			<div class="head">
+				<a class="btn-close trigger3" href="#"> <i class="fa fa-times" aria-hidden="true"></i>
+				</a>
+			</div>
+			<div class="content">
+				<div class="good-job">
+					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
 
+					<div class="form-group">
+						<div id="radio">
+							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
+							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
+						</div>
+						<div id="regiondiv" style="display: none;">
+							<select class="form-select form-select-sm" name="region" id="region">
+   								<option value="">지역선택</option>
+   								<option value="전체">전체</option>
+   				 				<option value="경기">경기</option>
+    			 				<option value="서울">서울</option>
+    			 				<option value="인천">인천</option>
+    			 				<option value="대전">대전</option>
+    			 				<option value="대구">대구</option>
+    			 				<option value="울산">울산</option>
+    			 				<option value="부산">부산</option>
+    			 				<option value="광주">광주</option>
+    			 				<option value="강원">강원</option>
+    			 				<option value="충남">충남</option>
+    			 				<option value="충북">충북</option>
+    			 				<option value="경북">경북</option>
+    			 				<option value="경남">경남</option> 
+    			 				<option value="전북">전북</option>
+    			 				<option value="전남">전남</option> 
+							</select>
+						</div>
+						<input id="channelname" type="email" class="form-control" placeholder="채널이름" /> <br>
+
+						<div class="form-control" id="selectaddfriends">
+							
+							<ul class="mylist2">
+							</ul>
+						
+						</div>
+						
+								<button class="btn trigger2" id="addfriend" style="float: right;">친구설정</button>
+						
+						<br> <br>
+						<button class="btn btn-primary" id='updatechannel'>수정</button>
+						<button class="btn btn-danger" id="delchannelbtn"  >채널삭제</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+ -->
 </body>
 <script type="text/javascript">
 
@@ -325,8 +401,13 @@ function chreqaon(AorN, chnum) {
 		
 		$('.trigger').click(function() {
 			$('.modal-wrapper').toggleClass('open');
+			var str = "";
+			str += "<button class='btn btn-primary' id='createchannel'>생성</button>";
+			$('#modaldiv').empty();
+			$('#modaldiv').append(str);
 			
-			  setTimeout(function() {
+			
+			setTimeout(function() {
 	  				$('li').removeClass('change_back');
 	  				$("#channelname").val('');
 	  				$("#selectaddfriends").empty();
@@ -336,6 +417,11 @@ function chreqaon(AorN, chnum) {
 
 		$('.trigger2').click(function() {
 			$('.modal-wrapper2').toggleClass('open');
+			
+		});
+		
+		$('.trigger3').click(function() {
+			$('.modal-wrapper3').toggleClass('open');
 			
 		});
 		
@@ -370,6 +456,7 @@ function chreqaon(AorN, chnum) {
 			}
 
 		});
+		
 		$('#friendsaddbtn').click(function() {
 			$('.modal-wrapper2').toggleClass('open');
 			var str = "";
@@ -382,6 +469,74 @@ function chreqaon(AorN, chnum) {
 			$("#selectaddfriends").append(str);
 		});
 		
+		
+		//채널 설정
+		$(".setting").on('click', function() {
+			var str = "";
+			str += "<button class='btn btn-primary' id='updatechannel'>수정</button>";
+			str += "<button class='btn btn-danger' id='deletechannel'>채널삭제</button>";
+			$('#modaldiv').empty();
+			$('#modaldiv').append(str);
+			
+			 var chnum = String($(this).attr("value"));
+			 
+				$.ajax({
+					type : 'post',
+					data : {
+						"chnum" : chnum
+					},
+					url : "/settingch",
+					success : function(returnData, status) {
+						if (status == "success") {
+							if (returnData) {
+								$('#channelname').val(returnData.ch_name);
+								
+								var str = "";
+								str += "<ul class='mylist'>";
+								$('.mylist').conta
+								for(var i = 0; i < returnData.chmember.length; i++){
+									str += "<li>" + returnData.chmember[i] + "</li>";
+									$('.mylist').children('li:contains('+returnData.chmember[i]+')').trigger('click');
+								}
+								
+								console.log();
+								
+								str += "</ul>";
+								
+								$("#selectaddfriends").empty();
+								$("#selectaddfriends").append(str);
+								
+								
+								if (returnData.ch_type) {
+									$('#public').prop('checked', true);
+									$('#regiondiv').css('display', 'inline');
+									$('#region').val(returnData.ch_region).attr("selected", true);
+								} else {
+									$('#onlyfriend').prop('checked', true);
+									$('#regiondiv').css('display', 'none');
+									$('#region').val('지역선택').attr("selected", true);
+								}
+								
+							} else {
+
+							}
+						} else {
+							alert("ERROR!" + error);
+							return;
+						}
+						
+					}
+
+				})
+			 
+			 
+			 
+		  	 
+			 $('.modal-wrapper').toggleClass('open');
+		});
+		
+		
+		//채널 입장
 		$(".enterchbtn").on('click', function() {
 			 var chnum = $(this).attr("value");
 			

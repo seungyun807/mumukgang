@@ -23,6 +23,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
 		HttpSession httpSession = request.getSession();
 		
 		String loginId = (String)request.getSession().getAttribute("email");
+		
 		System.out.println("preHandle >>>  Controller 실행 전 실행");
 		System.out.println("loginId = " + loginId);
 		if(loginId != null) {return true;}

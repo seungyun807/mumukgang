@@ -235,6 +235,41 @@ a {
 	opacity: 1;
 }
 
+.modal-wrapper3 {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(128, 128, 128, 0.8);
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.25s ease-in-out;
+}
+
+.modal-wrapper3.open {
+	opacity: 1;
+	visibility: visible;
+}
+
+.modal3 {
+	width: 600px;
+	height: 470px;
+	display: block;
+	margin: 50% 0 0 -300px;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	background: #fff;
+	opacity: 0;
+	transition: all 0.5s ease-in-out;
+}
+
+.modal-wrapper3.open .modal3 {
+	margin-top: -200px;
+	opacity: 1;
+}
+
 .head {
 	width: 100%;
 	height: 50px;

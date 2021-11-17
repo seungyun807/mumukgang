@@ -55,7 +55,7 @@
 	</select>
 	
 	<select id="searchpublicchwithregion" parameterType="hashmap" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND region = #{region} AND DEL_YN = 'N'
+		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND ch_region = #{region} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="selectfood"  resultType="egovMap">
@@ -84,6 +84,12 @@
 		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N'
 	</select>
 	
+	<select id="selectchinfo" parameterType="int" resultType="hashmap">
+		SELECT ch_name, ch_type, ch_region FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N';
+	</select>
 	
+	<select id="selectchmember" parameterType="int" resultType="String">
+		SELECT email FROM channel_member WHERE ch_num = #{ch_num} AND DEL_YN = 'N';
+	</select>
 	
 </mapper>

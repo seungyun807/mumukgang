@@ -55,4 +55,8 @@ public interface ChannelMapper {
 	public List<ChannelInvited> selectchinvited(String email);
 	
 	public void deleteinvited(ChannelMember channelmember);
+	
+	public HashMap<String, Object> selectchinfo (int ch_num);
+	
+	public List<String> selectchmember (int ch_num);
 }

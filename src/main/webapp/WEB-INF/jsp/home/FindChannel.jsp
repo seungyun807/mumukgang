@@ -156,7 +156,7 @@ ion-icon {
 		$(".enterchbtn").on('click', function() {
 			
 			 var chnum = $(this).attr("value");
-			
+				
 					var link = '/enter/chat/'+chnum;
 					location.href = link;
 		});

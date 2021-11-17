@@ -53,12 +53,10 @@ public class ChannelController {
 		List<HashMap<String, Object>> chlist;
 		List<HashMap<String, Object>> chcreater;
 		List<String> namelist = new ArrayList<String>();
-
+		List<Boolean> createrTorN = new ArrayList<Boolean>();
+		
 		String loginemail = (String) session.getAttribute("email");
 		map.put("email", loginemail);
-		
-		System.out.println("mapper 전");
-		
 		
 		friendslist = friendMapper.friendslist(map);
 		
@@ -66,8 +64,6 @@ public class ChannelController {
 		chlist = channelMapper.participatingch(map);
 		//loginid가 만든 채널번호
 		chcreater = channelMapper.chhost(map);
-		
-		System.out.println(chcreater);
 		
 		map.clear();
 
@@ -78,19 +74,21 @@ public class ChannelController {
 			map.put("ch_num", data.get("chNum"));
 
 			if (String.valueOf(chcreater).contains(data.get("chNum").toString())) {
-				System.out.println("들어옴");
-				String chname = "*" + (String)channelMapper.selectchname(map).get("ch_name");
-				namelist.add(chname);
+				createrTorN.add(true);
+				//String chname = "*" + (String)channelMapper.selectchname(map).get("ch_name");
+				namelist.add((String)channelMapper.selectchname(map).get("ch_name"));
 			}
 			else {
-				String chname = (String)channelMapper.selectchname(map).get("ch_name");
-				namelist.add(chname);
+				createrTorN.add(false);
+				//String chname = (String)channelMapper.selectchname(map).get("ch_name");
+				namelist.add((String)channelMapper.selectchname(map).get("ch_name"));
 			}
 			
 		}
 		
-		System.out.println(namelist);
+		System.out.println(createrTorN);
 		
+		model.addAttribute("createrTorN", createrTorN);
 		model.addAttribute("chinvited", channelMapper.selectchinvited(loginemail));
 		model.addAttribute("namelist", namelist);
 		model.addAttribute("chlist", chlist);
@@ -226,14 +224,16 @@ public class ChannelController {
 		System.out.println(chregion);
 		//System.out.println(chregion.equals("전체"));
 		
-		if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
-			System.out.println("전체");
-			model.addAttribute("chlist", channelMapper.findpublicch());
-			return "home/FindChannel";
-		}
-		else if (keyword != null && chregion.equals("전체")) {
+		
+		if (keyword != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
 			System.out.println("searchpublicch");
 			model.addAttribute("chlist", channelMapper.searchpublicch(keyword));
+			return "home/FindChannel";
+		}
+		else if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
+			System.out.println("전체");
+			model.addAttribute("chlist", channelMapper.findpublicch());
+			System.out.println(channelMapper.findpublicch());
 			return "home/FindChannel";
 		}
 		else if (keyword != null && chregion != null) {
@@ -253,16 +253,20 @@ public class ChannelController {
 		}
 		
 	}
-//	
-//	/***
-//	 * 채널검색
-//	 * 
-//	 * */
-//	@RequestMapping(value="/searchch", method=RequestMethod.POST)
-//	public String searchChannel(@RequestParam HashMap<String, Object> map, Model model) {
-//		String keyword = (String) map.get("findchannel");
-//		System.out.println(channelMapper.searchpublicch(keyword));
-//		model.addAttribute("chlist", channelMapper.searchpublicch(keyword));
-//		return "home/FindChannel";
-//	}
+	
+	
+	/***
+	 * 채널 설정
+	 * 
+	 * */
+	@RequestMapping(value="/settingch", method=RequestMethod.POST)
+	@ResponseBody
+	public Object settingChannel(@RequestParam(value="chnum") String chnum, HttpSession session) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		List<String> list = channelMapper.selectchmember(Integer.parseInt(chnum));
+		list.remove(session.getAttribute("email"));
+		map = channelMapper.selectchinfo(Integer.parseInt(chnum));
+		map.put("chmember", list);
+		return map;
+	}
 }

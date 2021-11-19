@@ -29,4 +29,6 @@
 	<select id="selectBunsick" resultType="egovMap">
 		SELECT food_name FROM menu WHERE food_kinds = '분식'
 	</select>
+	
+	
 </mapper>

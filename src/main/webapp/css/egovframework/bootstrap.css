@@ -4421,6 +4421,7 @@ fieldset:disabled .btn {
   padding-left: 0;
   margin-bottom: 0;
   border-radius: 0.25rem;
+  margin-left : 10px;
 }
 
 .list-group-numbered {

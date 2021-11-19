@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta http-equiv="X-Frame-Options" content="sameorigin" />
 <title>채팅</title>
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -20,21 +21,21 @@
 %>
 <style>
 #pickBox{
-	width: 80%;
+	width: 90%;
 	height: 80px;
 	overflow: auto;
 	overflow-x: hidden;
+	margin-bottom: 15px;
 }
 #resultBox{
 	width: 200px;
 	height: 35px;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	text-align: center;
 }
 #chatArea {
 	width: 100%;
-	height: 80%;
+	height: 400px;
 	overflow: auto;
 	overflow-x: hidden;
 	
@@ -51,7 +52,7 @@
 .mydiv {
 	display: grid;
 	grid-template-columns: 3.5fr 1fr;
-	grid-template-rows: 100px 500px 250px;
+	grid-template-rows: 100px 460px 45px 250px;
 	grid-column-gap: 10px;
 	margin-left: 50px;
 	margin-top: 20px;
@@ -70,10 +71,14 @@
 	overflow-x: hidden;
 	
 }
-.item:nth-child(6) {
+.item:nth-child(4) {
+	grid-row: 2/4;
+	grid-column: 2/3;
+
+}
+.item:nth-child(7) {
 	display: flex;
-    justify-content: flex-end;
-	 margin: auto 0 0 auto;
+    flex-direction: column;
 }
 input{
 	width: 80%;
@@ -99,8 +104,24 @@ input{
 	align-items: center;
 	padding: 20px;
 }
-
-
+#inputmenu{
+	width: 200px;
+}
+.inputDiv{
+	display: flex;
+	justify-content: center;
+	margin-right: 50px;
+	margin-top: 15px;
+}
+#onlineDiv{
+	margin-top:5px;
+	height: 180px;
+}
+#delchannelbtn{
+	font-size: 12px;
+	margin-top: 10px;
+	margin-left: auto;
+}
 </style>
 <body>
 	<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
@@ -188,9 +209,17 @@ input{
 
 		</div>
 		<div class="item">
+		<div class="inputDiv">
+			<input class="form-control" id="inputmenu" placeholder="음식직접입력" onkeyup="if(window.event.keyCode==13){inputmenu()}"/>
+			<button class="btn btn btn-secondary inputmenu" id="sendBtn">입력</button>
+		</div>
+		</div>
+		<div class="item">
 			<div class="boxDiv">
 			<div id="pickBox" class="form-control">
 			</div>
+			
+			<span>오늘의 메뉴는?</span>
 			<div class="form-control" id="resultBox">
 				
 			</div>
@@ -202,11 +231,13 @@ input{
 			</div>
 		</div>
 		<div class="item">
+		<span>온라인 친구</span>
+		<div class="form-control" id="onlineDiv"></div>
 				<c:set var = "roomNo" scope = "session" value = "${roomNo}"/>
 					<c:forEach var="chcreater" items="${chcreater}" varStatus="status">
 			 			<c:set var = "chcreaternum" scope = "session" value = "${chcreater.chNum}"/>
 							<c:if test= "${chcreaternum eq roomNo}">
-								<button class="btn btn-danger" id="delchannelbtn" style="width: 80px; font-size: 13px;" >채널삭제</button>
+								<button class="btn btn-danger" id="delchannelbtn"  >채널삭제</button>
 							</c:if>
 					</c:forEach>
 			
@@ -249,6 +280,7 @@ input{
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2eebb72cbf45a61d75d2efc7638259a2"></script>
 <script type="text/javascript">
+
 $(function(){
 	
 	$('.btn-warning').click(function(){
@@ -259,9 +291,6 @@ $(function(){
 		if($(clicked).css("display") == "none"){
 			$(clicked).css("display", "inline");
 			$(clicked).slideDown(2000);
-			
-			
-			
 		}
 		else{
 			$(clicked).css("display", "none");
@@ -313,7 +342,6 @@ function locationclick(x, y) {
 		var sock = new SockJS("${pageContext.request.contextPath}/endpoint");
 		var client = Stomp.over(sock);
 		
-
 		client.connect({}, function() {
 			//alert("connect");
 
@@ -334,6 +362,12 @@ function locationclick(x, y) {
 				else{
 					appendMessage(content);
 				}
+				
+			});
+			
+			client.subscribe('/subscribe/chat', function(chat) {
+
+				alert("hi");
 				
 			});
 
@@ -433,6 +467,10 @@ function locationclick(x, y) {
 				
 			});
 			
+			
+			
+			
+			
 			//랜덤뽑기
 			$('#randomstart').click(function() {
 				//$('.modal-wrapper').toggleClass('open');
@@ -489,7 +527,29 @@ function locationclick(x, y) {
 				});
 			});
 			
-		
+			//메뉴 직접입력
+			function inputmenu() {
+				ispick = "<span id='" + $('#inputmenu').val()+"'>"+ $('#inputmenu').val()+" </span>";
+				pickid = $('#inputmenu').text();
+				sendmsg();
+				$('#inputmenu').val('');
+			setTimeout(function() {
+					ispick = "";
+				}, 500);
+			}
+			
+			
+			 $("#inputmenu").keyup(function(key) { 
+				 if(key.keyCode==13) {
+						inputmenu();
+			        }
+			});
+			
+			$('.inputmenu').click(function () {
+				inputmenu();
+			})
+			 
+			 
 			
 			$('.trigger').click(function() {
 				$('.modal-wrapper').toggleClass('open');

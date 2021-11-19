@@ -33,7 +33,8 @@
 }
 
 .listdiv{
-	grid-template-columns: 55px 300px 55px 55px !important;
+	grid-template-columns: 55px 350px 55px 55px !important;
+	width: 510px !important;
 }
 ion-icon {
   font-size: 25px;
@@ -62,7 +63,6 @@ ion-icon {
 	justify-content: center;
 	align-content: center;
 }
-
 #createfriendslist{
 	height: 230px;
 	margin-bottom: 15px;
@@ -262,7 +262,6 @@ label {
 						
 						<br> <br>
 						<div id='modaldiv'>
-						<button class="btn btn-primary" id='createchannel'>생성</button>
 						</div>
 					</div>
 				</div>
@@ -307,66 +306,12 @@ label {
 			</div>
 		</div>
 	</div>
-	<!-- 
-	<div class="modal-wrapper3">
-		<div class="modal3">
-			<div class="head">
-				<a class="btn-close trigger3" href="#"> <i class="fa fa-times" aria-hidden="true"></i>
-				</a>
-			</div>
-			<div class="content">
-				<div class="good-job">
-					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-
-					<div class="form-group">
-						<div id="radio">
-							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
-							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
-						</div>
-						<div id="regiondiv" style="display: none;">
-							<select class="form-select form-select-sm" name="region" id="region">
-   								<option value="">지역선택</option>
-   								<option value="전체">전체</option>
-   				 				<option value="경기">경기</option>
-    			 				<option value="서울">서울</option>
-    			 				<option value="인천">인천</option>
-    			 				<option value="대전">대전</option>
-    			 				<option value="대구">대구</option>
-    			 				<option value="울산">울산</option>
-    			 				<option value="부산">부산</option>
-    			 				<option value="광주">광주</option>
-    			 				<option value="강원">강원</option>
-    			 				<option value="충남">충남</option>
-    			 				<option value="충북">충북</option>
-    			 				<option value="경북">경북</option>
-    			 				<option value="경남">경남</option> 
-    			 				<option value="전북">전북</option>
-    			 				<option value="전남">전남</option> 
-							</select>
-						</div>
-						<input id="channelname" type="email" class="form-control" placeholder="채널이름" /> <br>
-
-						<div class="form-control" id="selectaddfriends">
-							
-							<ul class="mylist2">
-							</ul>
-						
-						</div>
-						
-								<button class="btn trigger2" id="addfriend" style="float: right;">친구설정</button>
-						
-						<br> <br>
-						<button class="btn btn-primary" id='updatechannel'>수정</button>
-						<button class="btn btn-danger" id="delchannelbtn"  >채널삭제</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
- -->
+	
 </body>
 <script type="text/javascript">
-
+var chtype = false;
+var chregion = "";
+var chnum = "";
 //채널 수락여부 ajax
 function chreqaon(AorN, chnum) {
 	$.ajax({
@@ -378,9 +323,7 @@ function chreqaon(AorN, chnum) {
         				"acceptornot" : AorN
         	},
         success     :   function(retVal){
-            if(retVal.code == "NO") {  
-            	alert(retVal.message);
-            }
+            alert(retVal.message);
             var link = "/channel";
             location.href = link;
         },
@@ -389,20 +332,107 @@ function chreqaon(AorN, chnum) {
         }
     });
 }
+
+function chcreateORupdate(state) {
+	
+	if ($('#channelname').val() == "") {
+		alert("채널 이름을 입력해주세요.");
+	}
+	else {
+	var array = new Array();
+	
+	for(var i = 0; i < localStorage.length; i++){
+		array.push(localStorage.getItem(localStorage.key(i)));
+	}
+	
+	var objParams = {
+			"channelname" : $('#channelname').val(),
+			"chtype" : chtype,
+			"chregion" : chregion,
+			"selectlist" : array,
+			"chnum" : chnum
+	};
+	
+	$.ajax({
+        url         :   state,
+        dataType    :   "json",
+        contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+        type        :   "post",
+        data        :   objParams,
+        success     :   function(retVal){
+
+            if(retVal.code == "OK") {
+                alert(retVal.message);
+                var link = "/channel";
+                location.href = link;
+            } else {
+                alert(retVal.message);
+            }
+             
+        },
+        error       :   function(request, status, error){
+            console.log("AJAX_ERROR");
+        }
+    });
+	$('.modal-wrapper2').toggleClass('open');
+	
+	}
+}
+
+function deletechannel() {
+	if (confirm("채널을 삭제하시겠습니까?")) {
+		$.ajax({
+            url         :   "/deletechannel",
+            dataType    :   "json",
+            contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+            type        :   "post",
+            data        :   {"roomNo" : chnum},
+            success     :   function(retVal){
+                if(retVal.code == "OK") {
+                    alert(retVal.message);
+                    var link = "/channel";
+                    location.href = link;
+                } else {
+                    alert(retVal.message);
+                }
+                 
+            },
+            error       :   function(request, status, error){
+                console.log("AJAX_ERROR");
+            }
+        });
+	}
+}
+
+
+//채널 만들기
+function createchannel() {
+	
+	var state = "/createchannel";
+	chcreateORupdate(state);
+
+}
+
+//채널 UPDATE
+function updatechannel() {
+	
+	var state = "/updatechannel";
+	chcreateORupdate(state);
+	
+}
+
 	$(document).ready(function() {
 		localStorage.clear();
 		$("#findchannel").removeClass("active");
 		$("#friendlist").removeClass("active");
 		$("#findfriend").removeClass("active");
 		$("#channel").addClass("active");
-		
-		var chtype = false;
-		var chregion = "";
+
 		
 		$('.trigger').click(function() {
 			$('.modal-wrapper').toggleClass('open');
 			var str = "";
-			str += "<button class='btn btn-primary' id='createchannel'>생성</button>";
+			str += "<button class='btn btn-primary createchannel' id='createchannel' onclick='createchannel()'>생성</button>";
 			$('#modaldiv').empty();
 			$('#modaldiv').append(str);
 			
@@ -470,15 +500,16 @@ function chreqaon(AorN, chnum) {
 		});
 		
 		
+		
 		//채널 설정
 		$(".setting").on('click', function() {
 			var str = "";
-			str += "<button class='btn btn-primary' id='updatechannel'>수정</button>";
-			str += "<button class='btn btn-danger' id='deletechannel'>채널삭제</button>";
+			str += "<button class='btn btn-primary' id='updatechannel' onclick='updatechannel()'>수정</button>";
+			str += "<button class='btn btn-danger' id='deletechannel' onclick='deletechannel()'>채널삭제</button>";
 			$('#modaldiv').empty();
 			$('#modaldiv').append(str);
 			
-			 var chnum = String($(this).attr("value"));
+			 chnum = String($(this).attr("value"));
 			 
 				$.ajax({
 					type : 'post',
@@ -528,9 +559,6 @@ function chreqaon(AorN, chnum) {
 					}
 
 				})
-			 
-			 
-			 
 		  	 
 			 $('.modal-wrapper').toggleClass('open');
 		});
@@ -558,53 +586,6 @@ function chreqaon(AorN, chnum) {
 		
 		
 		
-		$('#createchannel').click(function() {
-			if ($('#channelname').val() == "") {
-				alert("채널 이름을 입력해주세요.");
-			}
-			else {
-				
-			
-			var array = new Array();
-			
-			for(var i = 0; i < localStorage.length; i++){
-				array.push(localStorage.getItem(localStorage.key(i)));
-			}
-			
-			
-			var objParams = {
-					"channelname" : $('#channelname').val(),
-					"chtype" : chtype,
-					"chregion" : chregion,
-					"selectlist" : array
-			};
-			console.log(objParams);
-
-			$.ajax({
-                url         :   "/createchannel",
-                dataType    :   "json",
-                contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
-                type        :   "post",
-                data        :   objParams,
-                success     :   function(retVal){
-
-                    if(retVal.code == "OK") {
-                        alert(retVal.message);
-                        var link = "/channel";
-                        location.href = link;
-                    } else {
-                        alert(retVal.message);
-                    }
-                     
-                },
-                error       :   function(request, status, error){
-                    console.log("AJAX_ERROR");
-                }
-            });
-			$('.modal-wrapper2').toggleClass('open');
-			}
-		});
-
 	});
 </script>
 </html>

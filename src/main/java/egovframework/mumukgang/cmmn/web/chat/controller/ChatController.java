@@ -16,6 +16,8 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,18 +42,12 @@ public class ChatController {
 	
 	
 	//private final RedisPublisher redisPublisher;
-
+	private SimpMessageSendingOperations messagingTemplate;
 	@MessageMapping("/hello/{roomNo}")
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
-		//redisPublisher.publish(chat, message);
-		//HashOperations<String, String, Conversation> ho = redisTemplate.opsForHash();
-		
-		//System.out.println("redis haskey = " +ho.hasKey(chat.getMemberId(), chat.getChatContent()));
-		
 		chat.setSendDate(new Date());
 		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
-		
 		return chat;
 	}
 	

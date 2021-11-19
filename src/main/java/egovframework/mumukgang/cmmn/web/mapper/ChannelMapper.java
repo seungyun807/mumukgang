@@ -59,4 +59,8 @@ public interface ChannelMapper {
 	public HashMap<String, Object> selectchinfo (int ch_num);
 	
 	public List<String> selectchmember (int ch_num);
+	
+	public void updatech (Channel channel);
+	
+	public void updatedelchmember (ChannelMember channelMember);
 }

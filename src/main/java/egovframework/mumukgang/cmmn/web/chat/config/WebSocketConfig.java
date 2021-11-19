@@ -17,6 +17,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import egovframework.mumukgang.cmmn.web.chat.Messaging;
 import egovframework.mumukgang.cmmn.web.chat.StompHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,10 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
-	
+
     	@Autowired
     	private StompHandler stompHandler;
-	
+    	
 		@Override
 		public void configureMessageBroker(MessageBrokerRegistry config) {
 			config.enableSimpleBroker("/subscribe");

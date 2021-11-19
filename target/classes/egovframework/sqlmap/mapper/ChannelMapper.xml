@@ -92,4 +92,13 @@
 		SELECT email FROM channel_member WHERE ch_num = #{ch_num} AND DEL_YN = 'N';
 	</select>
 	
+	<update id="updatech" parameterType="egovframework.mumukgang.cmmn.web.vo.Channel">
+		UPDATE channel_info SET ch_name=#{ch_name}, ch_type=#{ch_type}, ch_region=#{ch_region} WHERE ch_num = #{ch_num};
+	</update>
+	
+	<update id="updatedelchmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
+		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num};
+	</update>
+	
+	
 </mapper>

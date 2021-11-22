@@ -97,8 +97,24 @@
 	</update>
 	
 	<update id="updatedelchmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
-		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num};
+		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num}
 	</update>
+	
+	<insert id="menupick" parameterType="hashmap">
+		INSERT INTO menu_pick VALUES(#{ch_num}, #{food_name})
+	</insert>
+	
+	<delete id="delmenupick" parameterType="hashmap">
+		DELETE FROM menu_pick WHERE ch_num=#{ch_num} AND food_name=#{food_name}
+	</delete>
+	
+	<select id="selcountmenupick" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM menu_pick WHERE ch_num = #{ch_num} AND food_name=#{food_name}
+	</select>
+	
+	<select id="selmenupick" parameterType="int" resultType="egovMap">
+		SELECT food_name FROM menu_pick WHERE ch_num = #{ch_num}
+	</select>
 	
 	
 </mapper>

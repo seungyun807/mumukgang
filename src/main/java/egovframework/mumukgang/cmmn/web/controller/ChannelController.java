@@ -358,4 +358,22 @@ public class ChannelController {
 		map.put("chmember", list);
 		return map;
 	}
+	
+	
+	/***
+	 * 채널별 pick 메뉴 저장 및 삭제
+	 * 
+	 * */
+	@RequestMapping(value="/pickmenu", method=RequestMethod.POST)
+	@ResponseBody
+	public void pickmenu(@RequestParam(value="pickid") String pick, @RequestParam(value="roomNo") int chnum, @RequestParam(value="del") boolean del) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ch_num", chnum);
+		map.put("food_name", pick);
+		if(del) {
+			channelMapper.delmenupick(map);
+		} else {
+			channelMapper.menupick(map);
+		}
+	}
 }

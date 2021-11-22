@@ -122,6 +122,24 @@ input{
 	margin-top: 10px;
 	margin-left: auto;
 }
+.jbul{
+	display: flex;
+	list-style: none;
+	flex-wrap: wrap;
+}
+.jbli {
+	border-radius: 40px 80px / 80px 40px;
+	background-color: #f5f5dc;
+	font-size: 15px;
+	padding: 5px;
+	margin-bottom: 10px
+}
+.pickdel{
+	margin-left: -6px;
+	color: #cc0000 !important;
+	margin-right: 5px;
+	cursor: pointer;
+}
 </style>
 <body>
 	<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
@@ -216,7 +234,17 @@ input{
 		</div>
 		<div class="item">
 			<div class="boxDiv">
-			<div id="pickBox" class="form-control">
+			<div id="pickBox">
+				
+				<ul class="jbul">
+				<c:forEach  var="pickmenu" items="${pickmenu}" varStatus="status">
+  					<li id='${pickmenu.foodName}' class="jbli">${pickmenu.foodName}</li>
+					<a class="pickdel" name='${pickmenu.foodName}'><ion-icon name="close-outline"></ion-icon></a>
+				</c:forEach>
+  				
+					</ul>
+
+					
 			</div>
 			
 			<span>오늘의 메뉴는?</span>
@@ -325,6 +353,32 @@ function locationclick(x, y) {
 	marker.setMap(map);
 		
 }
+
+function savepick(roomNo, pickid, del) {
+		console.log(pickid);
+		$.ajax({
+            url         :   "/pickmenu",
+            dataType    :   "json",
+            contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+            type        :   "post",
+            data        :   {"pickid" : pickid,
+            				 "roomNo" : roomNo,
+            				 "del" : del},
+            success     :   function(retVal){
+
+                if(retVal.code == "OK") {
+                  
+                } else {
+                 
+                }
+                 
+            },
+            error       :   function(request, status, error){
+                console.log("AJAX_ERROR");
+            }
+        });
+}
+
 	$(function() {
 		$("#findchannel").removeClass("active");
 		$("#friendlist").removeClass("active");
@@ -344,11 +398,10 @@ function locationclick(x, y) {
 		
 		client.connect({}, function() {
 			//alert("connect");
-
+			
 			//메세지 들어오는곳 == 구독한 채팅 채널
 			//roomNo는 채팅창 접속하는 url에 get방식의 값으로 연결해줌
 			//ex)채팅url?roomNo=13 이면 jsp el태그로 ${roomNo}로 가져와서 사용
-
 			client.subscribe('/subscribe/chat/' + roomNo, function(chat) {
 
 				//받은 데이터
@@ -376,8 +429,8 @@ function locationclick(x, y) {
 		function appendMessage(msg) {
 			if(msg.ispick != ""){
 				
-				$("#pickBox").append(msg.ispick);
-				//ispick = "";
+				$(".jbul").append(msg.ispick);
+				
 			}
 			else{
 			$("#chatMessageArea").append(
@@ -404,7 +457,7 @@ function locationclick(x, y) {
 		}
 
 		function doresult(msg) {
-			$('#resultBox').text(msg.result);
+			$('#resultBox').text(msg.result+"👀");
 			$('#resultBox').css("background-color", "lightyellow");
 		}
 		function sendmsg() {
@@ -449,6 +502,11 @@ function locationclick(x, y) {
 			$('#exitBtn').click(function() {
 				disconnect();
 			});
+			$('.pickdel').click(function() {
+				savepick(roomNo, $(this).attr("name"), true);
+				$(this).remove();
+				$('#'+$(this).attr('name')).remove();
+			})
 			
 			//메뉴 pick
 			$('.foodbtn').click(function() {
@@ -456,11 +514,11 @@ function locationclick(x, y) {
 					alert("중복된 메뉴입니다.");
 				}
 				else {
-					ispick = "<span id='" + $(this).text()+"'>"+ $(this).text()+" </span>";
+					ispick = "<li id='" + $(this).text()+"' class='jbli'>"+ $(this).text()+" </li><a class='pickdel'><ion-icon name='close-outline'></ion-icon></a>";
 					pickid = $(this).text();
 					sendmsg();
 				}
-				
+				savepick(roomNo, pickid, false);
 				setTimeout(function() {
 					ispick = "";
 	  			}, 500);
@@ -475,11 +533,11 @@ function locationclick(x, y) {
 			$('#randomstart').click(function() {
 				//$('.modal-wrapper').toggleClass('open');
 				$('#resultBox').css("background-color", "transparent");
-				var ele = document.getElementById('pickBox');
+				var ele = document.getElementsByTagName('ul')[0];
 				var eleCount = ele.childElementCount;
 				var list = [];
 				for(var i = 0; i < eleCount; i++){
-					list.push($('#pickBox').children().eq(i).attr('id'));
+					list.push($('.jbul').children().eq(i).attr('id'));
 				}
 				result = list[Math.floor(Math.random() * list.length)];
 				
@@ -491,9 +549,8 @@ function locationclick(x, y) {
 									}, 90*x);
 							})(i);
 						}
-
+					
 				sendresult();
-		 	
 				
 			});
 			

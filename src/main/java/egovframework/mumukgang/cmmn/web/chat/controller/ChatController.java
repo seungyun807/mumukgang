@@ -40,17 +40,23 @@ public class ChatController {
 	@Resource
 	MenuMapper menumapper;
 	
+	  private SimpMessagingTemplate template;
 	
-	//private final RedisPublisher redisPublisher;
-	private SimpMessageSendingOperations messagingTemplate;
+//	  @Autowired
+//	   public void setTemplate(SimpMessagingTemplate template) {
+//	        this.template = template;
+//	    }
+	  
 	@MessageMapping("/hello/{roomNo}")
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
 		chat.setSendDate(new Date());
 		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
+		//setTemplate(template);
+	   // this.template.convertAndSend("/subscribe/chat/9", chat);
 		return chat;
 	}
-	
+
 	@RequestMapping("/enter/chat/{roomNo}")
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
 		String loginid = (String)session.getAttribute("email");
@@ -97,8 +103,7 @@ public class ChatController {
 		model.addAttribute("countchmem", countchmem);
 		model.addAttribute("roomNo", roomNo);
 		model.addAttribute("foodlist", channelmapper.selectfood());
-
-		
+		model.addAttribute("pickmenu", channelmapper.selmenupick(roomNo));
 		if (chtype > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");

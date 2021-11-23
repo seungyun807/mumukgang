@@ -37,7 +37,7 @@
 	width: 510px !important;
 }
 ion-icon {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .thirddiv {
@@ -195,7 +195,7 @@ label {
 						 	<div class="card-body">
 								<h6 class="card-title">${chinvited.nickname} </h6>
 								<div class="cardDiv">
-									<p class="card-text"><span style="font-size: 13px;">(${chinvited.reqEmail})</span> ${chinvited.requestTime}</p>	
+									<p class="card-text" style="width: 70%;"><span style="font-size: 13px;">${chinvited.reqEmail}<br></span> ${chinvited.requestTime}</p>	
 						<div class = "btn-group" role="group" style="margin-left: 50px; margin-top: 5px;">
 							<button class="btn btn-secondary acceptch" id="${chinvited.chNum}">
 								<ion-icon name="checkmark-outline" style="color:green;"></ion-icon>

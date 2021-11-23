@@ -88,6 +88,7 @@ a {
 .nav__logo {
     color: var(--white-color);
     font-weight: 600;
+    cursor: pointer;
 }
 
 .nav__link {

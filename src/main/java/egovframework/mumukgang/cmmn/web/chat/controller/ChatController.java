@@ -103,7 +103,7 @@ public class ChatController {
 		model.addAttribute("countchmem", countchmem);
 		model.addAttribute("roomNo", roomNo);
 		model.addAttribute("foodlist", channelmapper.selectfood());
-		model.addAttribute("pickmenu", channelmapper.selmenupick(roomNo));
+		model.addAttribute("pickmenu", menumapper.selmenupick(roomNo));
 		if (chtype > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");

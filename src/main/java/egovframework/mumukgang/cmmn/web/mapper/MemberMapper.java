@@ -16,4 +16,6 @@ public interface MemberMapper {
 	public int UserNickCheck(String nickname);
 	
 	public HashMap<String, Object> selectEandNick(HashMap<String, Object> map);
+	
+	public HashMap<String, Object> selectUserInfo(HashMap<String, Object> map);
 }

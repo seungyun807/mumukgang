@@ -11,6 +11,11 @@
 </head>
 
 <script type="text/javascript">
+	function gotoMyPage(){
+		var link = "/confirmmypage";
+		location.href = link;
+	}
+
 	function gotoFindChannel() {
 		var link = "/findchannel";
 		location.href = link;
@@ -44,7 +49,7 @@
             <div>
                 <div class="nav__brand">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <span href="#" class="nav__logo">${nickname }</a>
+                    <span href="#" class="nav__logo"  onclick="gotoMyPage()">${nickname }</a>
                 </div>
                 <div class="nav__list">
                     <a href="#" class="nav__link active" id="findchannel" onclick="gotoFindChannel()">

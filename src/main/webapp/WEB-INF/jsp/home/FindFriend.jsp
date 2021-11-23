@@ -74,12 +74,12 @@
 			<c:forEach var="resfriend" items="${resfriends}" varStatus="status">
 				<div class="card card bg-light mb-3" style="height: 100px; max-width: 383px;">
 					<div class="card-body">
-						<div>
+						<div style="width: 260px;">
 							<p class="card-title">${resfriend.reqNickname}</p>
 							<p class="card-text" style="font-size: 13px">(${resfriend.reqEmail})</p>
 						</div>
 						<br>
-							<div class = "btn-group" role="group" style="margin-left: 45px; margin-top: 5px;">
+							<div class = "btn-group" role="group" style="margin-top: 5px;">
 								<button class="btn btn-secondary acceptfriend" id="${resfriend.index}">
 									<ion-icon name="checkmark-outline" style="color:green;"></ion-icon>
 								</button>
@@ -98,12 +98,12 @@
 			<c:forEach var="reqfriends" items="${reqfriends}" varStatus="status">
 				<div class="card card bg-light mb-3" style="height: 100px; max-width: 383px;">
 					<div class="card-body">
-						<div>
+						<div style="width: 303px;">
 							<p class="card-title">${reqfriends.resNickname}</p>
 							<p class="card-text" style="font-size: 13px">(${reqfriends.resEmail})</p>
 						</div>
 						<br>
-								<button class="btn btn-secondary cancelreq" id="${reqfriends.index}" style="margin-left: 90px; margin-top: 5px;">
+								<button class="btn btn-secondary cancelreq" id="${reqfriends.index}" style="margin-top: 5px;">
 									<ion-icon name="close-outline" style="color:red;"></ion-icon>
 								</button>
 					</div>

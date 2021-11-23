@@ -30,5 +30,23 @@
 		SELECT food_name FROM menu WHERE food_kinds = '분식'
 	</select>
 	
+	<insert id="menupick" parameterType="hashmap">
+		INSERT INTO menu_pick VALUES(#{ch_num}, #{food_name})
+	</insert>
 	
+	<select id="selcountmenupick" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM menu_pick WHERE ch_num = #{ch_num} AND food_name=#{food_name}
+	</select>
+	
+	<select id="selmenupick" parameterType="int" resultType="egovMap">
+		SELECT food_name FROM menu_pick WHERE ch_num = #{ch_num}
+	</select>
+	
+	<delete id="delmenupick" parameterType="hashmap">
+		DELETE FROM menu_pick WHERE ch_num=#{ch_num} AND food_name=#{food_name}
+	</delete>
+	
+	<delete id="delchmenu" parameterType="hashmap">
+		DELETE FROM menu_pick WHERE ch_num=#{ch_num}
+	</delete>
 </mapper>

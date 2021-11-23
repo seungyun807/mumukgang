@@ -35,8 +35,10 @@ public class LoginController {
 	public String viewJoin() {return "member/Join"; }
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String Join(@RequestParam HashMap<String, Object> params, Model model) throws Exception{
-		System.out.println("/join param = " + params);
+	public String Join(@RequestParam HashMap<String, Object> params, Model model, HttpSession session) throws Exception{
+
+		System.out.println("/join cast = " + session.getAttribute("cast"));
+		
 		int result = membermapper.UserJoin(params);
 		if(result > 0) {
 			model.addAttribute("joinmsg", "success");
@@ -118,7 +120,7 @@ public class LoginController {
 	@PostMapping(value="/kakaologin")
 	public String kakaologin(@RequestParam HashMap<String, Object> params, HttpSession session) throws Exception {
 		HashMap<String, Object> nickname = new HashMap<String, Object>();
-
+		
 		String email = (String)params.get("email");
 		
 		

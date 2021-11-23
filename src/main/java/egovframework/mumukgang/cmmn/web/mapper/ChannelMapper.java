@@ -64,11 +64,5 @@ public interface ChannelMapper {
 	
 	public void updatedelchmember (ChannelMember channelMember);
 	
-	public void menupick (HashMap<String, Object> map);
-	
-	public void delmenupick (HashMap<String, Object> map);
-	
-	public int selcountmenupick (HashMap<String, Object> map);
-	
-	public List<String> selmenupick (int ch_num);
+
 }

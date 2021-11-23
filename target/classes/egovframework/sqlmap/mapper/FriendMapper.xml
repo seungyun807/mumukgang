@@ -46,7 +46,7 @@
 			SELECT concat('RID_', LPAD(ifnull(MAX(substring(relation_ID,5)),0)+1,5,'0')) AS relation_ID
 			FROM friends_list
 		</selectKey>
-		INSERT INTO friends_list VALUES(#{relation_ID}, #{req_email}, #{res_email}, #{res_nickname})
+		INSERT INTO friends_list VALUES(#{relation_ID}, #{req_email}, #{res_email}, #{res_nickname}, NOW())
 	</insert>
 	
 	<insert id="addtofriends2" parameterType="egovframework.mumukgang.cmmn.web.vo.FriendReq">
@@ -54,7 +54,7 @@
 			SELECT concat('RID_', LPAD(ifnull(MAX(substring(relation_ID,5)),0)+1,5,'0')) AS relation_ID
 			FROM friends_list
 		</selectKey>
-		INSERT INTO friends_list VALUES(#{relation_ID}, #{res_email}, #{req_email}, #{req_nickname})
+		INSERT INTO friends_list VALUES(#{relation_ID}, #{res_email}, #{req_email}, #{req_nickname}, NOW())
 	</insert>
 	
 	<delete id="delfriend" parameterType="hashmap">

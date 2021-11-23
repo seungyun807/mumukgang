@@ -26,6 +26,7 @@ import com.sun.mail.handlers.image_gif;
 
 import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
 import egovframework.mumukgang.cmmn.web.mapper.FriendMapper;
+import egovframework.mumukgang.cmmn.web.mapper.MenuMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
@@ -40,7 +41,8 @@ public class ChannelController {
 	FriendMapper friendMapper;
 	@Resource
 	ChannelMapper channelMapper;
-	
+	@Resource
+	MenuMapper menuMapper;
 	
 	/***
 	 * 채널 메뉴 view
@@ -134,7 +136,7 @@ public class ChannelController {
 		
 		channelMember.setCh_num(createChnum);
 		channelMember.setEmail(loginid);
-		
+		channelMember.setJoin_date(latestDate);
 		channelMapper.channelmember(channelMember);
 		
 			
@@ -256,10 +258,13 @@ public class ChannelController {
 	public Object chReqAcceptance(@RequestParam(value="chnum") int chnum, @RequestParam(value="acceptornot") boolean aon, HttpSession session) {	
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		ChannelMember channelMember = new ChannelMember();
-		
+		SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");		
+		String latestDate = currentDateTime.format(new Date()).toString();
 		String loginId = (String) session.getAttribute("email");
+		
 		channelMember.setCh_num(chnum);
 		channelMember.setEmail(loginId);
+		channelMember.setJoin_date(latestDate);
 		if (aon) {
 			channelMapper.channelmember(channelMember);
 			retVal.put("code", "OK");
@@ -299,6 +304,27 @@ public class ChannelController {
 				return retVal;
 		}
 		
+	}
+	
+	
+	/***
+	 * 채널 나가기
+	 * 
+	 * */
+	@RequestMapping(value="/outchannel", method=RequestMethod.POST)
+	@ResponseBody
+	public Object outChannel(@RequestParam(value="roomNo") int roomNo, HttpSession session) {
+		ChannelMember channelMember = new ChannelMember();
+		channelMember.setCh_num(roomNo);
+		channelMember.setEmail((String) session.getAttribute("email"));
+		
+		Map<String, Object> retVal = new HashMap<String, Object>();
+		
+			channelMapper.updatedelchmember(channelMember);
+			//리턴값
+	        retVal.put("code", "OK");
+	        retVal.put("message", "채널에서 나갔습니다.");
+			return retVal;
 	}
 	
 	
@@ -366,14 +392,16 @@ public class ChannelController {
 	 * */
 	@RequestMapping(value="/pickmenu", method=RequestMethod.POST)
 	@ResponseBody
-	public void pickmenu(@RequestParam(value="pickid") String pick, @RequestParam(value="roomNo") int chnum, @RequestParam(value="del") boolean del) {
+	public void pickmenu(@RequestParam(value="pickid", required = false) String pick, @RequestParam(value="roomNo") int chnum, @RequestParam(value="del") boolean del, @RequestParam(value="empty") boolean empty ) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("ch_num", chnum);
 		map.put("food_name", pick);
 		if(del) {
-			channelMapper.delmenupick(map);
+			menuMapper.delmenupick(map);
+		} else if(empty){
+			menuMapper.delchmenu(map);
 		} else {
-			channelMapper.menupick(map);
+			menuMapper.menupick(map);
 		}
 	}
 }

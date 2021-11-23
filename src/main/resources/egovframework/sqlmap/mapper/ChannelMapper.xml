@@ -11,7 +11,7 @@
 	</insert>
 	
 	<insert id="channelmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
-		INSERT INTO channel_member (ch_num, email) VALUES (#{ch_num}, #{email})
+		INSERT INTO channel_member (ch_num, email, join_date) VALUES (#{ch_num}, #{email}, #{join_date})
 	</insert>
 	
 	<insert id="deleteinvited" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
@@ -23,7 +23,7 @@
 	</insert>
 	
 	<select id="selectchinvited" parameterType="String" resultType="egovMap">
-		SELECT * FROM channel_invited WHERE res_email = #{email}
+		SELECT ch_name, res_email, req_email, nickname, SUBSTR(request_time, 1, 10) request_time FROM channel_invited WHERE res_email = #{email}
 	</select>
 	
 	<select id="authoritychannel" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
@@ -99,22 +99,5 @@
 	<update id="updatedelchmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
 		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num}
 	</update>
-	
-	<insert id="menupick" parameterType="hashmap">
-		INSERT INTO menu_pick VALUES(#{ch_num}, #{food_name})
-	</insert>
-	
-	<delete id="delmenupick" parameterType="hashmap">
-		DELETE FROM menu_pick WHERE ch_num=#{ch_num} AND food_name=#{food_name}
-	</delete>
-	
-	<select id="selcountmenupick" parameterType="hashmap" resultType="int">
-		SELECT COUNT(*) FROM menu_pick WHERE ch_num = #{ch_num} AND food_name=#{food_name}
-	</select>
-	
-	<select id="selmenupick" parameterType="int" resultType="egovMap">
-		SELECT food_name FROM menu_pick WHERE ch_num = #{ch_num}
-	</select>
-	
 	
 </mapper>

@@ -6,7 +6,7 @@
     </select>
 
 	<insert id="UserJoin" parameterType="hashmap" >
-			INSERT INTO user VALUES(#{email}, #{password}, #{nickname}, #{comp_name})
+			INSERT INTO user VALUES(#{email}, #{password}, #{nickname}, #{comp_name}, NOW())
 
 	</insert>
 	
@@ -22,4 +22,7 @@
 		SELECT email, nickname FROM user WHERE email=#{email}
 	</select>
 	
+	<select id="selectUserInfo" parameterType="hashmap" resultType="Hashmap">
+		SELECT email, nickname, comp_name FROM user WHERE email=#{email}
+	</select>
 </mapper>

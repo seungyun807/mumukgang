@@ -19,6 +19,7 @@ public class Chat{ //implements Serializable {
 	private String agree;
 	private String result;
 	private Date sendDate;
+	private boolean empty;
 	
 	
 	//private String vaildYN;

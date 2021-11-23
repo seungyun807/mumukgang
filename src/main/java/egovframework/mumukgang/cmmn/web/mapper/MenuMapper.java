@@ -22,6 +22,14 @@ public interface MenuMapper {
 	
 	public List<HashMap<String, Object>> selectBunsick();
 
-
+	public void menupick (HashMap<String, Object> map);
+	
+	public void delmenupick (HashMap<String, Object> map);
+	
+	public int selcountmenupick (HashMap<String, Object> map);
+	
+	public List<String> selmenupick (int ch_num);
+	
+	public void delchmenu (HashMap<String, Object> map);
 		
 }

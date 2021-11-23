@@ -76,6 +76,7 @@ ion-icon {
 	<div class="thirddiv">
 		<div class="item">
 			<h3>채널찾기</h3>
+					<hr>
 		</div>
 
 		<div class="item">

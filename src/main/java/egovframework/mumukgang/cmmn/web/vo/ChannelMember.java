@@ -10,4 +10,5 @@ import lombok.ToString;
 public class ChannelMember{
 	private int ch_num;
 	private String email;
+	private String join_date;
 }

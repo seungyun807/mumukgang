@@ -61,7 +61,12 @@ public class ChatController {
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
 		String loginid = (String)session.getAttribute("email");
 		
-		List<HashMap<String, Object>> korean;
+		List<HashMap<String, Object>> jjim;
+		List<HashMap<String, Object>> guktang;
+		List<HashMap<String, Object>> jjigae;
+		List<HashMap<String, Object>> myeon;
+		List<HashMap<String, Object>> haejang;
+		
 		List<HashMap<String, Object>> japan;
 		List<HashMap<String, Object>> china;
 		List<HashMap<String, Object>> asianweston;
@@ -69,7 +74,12 @@ public class ChatController {
 		List<HashMap<String, Object>> fastfood;
 		List<HashMap<String, Object>> bunsick;
 		
-		korean = menumapper.selectKorean();
+		jjim = menumapper.jjim();
+		guktang = menumapper.guktang();
+		jjigae = menumapper.jjigae();
+		myeon = menumapper.myeon();
+		haejang = menumapper.haejang();
+		
 		japan = menumapper.selectJapanese();
 		china = menumapper.selectChinese();
 		asianweston = menumapper.selectAsianWestern();
@@ -77,7 +87,12 @@ public class ChatController {
 		fastfood = menumapper.selectFastFood();
 		bunsick = menumapper.selectBunsick();
 		
-		model.addAttribute("korean", korean);
+		model.addAttribute("jjim", jjim);
+		model.addAttribute("guktang", guktang);
+		model.addAttribute("jjigae", jjigae);
+		model.addAttribute("myeon", myeon);
+		model.addAttribute("haejang", haejang);
+		
 		model.addAttribute("japan", japan);
 		model.addAttribute("china", china);
 		model.addAttribute("asianweston", asianweston);

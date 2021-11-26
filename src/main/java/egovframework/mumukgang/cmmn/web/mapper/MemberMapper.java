@@ -18,4 +18,6 @@ public interface MemberMapper {
 	public HashMap<String, Object> selectEandNick(HashMap<String, Object> map);
 	
 	public HashMap<String, Object> selectUserInfo(HashMap<String, Object> map);
+	
+	public void modify(HashMap<String, Object> map);
 }

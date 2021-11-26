@@ -8,7 +8,15 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper
 public interface MenuMapper {
 	
-	public List<HashMap<String, Object>> selectKorean();
+	public List<HashMap<String, Object>> jjim();
+	
+	public List<HashMap<String, Object>> guktang();
+	
+	public List<HashMap<String, Object>> jjigae();
+	
+	public List<HashMap<String, Object>> myeon();
+	
+	public List<HashMap<String, Object>> haejang();
 	
 	public List<HashMap<String, Object>> selectJapanese();
 	

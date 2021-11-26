@@ -18,7 +18,13 @@
 ion-icon {
   font-size: 20px;
 }
-
+.listdiv{
+	width: 90% !important;
+}
+.paging{
+	text-align: center;
+	margin-right: 10%;
+}
 
 .thirddiv {
 	display: grid;
@@ -39,7 +45,11 @@ ion-icon {
 	grid-column: 1/3;
 	margin-top: 40px;
 }
-
+.item:nth-child(5) {
+	grid-column: 1/3;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
 .listdivitem:nth-child(1) {
 	grid-column: 1/2;
 	grid-row: 1/3;
@@ -55,17 +65,18 @@ ion-icon {
 	grid-row: 1/3;
 	margin-top: 25px;
 }
+
 #sptext{
 	font-size: 13px;
 	text-align: right;
-	margin-right: 20%;
+	margin-right: 10%;
 }
 
 .form-select-sm{
 	width: 140px;
     margin: 7px;
     margin-left: 30%;
-    margin-right: 40%;
+    margin-right: 25%;
     float: right;
 }
 </style>
@@ -98,7 +109,7 @@ ion-icon {
 		<div class="item">
 		<form action="/findchannel" method="post">
 			<select class="form-select form-select-sm" name="region" id="region" onchange="this.form.submit()">
-   				 <option value="지역선택" selected="selected">지역선택</option>
+   				 <option value="지역선택" selected>지역선택</option>
    				 <option value="전체">전체</option>
    				 <option value="경기">경기</option>
     			 <option value="서울">서울</option>
@@ -124,7 +135,7 @@ ion-icon {
 		</div>
 		
 		<ul class="list-group">
-			<c:forEach var="chlist" items="${chlist}" varStatus="status">
+				<c:forEach var="chlist" items="${chlist}" varStatus="status">
 					<div class="listdiv">
 						<div class="listdivitem">
 							<img width="40px" src="../../images/egovframework/profile/group2.png">
@@ -141,11 +152,41 @@ ion-icon {
 				</c:forEach>
 				</ul>
 		</div>
+		<div class="item">
+		 			<div class="paging">
+                    <c:if test="${pagination.curRange ne 1 }">
+                        <a href="#" onClick="fn_paging(1)"><<</a> 
+                    </c:if>
+                    <c:if test="${pagination.curPage ne 1}">
+                        <a href="#" onClick="fn_paging('${pagination.prevPage }')"><</a> 
+                    </c:if>
+                    <c:forEach var="pageNum" begin="${pagination.startPage }" end="${pagination.endPage }">
+                        <c:choose>
+                            <c:when test="${pageNum eq  pagination.curPage}">
+                                <span style="font-weight: bold;"><a href="#" onClick="fn_paging('${pageNum }')">${pageNum }</a></span> 
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#" onClick="fn_paging('${pageNum }')">${pageNum }</a> 
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    <c:if test="${pagination.curPage ne pagination.pageCnt && pagination.pageCnt > 0}">
+                        <a href="#" onClick="fn_paging('${pagination.nextPage }')">></a> 
+                    </c:if>
+                    <c:if test="${pagination.curRange ne pagination.rangeCnt && pagination.rangeCnt > 0}">
+                        <a href="#" onClick="fn_paging('${pagination.pageCnt }')">>></a> 
+                    </c:if>
+                </div>
+		</div>
 	</div>
 </body>
 <script src="../../js/jquery_cookie.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var latitude = sessionStorage.getItem("latitude");
+		var longitude = sessionStorage.getItem("longitude");
+		console.log(latitude, longitude);
+		getLocation();
 		$("#findchannel").addClass("active");
 		$("#friendlist").removeClass("active");
 		$("#findfriend").removeClass("active");
@@ -178,32 +219,26 @@ ion-icon {
 			
 		})
 	});
-	/*
-	function searchch(){
-		var objParams = {
-				"keyword" : $('#searchInput').val()
-		};
-		$.get({
-            url         :   "/searchch",
-           
-            type        :   "GET",
-            data        :   objParams,
-            success     :   function(data){
-
-                if(data) {
-                	location.href = data;
-                	//location.replace = data;
-                    alert(data);
-                    
-                } else {
-                    alert(retVal.message);
-                }
-                 
-            },
-            error       :   function(request, status, error){
-                console.log("AJAX_ERROR");
-            }
-        });
-	}*/
+	
+	function fn_paging(curPage) {
+		location.href = "/findchannel?curPage=" + curPage;
+	}
+	
+	function getLocation() {
+		  if (navigator.geolocation) { // GPS를 지원하면
+		    navigator.geolocation.getCurrentPosition(function(position) {
+		    	sessionStorage.setItem("latitude", position.coords.latitude);
+		    	sessionStorage.setItem("longitude", position.coords.longitude);
+		    }, function(error) {
+		      console.error(error);
+		    }, {
+		      enableHighAccuracy: false,
+		      maximumAge: 0,
+		      timeout: Infinity
+		    });
+		  } else {
+		    alert('GPS를 지원하지 않습니다');
+		  }
+		}
 </script>
 </html>

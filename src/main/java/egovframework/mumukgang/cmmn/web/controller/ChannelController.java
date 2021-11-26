@@ -32,6 +32,7 @@ import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
 import egovframework.mumukgang.cmmn.web.vo.Chnum;
 import egovframework.mumukgang.cmmn.web.vo.Friends;
+import egovframework.mumukgang.cmmn.web.vo.Pagination;
 import reactor.util.annotation.Nullable;
 
 @Controller
@@ -333,39 +334,53 @@ public class ChannelController {
 	 * 
 	 * */
 	@RequestMapping(value="/findchannel")
-	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map, Model model) {
+	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map,  @RequestParam(defaultValue="1") int curPage, Model model) {
 		String keyword = (String) map.get("findchannel");
 		String chregion = (String) map.get("region");
 		System.out.println(chregion);
+		HashMap<String, Object> temp = new HashMap<String, Object>();
 		//System.out.println(chregion.equals("전체"));
 		
 		
 		if (keyword != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
-			System.out.println("searchpublicch");
-			model.addAttribute("chlist", channelMapper.searchpublicch(keyword));
-			return "home/FindChannel";
+			int listCnt = channelMapper.searchpublicchCnt(keyword);
+			int start = (curPage-1)*10;
+			Pagination pagination = new Pagination(listCnt, curPage);
+			temp.put("keyword", keyword);
+			temp.put("start", start);
+			model.addAttribute("chlist", channelMapper.searchpublicch(temp));
+			model.addAttribute("pagination", pagination);
+			
 		}
 		else if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
-			System.out.println("전체");
-			model.addAttribute("chlist", channelMapper.findpublicch());
-			System.out.println(channelMapper.findpublicch());
-			return "home/FindChannel";
+			
+			model.addAttribute("chlist", channelMapper.findpublicch(curPage));
+			System.out.println(channelMapper.findpublicch(curPage));
+		
 		}
 		else if (keyword != null && chregion != null) {
 			System.out.println("searchpublicchwithregion");
 			System.out.println(map);
 			model.addAttribute("chlist", channelMapper.searchpublicchwithregion(map));
-			return "home/FindChannel";
+			
 		}
 		else if(chregion != null){
 			System.out.println("searchpublicchregion");
 			model.addAttribute("chlist", channelMapper.searchpublicchregion(chregion));
-			return "home/FindChannel";
+		
 		}
 		else {
-			model.addAttribute("chlist", channelMapper.findpublicch());
-			return "home/FindChannel";
+			int listCnt = channelMapper.findpublicchCnt();
+			int start = (curPage-1)*10;
+			Pagination pagination = new Pagination(listCnt, curPage);
+			
+			
+			model.addAttribute("chlist", channelMapper.findpublicch(start));
+			model.addAttribute("pagination", pagination);
+			
 		}
+		
+		return "home/FindChannel";
 		
 	}
 	

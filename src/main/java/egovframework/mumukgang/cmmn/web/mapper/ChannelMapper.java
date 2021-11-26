@@ -40,11 +40,15 @@ public interface ChannelMapper {
 	
 	public void delchannel (HashMap<String, Object> map);
 	
-	public List<HashMap<String, Object>> findpublicch();
+	public List<HashMap<String, Object>> findpublicch(int curPage);
+	
+	public int findpublicchCnt();
 	
 	public int ispublicch (ChannelMember channelmember);
 	
-	public  List<HashMap<String, Object>> searchpublicch (String keyword);
+	public  List<HashMap<String, Object>> searchpublicch (HashMap<String, Object> map);
+	
+	public  int searchpublicchCnt (String keyword);
 	
 	public  List<HashMap<String, Object>> searchpublicchregion (String ch_region);
 	

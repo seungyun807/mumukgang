@@ -2,8 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.mumukgang.cmmn.web.mapper.MenuMapper">
 
-	<select id="selectKorean" resultType="egovMap">
-		SELECT food_name FROM menu WHERE food_kinds = '한식'
+	<select id="jjim" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식' AND food_subkinds = "찜"
+	</select>
+	
+	<select id="guktang" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식' AND food_subkinds = "국/탕"
+	</select>
+	
+	<select id="jjigae" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식' AND food_subkinds = "찌개"
+	</select>
+	
+	<select id="myeon" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식' AND food_subkinds = "면"
+	</select>
+	
+	<select id="haejang" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '한식' AND food_subkinds = "해장"
 	</select>
 	
 	<select id="selectJapanese" resultType="egovMap">

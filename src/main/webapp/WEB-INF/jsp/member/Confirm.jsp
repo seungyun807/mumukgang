@@ -74,18 +74,8 @@ span {
 </body>
 <script type="text/javascript">
 function gotomypage() {
-	var confirm = true;
-	$.ajax({
-        url         :   "/mypage",
-        dataType    :   "json",
-        contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
-        type        :   "post",
-        data        :   {"confirm" : confirm},
-        error       :   function(request, status, error){
-            console.log("AJAX_ERROR");
-        }
-    });
-	confirm = false;
+	var link = "/mypage";
+	location.href = link;
 }
 function confirmpw() {
 	var pw = $('#pw').val();

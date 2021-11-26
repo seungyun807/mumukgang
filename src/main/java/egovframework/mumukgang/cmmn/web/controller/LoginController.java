@@ -79,6 +79,31 @@ public class LoginController {
 		return map;
 	}
 	
+	
+	/**
+	 * 회원정보수정
+	 * 
+	 */
+	@PostMapping(value="/modify")
+	@ResponseBody
+	public Object viewMyPage(
+			@RequestParam(value="pw") String pw,
+			@RequestParam(value="comp_name") String comp_name,
+			HttpSession session, Model model) {
+		
+			String loginid = (String) session.getAttribute("email");
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("email", loginid);
+			map.put("password", pw);
+			map.put("comp_name", comp_name);
+			membermapper.modify(map);
+			HashMap<String, Object> retVal = new HashMap<String, Object>();
+			retVal.put("code", "OK");
+			retVal.put("message", "수정에 성공하였습니다.");
+			return retVal;
+	}
+	
+	
 	/***
 	 * 로그인 성공
 	 * 
@@ -139,5 +164,7 @@ public class LoginController {
 		session.invalidate();
 		return "redirect:/";
 	}
+	
+	
 	
 }

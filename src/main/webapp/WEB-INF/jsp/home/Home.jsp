@@ -38,6 +38,7 @@
 	
 	function gotoLogout(){
 		var link = "/logout";
+		sessionStorage.clear();
 		location.href = link;
 	}
 	

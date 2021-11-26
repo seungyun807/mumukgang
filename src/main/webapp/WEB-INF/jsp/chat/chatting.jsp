@@ -144,6 +144,12 @@ font-size: 12px;
 .btngroup{
 	font-size: 14px;
 }
+.emoji{
+	font-weight: 1 !important;
+}
+.btn{
+	margin: 2px;
+}
 </style>
 <body>
 	<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
@@ -168,45 +174,72 @@ font-size: 12px;
 			<div id="page-content-wrapper">
 				<div class="container-fluid">
 					
-						<button class="btn btn-warning" id="korean">한식</button>
+						<button class="btn btn-warning" id="korean"><span class="emoji">🍚 </span>한식</button>
 							<div class="col-md-5" id="koreanDiv" style="display: none;">
-								<div id="koreanDiv"  style="display: inline">
-								<c:forEach var="korean" items="${korean}" varStatus="status">
-									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${korean.foodName}</button>
-								</c:forEach>
-								</div>
+								<button class="btn btn-dark" id="jjim" >찜</button>
+									<div id="jjimDiv" class="col-md-5" style="display: none;">
+										<c:forEach var="jjim" items="${jjim}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${jjim.foodName}</button>
+										</c:forEach>
+									</div>
+								<button class="btn btn-dark" id="guktang">국/탕</button>
+									<div id="guktangDiv" class="col-md-5" style="display: none;" onclick="inline()">
+										<c:forEach var="guktang" items="${guktang}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${guktang.foodName}</button>
+										</c:forEach>
+									</div>
+								<button class="btn btn-dark" id="jjigae">찌개</button>
+									<div id="jjigaeDiv" class="col-md-5" style="display: none;" onclick="inline()">
+										<c:forEach var="jjigae" items="${jjigae}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${jjigae.foodName}</button>
+										</c:forEach>
+									</div>
+								<button class="btn btn-dark" id="myeon">면</button>
+									<div id="myeonDiv" class="col-md-5" style="display: none;" onclick="inline()">
+										<c:forEach var="myeon" items="${myeon}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${myeon.foodName}</button>
+										</c:forEach>
+									</div>
+								<button class="btn btn-dark" id="haejang">해장</button>
+									<div id="haejangDiv" class="col-md-5" style="display: none;" onclick="inline()">
+										<c:forEach var="haejang" items="${haejang}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${haejang.foodName}</button>
+										</c:forEach>
+									</div>
 							</div>
-						<button class="btn btn-warning" id="bunsick">분식</button>
+									
+							
+						<button class="btn btn-warning" id="bunsick"><span class="emoji">🍤 </span>분식</button>
 							<div class="col-md-5" id="bunsickDiv" style="display: none;">
 								<c:forEach var="bunsick" items="${bunsick}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${bunsick.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="japan">일식</button>
+						<button class="btn btn-warning" id="japan"><span class="emoji">🍣 </span>일식</button>
 							<div class="col-md-5" id="japanDiv" style="display: none;">
 								<c:forEach var="japan" items="${japan}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${japan.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="asianweston">아시안·양식</button>
+						<button class="btn btn-warning" id="asianweston"><span class="emoji">🍝 </span>아시안·양식</button>
 							<div class="col-md-5" id="asianwestonDiv" style="display: none;">
 								<c:forEach var="asianweston" items="${asianweston}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${asianweston.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="china">중국집</button>
+						<button class="btn btn-warning" id="china"><span class="emoji">🍜 </span>중국집</button>
 							<div class="col-md-5" id="chinaDiv" style="display: none;">
 								<c:forEach var="china" items="${china}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${china.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="fastfood">패스트푸드</button>
+						<button class="btn btn-warning" id="fastfood"><span class="emoji">🍔 </span>패스트푸드</button>
 							<div class="col-md-5" id="fastfoodDiv" style="display: none;">
 								<c:forEach var="fastfood" items="${fastfood}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${fastfood.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="convenience">간편식</button>
+						<button class="btn btn-warning" id="convenience"><span class="emoji">🥡 </span>간편식</button>
 							<div class="col-md-5" id="convenienceDiv" style="display: none;">
 								<c:forEach var="convenience" items="${convenience}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${convenience.foodName}</button>
@@ -316,7 +349,7 @@ font-size: 12px;
 
 $(function(){
 	
-	$('.btn-warning').click(function(){
+	$('.btn-warning, .btn-dark').click(function(){
 		
 		var clicked = "#"+$(this).attr('id')+"Div";
 		
@@ -337,8 +370,9 @@ $(function(){
 });
 function locationclick(x, y) {
 	$('.modal-wrapper2').toggleClass('open');
+	
 	var mapContainer = document.getElementById('map'),
-    mapOption = { 
+    mapOption = {
         center: new kakao.maps.LatLng(y, x), 
         level: 3 
     };
@@ -577,9 +611,16 @@ function savepick(roomNo, pickid, del, empty) {
 				if ($('#resultBox').is(':empty')) {
 					alert('먼저 랜덤뽑기를 해주세요.');
 				} else{
+					var latitude = sessionStorage.getItem("latitude");
+					var longitude = sessionStorage.getItem("longitude");
+					console.log(latitude, longitude);
+					if (latitude == null || longitude == null) {
+						alert('위치찾기에 동의해주세요.');
+						getLocation();
+					}else{
 				$('.modal-wrapper').toggleClass('open');
 				$.ajax({
-				    url: 'https://dapi.kakao.com/v2/local/search/keyword.json?y=35.142432279851256&x=126.83601844546476&radius=2000',
+				    url: "https://dapi.kakao.com/v2/local/search/keyword.json?y="+latitude+"&x="+longitude+"&radius=2000",
 				    data: { query: $('#resultBox').text(), page: 1},
 				    headers: { 'Authorization': 'KakaoAK c602ea38330a8ae2bae8e53d2d5bb2b1'},
 				    type: 'GET'
@@ -599,6 +640,7 @@ function savepick(roomNo, pickid, del, empty) {
 				    
 				   
 				});
+				}
 				}
 			});
 			
@@ -728,7 +770,23 @@ function savepick(roomNo, pickid, del, empty) {
 		
 	}
 	
-
+	function getLocation() {
+		  if (navigator.geolocation) { // GPS를 지원하면
+		    navigator.geolocation.getCurrentPosition(function(position) {
+		    	sessionStorage.setItem("latitude", position.coords.latitude);
+		    	sessionStorage.setItem("longitude", position.coords.longitude);
+		   
+		    }, function(error) {
+		      console.error(error);
+		    }, {
+		      enableHighAccuracy: false,
+		      maximumAge: 0,
+		      timeout: Infinity
+		    });
+		  } else {
+		    alert('GPS를 지원하지 않습니다');
+		  }
+		}
 
 	
 </script>

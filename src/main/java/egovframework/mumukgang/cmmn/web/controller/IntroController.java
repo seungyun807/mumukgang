@@ -44,7 +44,7 @@ public class IntroController {
 	
 	
 	/**
-	 * 마이페이지
+	 * 마이페이지 접근시 비밀번호 확인
 	 * 
 	 */
 	@PostMapping(value="/mypagegate")
@@ -58,6 +58,7 @@ public class IntroController {
 		
 		if (memberMapper.loginCheck(param) > 0) {
 			retVal.put("code", "OK");
+			session.setAttribute("mypage", true);
 		} else {
 			retVal.put("code", "NO");
 			retVal.put("message", "비밀번호가 일치하지 않습니다.");
@@ -71,20 +72,18 @@ public class IntroController {
 	 * 
 	 */
 	@RequestMapping(value="/mypage")
-	public String viewMyPage(@RequestParam(required=false) Boolean confirm, HttpSession session, Model model) {
-		if(confirm == null) {
-			return "chat/authorityrefuse";
-		}
-		else if (confirm) {
+	public String viewMyPage(HttpSession session, Model model) {
+		boolean confirm = (boolean) session.getAttribute("mypage");
+		
+		if (confirm) {
 			String loginid = (String) session.getAttribute("email");
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("email", loginid);
 			model.addAttribute("info", memberMapper.selectUserInfo(map));
+			session.setAttribute("mypage", false);
 			return "member/MyPage";
 		} else {
 			return "chat/authorityrefuse";
 		}
-		
-		
 	}
 }

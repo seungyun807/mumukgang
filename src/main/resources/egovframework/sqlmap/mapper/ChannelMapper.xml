@@ -46,8 +46,12 @@
 		SELECT ch_type FROM channel_info WHERE ch_num = #{ch_num} AND DEL_YN = 'N'
 	</select>
 	
-	<select id="searchpublicch" parameterType="string" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1
+	<select id="searchpublicch" parameterType="hashmap" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1 limit #{start}, 10
+	</select>
+	
+	<select id="searchpublicchCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1
 	</select>
 	
 	<select id="searchpublicchregion" parameterType="string" resultType="egovMap">
@@ -76,8 +80,12 @@
 		<!-- DELETE * FROM channel_info WHERE ch_num = #{roomNo} -->
 	</update>
 	
-	<select id="findpublicch" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N'
+	<select id="findpublicch" parameterType="int" resultType="egovMap">
+		SELECT * FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' limit #{start}, 10
+	</select>
+	
+	<select id="findpublicchCnt" resultType="int">
+		SELECT COUNT(*) FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N'
 	</select>
 	
 	<select id="ispublicch" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">

@@ -36,9 +36,6 @@
 .flexitem{
 	margin-bottom: 7px;
 }
-span {
-	margin-left: 5px;
-}
 
 </style>
 <body>
@@ -51,7 +48,6 @@ span {
 			<hr>
 		</div>
 		<div class="item">
-		<form action="">
 		 <div class="form-group info" >
 		 	<div class="flexitem">
 			 	<label>이메일</label><br>
@@ -73,7 +69,7 @@ span {
 		 			<label>회사명</label>            
             		<input name="comp_name" id="comp_name" type="text" class="form-control" value="${info.comp_name }"/>
            
-  			<button type="submit" class="btn" style="margin-top: 15px; float: right;">변경</button>
+  			<button id="modify" class="btn btn-light" style="margin-top: 15px; float: right;">변경</button>
         </div>
 		
 	</div>
@@ -92,12 +88,81 @@ span {
     			</script>
 			</c:when>
 		</c:choose> 
-
-</form>
 	
 </div>
 </body>
 <script type="text/javascript">
-$('#nickname').attr("readonly", true);
+$(function() {
+	 $("#pwconfirm").keyup(function() {
+		
+		 var pw =  $("#pw").val();
+		 var pwconfirm =  $("#pwconfirm").val();
+		 if (pw == "" || pwconfirm == "" ) {
+			 $("#pw_confirm").text("\u00a0");
+			}		 
+		 else if(pw != pwconfirm){
+	 		$("#pw_confirm").css("color", "red");
+	 		$("#pw_confirm").text("비밀번호가 일치하지 않습니다.");		
+	 	} else{
+	 		$("#pw_confirm").css("color", "blue");
+	 		$("#pw_confirm").text("비밀번호가 일치합니다.");
+	 	}
+	 });
+	 $("#pw").keyup(function() {
+		 var pw =  $("#pw").val();
+		 var pwconfirm =  $("#pwconfirm").val();
+		 if (pw == "" || pwconfirm == "" ) {
+			 $("#pw_confirm").text("\u00a0");
+			}		
+		 else if(pw != pwconfirm){
+	 		$("#pw_confirm").css("color", "red");
+	 		$("#pw_confirm").text("비밀번호가 일치하지 않습니다.");		
+	 	} else{
+	 		$("#pw_confirm").css("color", "blue");
+	 		$("#pw_confirm").text("비밀번호가 일치합니다.");
+	 	}
+	 });
+	 
+	 $("#modify").click(function () {
+		if (checkPw()) {
+			$.ajax({
+		        url         :   "/modify",
+		        dataType    :   "json",
+		        contentType :   "application/x-www-form-urlencoded; charset=UTF-8",
+		        type        :   "post",
+		        data        :   {"pw" : $('#pw').val(),
+		        				  "comp_name" : $('#comp_name').val()},
+		        success     :   function(retVal){
+		            if(retVal.code == 'OK') {
+		            	alert(retVal.message);
+		            	var link = "/";
+		            	location.href = link;
+		            } else {
+		            	 alert("수정에 실패하였습니다.");
+		            }
+		             
+		        },
+		        error       :   function(request, status, error){
+		            console.log("AJAX_ERROR");
+		        }
+		    });
+		}
+		else{
+			alert('비밀번호가 일치하지 않습니다.');
+		}
+	})
+	 
+});
+
+function checkPw() {
+	 var pwconfirm = $('#pw_confirm').text();
+	 console.log(pwconfirm);
+	 if(pwconfirm == "비밀번호가 일치합니다."){
+		 return true;
+	 } else {
+		 
+		 return false;
+	 }
+}
 </script>
 </html>

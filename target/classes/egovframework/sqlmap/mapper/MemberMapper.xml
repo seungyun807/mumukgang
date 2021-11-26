@@ -25,4 +25,8 @@
 	<select id="selectUserInfo" parameterType="hashmap" resultType="Hashmap">
 		SELECT email, nickname, comp_name FROM user WHERE email=#{email}
 	</select>
+	
+	<update id="modify" parameterType="hashmap">
+		UPDATE user SET password=#{password}, comp_name=#{comp_name} WHERE email=#{email}
+	</update>
 </mapper>

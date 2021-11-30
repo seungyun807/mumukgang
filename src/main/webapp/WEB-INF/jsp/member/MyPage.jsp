@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>머먹GANG · 마이페이지</title>
 <script src="../../js/jquery-3.6.0.js"></script>
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
@@ -50,23 +50,23 @@
 		<div class="item">
 		 <div class="form-group info" >
 		 	<div class="flexitem">
-			 	<label>이메일</label><br>
+			 	<label><b>이메일</b></label><br>
             	<span>${info.email}</span>
             	<br><br>
             </div>
-				<label>비밀번호</label>
+				<label><b>비밀번호</b></label>
             	<input name="password" type="password" id="pw" class="form-control" />
             	<br>
           
-		 		<label>비밀번호확인</label>            
+		 		<label><b>비밀번호확인</b></label>            
             		<input name="pwconfirm" type="password" id="pwconfirm" class="form-control"/>
             		<div id="pw_confirm" style="text-align: left; font-size: 13px; margin-bottom: 4px; margin-top: 2px;">&nbsp;</div>
            
-		 		<label>닉네임</label><br>
+		 		<label><b>닉네임</b></label><br>
             		<span>${info.nickname}</span>
            			<br><br>
             
-		 			<label>회사명</label>            
+		 			<label><b>회사명</b></label>            
             		<input name="comp_name" id="comp_name" type="text" class="form-control" value="${info.comp_name }"/>
            
   			<button id="modify" class="btn btn-light" style="margin-top: 15px; float: right;">변경</button>

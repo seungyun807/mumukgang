@@ -47,19 +47,27 @@
 	</select>
 	
 	<select id="searchpublicch" parameterType="hashmap" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1 limit #{start}, 10
+		SELECT ch_num, ch_name, substring(ch_date, 3, 14) ch_date FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1 AND DEL_YN = 'N' order by ch_num desc limit #{start}, 10
 	</select>
 	
 	<select id="searchpublicchCnt" parameterType="string" resultType="int">
-		SELECT COUNT(*) FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1
+		SELECT COUNT(*) FROM channel_info WHERE ch_name like CONCAT('%', #{keyword} ,'%') AND ch_type = 1 AND DEL_YN = 'N'
 	</select>
 	
-	<select id="searchpublicchregion" parameterType="string" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_region = #{region} AND ch_type = 1 AND DEL_YN = 'N'
+	<select id="searchpublicchregionCnt" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM channel_info WHERE ch_region = #{region} AND ch_type = 1 AND DEL_YN = 'N'
+	</select>
+	
+	<select id="searchpublicchregion" parameterType="hashmap" resultType="egovMap">
+		SELECT ch_num, ch_name, substring(ch_date, 3, 14) ch_date FROM channel_info WHERE ch_region = #{region} AND ch_type = 1 AND DEL_YN = 'N' order by ch_num desc limit #{start}, 10
+	</select>
+	
+	<select id="searchpublicchwithregionCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND ch_region = #{region} AND DEL_YN = 'N'
 	</select>
 	
 	<select id="searchpublicchwithregion" parameterType="hashmap" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND ch_region = #{region} AND DEL_YN = 'N'
+		SELECT ch_num, ch_name, substring(ch_date, 3, 14) ch_date FROM channel_info WHERE ch_name like CONCAT('%', #{findchannel} ,'%') AND ch_type = 1 AND ch_region = #{region} AND DEL_YN = 'N' order by ch_num desc limit #{start}, 10
 	</select>
 	
 	<select id="selectfood"  resultType="egovMap">
@@ -81,7 +89,7 @@
 	</update>
 	
 	<select id="findpublicch" parameterType="int" resultType="egovMap">
-		SELECT * FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' limit #{start}, 10
+		SELECT ch_num, ch_name, substring(ch_date, 3, 14) ch_date FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' order by ch_num desc limit #{start}, 10
 	</select>
 	
 	<select id="findpublicchCnt" resultType="int">
@@ -107,5 +115,17 @@
 	<update id="updatedelchmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
 		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num}
 	</update>
+	
+	<select id="findmycop" parameterType="hashmap" resultType="egovMap" >
+		SELECT ch_num, ch_name, substring(ch_date, 3, 14) ch_date FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' and ch_create_email in
+		(select email from user where comp_name in
+		(select comp_name from user where email= #{email})) order by ch_num desc limit #{start}, 10
+	</select>
+	
+	<select id="findmycopCnt" parameterType="String" resultType="int" >
+		SELECT COUNT(*) FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' and ch_create_email in
+		(select email from user where comp_name in
+		(select comp_name from user where email= #{email}))
+	</select>
 	
 </mapper>

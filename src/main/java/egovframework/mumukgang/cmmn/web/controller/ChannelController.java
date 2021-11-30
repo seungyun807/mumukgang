@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.enterprise.inject.New;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -334,13 +335,24 @@ public class ChannelController {
 	 * 
 	 * */
 	@RequestMapping(value="/findchannel")
-	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map,  @RequestParam(defaultValue="1") int curPage, Model model) {
+	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map,  @RequestParam(defaultValue="1") int curPage, @RequestParam(value="mycop", required=false) Boolean cop, Model model, HttpSession session) {
 		String keyword = (String) map.get("findchannel");
 		String chregion = (String) map.get("region");
-		System.out.println(chregion);
+		System.out.println("/findchannel = " + cop);
 		HashMap<String, Object> temp = new HashMap<String, Object>();
 		//System.out.println(chregion.equals("전체"));
-		
+		if(cop != null) {
+			if(cop) {
+				int listCnt = channelMapper.findmycopCnt((String) session.getAttribute("email"));
+				int start = (curPage-1)*10;
+				Pagination pagination = new Pagination(listCnt, curPage);
+				temp.put("email", session.getAttribute("email"));
+				temp.put("start", start);
+				model.addAttribute("chlist", channelMapper.findmycop(temp));
+				model.addAttribute("pagination", pagination);
+				return "home/FindChannel";
+			}
+		}
 		
 		if (keyword != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
 			int listCnt = channelMapper.searchpublicchCnt(keyword);
@@ -353,21 +365,30 @@ public class ChannelController {
 			
 		}
 		else if (chregion != null && (chregion.equals("전체") || chregion.equals("지역선택"))) {
+			int listCnt = channelMapper.findpublicchCnt();
+			int start = (curPage-1)*10;
+			Pagination pagination = new Pagination(listCnt, curPage);
 			
-			model.addAttribute("chlist", channelMapper.findpublicch(curPage));
-			System.out.println(channelMapper.findpublicch(curPage));
+			model.addAttribute("chlist", channelMapper.findpublicch(start));
+			model.addAttribute("pagination", pagination);
 		
 		}
 		else if (keyword != null && chregion != null) {
-			System.out.println("searchpublicchwithregion");
-			System.out.println(map);
+			int listCnt = channelMapper.searchpublicchwithregionCnt(map);
+			int start = (curPage-1)*10;
+			Pagination pagination = new Pagination(listCnt, curPage);
+			map.put("start", start);
 			model.addAttribute("chlist", channelMapper.searchpublicchwithregion(map));
-			
+			model.addAttribute("pagination", pagination);
 		}
 		else if(chregion != null){
-			System.out.println("searchpublicchregion");
-			model.addAttribute("chlist", channelMapper.searchpublicchregion(chregion));
-		
+			int listCnt = channelMapper.searchpublicchregionCnt(chregion);
+			int start = (curPage-1)*10;
+			Pagination pagination = new Pagination(listCnt, curPage);
+			temp.put("region", chregion);
+			temp.put("start", start);
+			model.addAttribute("chlist", channelMapper.searchpublicchregion(temp));
+			model.addAttribute("pagination", pagination);
 		}
 		else {
 			int listCnt = channelMapper.findpublicchCnt();

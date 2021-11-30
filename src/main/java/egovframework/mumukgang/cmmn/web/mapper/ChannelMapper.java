@@ -50,7 +50,11 @@ public interface ChannelMapper {
 	
 	public  int searchpublicchCnt (String keyword);
 	
-	public  List<HashMap<String, Object>> searchpublicchregion (String ch_region);
+	public int searchpublicchregionCnt (String ch_region);
+	
+	public  List<HashMap<String, Object>> searchpublicchregion (HashMap<String, Object> map);
+	
+	public  int searchpublicchwithregionCnt (HashMap<String, Object> map);
 	
 	public  List<HashMap<String, Object>> searchpublicchwithregion (HashMap<String, Object> map);
 	
@@ -68,5 +72,7 @@ public interface ChannelMapper {
 	
 	public void updatedelchmember (ChannelMember channelMember);
 	
-
+	public List<HashMap<String, Object>> findmycop (HashMap<String, Object> map);
+	
+	public int findmycopCnt (String email);
 }

@@ -148,16 +148,16 @@ public class FriendController {
 		
 		System.out.println("findfriendsdo = " + param);
 		System.out.println("friendMapper.findfriendsnickname(param) = " + friendMapper.findfriendsnickname(param));
-		
+		String findnick = "", loginnick = "";
 		map = friendMapper.findfriendsnickname(param);
-		
-		String findnick = (String)map.get("email");
-		String loginnick = (String)session.getAttribute("email");
-
-		if (findnick.equals(loginnick)) {
-			return null;
+		if(map != null) {
+			findnick = (String)map.get("email");
+			loginnick = (String)session.getAttribute("email");
+			if (findnick.equals(loginnick)) {
+				return null;
+			}
 		} else if(map == null) {
-			return "찾는 친구가 없습니다";
+			return null;
 		}
 		
 		return map;

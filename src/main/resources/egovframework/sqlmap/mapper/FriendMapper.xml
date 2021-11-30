@@ -3,7 +3,7 @@
 <mapper namespace="egovframework.mumukgang.cmmn.web.mapper.FriendMapper">
 
 	<select id="findfriendsnickname" parameterType="hashmap" resultType="Hashmap">
-		SELECT email, nickname FROM user WHERE nickname=#{nickname}
+		SELECT email, nickname, comp_name FROM user WHERE nickname=#{nickname} OR email=#{nickname}
 	</select>
 
 	<select id="friendslist" parameterType="hashmap" resultType="egovMap">

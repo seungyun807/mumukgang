@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>머먹GANG · 친구찾기</title>
 <script src="../../js/jquery-3.6.0.js"></script>
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
@@ -40,9 +40,16 @@
 	margin-bottom: 50px;
 } 
 
-.item:nth-child(3) {
-	
-} 
+.modal{
+	height: 300px !important;
+}
+.content{
+	display: flex;
+	height: 80%;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
 
 </style>
 <body>
@@ -57,7 +64,7 @@
 			<hr>
 				<div id="custom-search-input">
 					<div class="input-group col-md-12">
-						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="닉네임으로 검색해주세요" onkeyup="if(window.event.keyCode==13){findfriends()}" /> <span class="input-group-btn">
+						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="이메일 또는 닉네임으로 검색해주세요." onkeyup="if(window.event.keyCode==13){findfriends()}" /> <span class="input-group-btn">
 							<button class="btn btn-info btn-lg" id="findbtn">
 								<ion-icon name="search-outline"></ion-icon>
 							</button>
@@ -124,7 +131,7 @@
 			<div class="content">
 				<div class="good-job">
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-					<div class="item" id="test">친구를 찾을수 없습니다.</div>
+					<div id="test">친구를 찾을수 없습니다.</div>
 				</div>
 			</div>
 		</div>
@@ -151,8 +158,10 @@
 								str += "<br>";
 								str += returnData.nickname;
 								str += "<br>";
+								str += "(" + returnData.comp_name + ")";
+								str += "<br>";
 								str += "<input name='res_email' type='hidden' value='"+returnData.email+"' id='res_email'/>";
-								str += "<input name='res_nickname' type='hidden' value='"+returnData.nickname+"' id='res_nickname'/>";
+								str += "<input name='res_nickname' type='hidden' value='"+returnData.nickname+"' id='res_nickname'/><br><br>";
 								str += "<button class='btn btn-primary' id='requestbtn'>친구요청</button>";
 								$("#test").empty();
 								$("#test").append(str);

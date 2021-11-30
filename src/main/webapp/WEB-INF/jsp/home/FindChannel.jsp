@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>머먹GANG · 채널찾기</title>
 <script src="../../js/jquery-3.6.0.js"></script>
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
@@ -40,7 +40,10 @@ ion-icon {
 	grid-row: 1/2;
 	margin-bottom: 40px;
 }
-
+.item:nth-child(3) {
+	display: flex;
+	justify-content: right;
+}
 .item:nth-child(4) {
 	grid-column: 1/3;
 	margin-top: 40px;
@@ -63,7 +66,7 @@ ion-icon {
 .listdivitem:nth-child(3) {
 	grid-column: 3/4;
 	grid-row: 1/3;
-	margin-top: 25px;
+	margin-top: 9px;
 }
 
 #sptext{
@@ -74,10 +77,9 @@ ion-icon {
 
 .form-select-sm{
 	width: 140px;
-    margin: 7px;
-    margin-left: 30%;
-    margin-right: 25%;
-    float: right;
+    margin: 5px;
+    margin-left: 20px;
+    margin-right: 30px;
 }
 </style>
 <body>
@@ -107,6 +109,9 @@ ion-icon {
 				</form>
 		</div>
 		<div class="item">
+			<form action="/findchannel" method="post">
+				<button class="btn" style="width: 130px; " id="findmycop" value="true" name="mycop">나의 회사 찾기</button>
+			</form>
 		<form action="/findchannel" method="post">
 			<select class="form-select form-select-sm" name="region" id="region" onchange="this.form.submit()">
    				 <option value="지역선택" selected>지역선택</option>
@@ -141,7 +146,7 @@ ion-icon {
 							<img width="40px" src="../../images/egovframework/profile/group2.png">
 						</div>
 						<div class="listdivitem">
-							<li>${chlist.chName} </li>
+							<li>${chlist.chName} <span style="float: right;">${chlist.chDate}</span></li>
 						</div>
 						<div class="listdivitem">
 							<button class="btn enterchbtn" value="${chlist.chNum}" title="입장">
@@ -194,6 +199,7 @@ ion-icon {
 		
 		$("#region").val($.cookie('selectRegion')).prop("selected", true);
 		$('#searchRegion').attr('value', $.cookie('selectRegion'));
+		
 		
 		$(".enterchbtn").on('click', function() {
 			

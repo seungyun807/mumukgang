@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-Frame-Options" content="sameorigin" />
-<title>채팅</title>
+<title>머먹GANG · ${chname}</title>
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="../../js/sockjs-0.3.min.js"></script>
@@ -147,7 +147,10 @@ font-size: 12px;
 .emoji{
 	font-weight: 1 !important;
 }
-.btn{
+.foodbtn{
+	margin: 2px;
+}
+.menu{
 	margin: 2px;
 }
 </style>
@@ -174,33 +177,33 @@ font-size: 12px;
 			<div id="page-content-wrapper">
 				<div class="container-fluid">
 					
-						<button class="btn btn-warning" id="korean"><span class="emoji">🍚 </span>한식</button>
+						<button class="btn btn-warning menu" id="korean"><span class="emoji">🍚 </span>한식</button>
 							<div class="col-md-5" id="koreanDiv" style="display: none;">
-								<button class="btn btn-dark" id="jjim" >찜</button>
+								<button class="btn btn-dark menu" id="jjim" >찜</button>
 									<div id="jjimDiv" class="col-md-5" style="display: none;">
 										<c:forEach var="jjim" items="${jjim}" varStatus="status">
 											<button class="btn btn-secondary foodbtn">${jjim.foodName}</button>
 										</c:forEach>
 									</div>
-								<button class="btn btn-dark" id="guktang">국/탕</button>
+								<button class="btn btn-dark menu" id="guktang">국/탕</button>
 									<div id="guktangDiv" class="col-md-5" style="display: none;" onclick="inline()">
 										<c:forEach var="guktang" items="${guktang}" varStatus="status">
 											<button class="btn btn-secondary foodbtn">${guktang.foodName}</button>
 										</c:forEach>
 									</div>
-								<button class="btn btn-dark" id="jjigae">찌개</button>
+								<button class="btn btn-dark menu" id="jjigae">찌개</button>
 									<div id="jjigaeDiv" class="col-md-5" style="display: none;" onclick="inline()">
 										<c:forEach var="jjigae" items="${jjigae}" varStatus="status">
 											<button class="btn btn-secondary foodbtn">${jjigae.foodName}</button>
 										</c:forEach>
 									</div>
-								<button class="btn btn-dark" id="myeon">면</button>
+								<button class="btn btn-dark menu" id="myeon">면</button>
 									<div id="myeonDiv" class="col-md-5" style="display: none;" onclick="inline()">
 										<c:forEach var="myeon" items="${myeon}" varStatus="status">
 											<button class="btn btn-secondary foodbtn">${myeon.foodName}</button>
 										</c:forEach>
 									</div>
-								<button class="btn btn-dark" id="haejang">해장</button>
+								<button class="btn btn-dark menu" id="haejang">해장</button>
 									<div id="haejangDiv" class="col-md-5" style="display: none;" onclick="inline()">
 										<c:forEach var="haejang" items="${haejang}" varStatus="status">
 											<button class="btn btn-secondary foodbtn">${haejang.foodName}</button>
@@ -209,37 +212,37 @@ font-size: 12px;
 							</div>
 									
 							
-						<button class="btn btn-warning" id="bunsick"><span class="emoji">🍤 </span>분식</button>
+						<button class="btn btn-warning menu" id="bunsick"><span class="emoji">🍤 </span>분식</button>
 							<div class="col-md-5" id="bunsickDiv" style="display: none;">
 								<c:forEach var="bunsick" items="${bunsick}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${bunsick.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="japan"><span class="emoji">🍣 </span>일식</button>
+						<button class="btn btn-warning menu" id="japan"><span class="emoji">🍣 </span>일식</button>
 							<div class="col-md-5" id="japanDiv" style="display: none;">
 								<c:forEach var="japan" items="${japan}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${japan.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="asianweston"><span class="emoji">🍝 </span>아시안·양식</button>
+						<button class="btn btn-warning menu" id="asianweston"><span class="emoji">🍝 </span>아시안·양식</button>
 							<div class="col-md-5" id="asianwestonDiv" style="display: none;">
 								<c:forEach var="asianweston" items="${asianweston}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${asianweston.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="china"><span class="emoji">🍜 </span>중국집</button>
+						<button class="btn btn-warning menu" id="china"><span class="emoji">🍜 </span>중국집</button>
 							<div class="col-md-5" id="chinaDiv" style="display: none;">
 								<c:forEach var="china" items="${china}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${china.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="fastfood"><span class="emoji">🍔 </span>패스트푸드</button>
+						<button class="btn btn-warning menu" id="fastfood"><span class="emoji">🍔 </span>패스트푸드</button>
 							<div class="col-md-5" id="fastfoodDiv" style="display: none;">
 								<c:forEach var="fastfood" items="${fastfood}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${fastfood.foodName}</button>
 								</c:forEach>
 							</div>
-						<button class="btn btn-warning" id="convenience"><span class="emoji">🥡 </span>간편식</button>
+						<button class="btn btn-warning menu" id="convenience"><span class="emoji">🥡 </span>간편식</button>
 							<div class="col-md-5" id="convenienceDiv" style="display: none;">
 								<c:forEach var="convenience" items="${convenience}" varStatus="status">
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${convenience.foodName}</button>

@@ -56,7 +56,7 @@
 
 	<form action="/join" onsubmit="return checkIdPw();" method="post">
 	<div class="firstdiv">
-		<h1>머먹겡</h1>
+		<h1>회원가입</h1>
 		<br>
 		 <div class="form-group" >
             <input name="email" id="email" type="email" class="form-control" placeholder="이메일"  />

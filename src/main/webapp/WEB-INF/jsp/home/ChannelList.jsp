@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>머먹GANG · 채널목록</title>
 <script src="../../js/jquery-3.6.0.js"></script>
 
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
@@ -140,6 +140,9 @@ label {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+}
+.modal{
+	height: 500px !important;
 }
 </style>
 

@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>채팅</title>
+<title>머먹GANG · 접근불가</title>
 <link href="../../css/egovframework/bootstrap.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="../../js/sockjs-0.3.min.js"></script>

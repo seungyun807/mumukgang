@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>머먹겡</title>
+<title>머먹GANG</title>
 </head>
 <script src="../../js/jquery-3.6.0.js"></script>
 <link rel="shortcut icon" href="#">
@@ -110,7 +110,7 @@ function loginWithKakao() {
 	width: 100%;
 	 content: "";
 	  position: absolute;
-	  opacity:0.45;
+	  opacity:0.35;
   background: url("/images/egovframework/intro/intro.png");
   z-index: -1;
 }
@@ -119,7 +119,7 @@ function loginWithKakao() {
 	width: 70%;
 }
 .firstdiv{
-	height: 350px;
+	height: 320px;
 	width: 400px;
 	text-align: center;
 	border: 1px solid gray;
@@ -166,10 +166,12 @@ a {
 </style>
 
 <body>
+
 <div class="intro">
+<img alt="" src="../../images/egovframework/logo.png" style="background-color: white; padding: 10px">
 	<form action="/login" method="post">
 	<div class="firstdiv">
-		<h1>머먹겡</h1>
+		<h5>로그인</h5>
 		<br>
 		 <div class="form-group">
             <input name="email" type="text" class="form-control" placeholder="아이디" />

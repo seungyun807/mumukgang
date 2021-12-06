@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,16 +20,20 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import egovframework.mumukgang.cmmn.web.chat.Messaging;
+import egovframework.mumukgang.cmmn.web.chat.StompHandler;
 import egovframework.mumukgang.cmmn.web.chat.model.vo.Chat;
 import egovframework.mumukgang.cmmn.web.mapper.ChannelMapper;
 import egovframework.mumukgang.cmmn.web.mapper.MenuMapper;
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelMember;
+import junit.framework.Test;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,20 +45,43 @@ public class ChatController {
 	@Resource
 	MenuMapper menumapper;
 	
-	  private SimpMessagingTemplate template;
 	
-//	  @Autowired
-//	   public void setTemplate(SimpMessagingTemplate template) {
-//	        this.template = template;
-//	    }
-	  
+	private SimpMessagingTemplate template;
+	
+	@Autowired
+ 	private Messaging messaging;
+	
+	 @Autowired
+	    public ChatController(SimpMessagingTemplate template) {
+	        this.template = template;
+	    }
+
+	
 	@MessageMapping("/hello/{roomNo}")
 	@SendTo("/subscribe/chat/{roomNo}")
 	public Chat broadcasting(Chat chat) {
 		chat.setSendDate(new Date());
+		System.out.println("chatContent = " + chat.getChatContent() +" chat = " + chat);
+		if(chat.getChatContent() != null) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("ch_num", chat.getRoomNo());
+			map.put("nickname", chat.getMemberId());
+			map.put("content", chat.getChatContent());
+			channelmapper.saveChat(map);
+		}
+		//setTemplate(template);
+	    //this.template.convertAndSend("/subscribe/chat/24", chat);
+	   // messaging.checkNotice(this.template);
+		return chat;
+	}
+	
+	@MessageMapping("/test/{roomNo}")
+	@SendTo("/subscribe/chat/{roomNo}")
+	public Chat test(Chat chat) {
+		chat.setSendDate(new Date());
 		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
 		//setTemplate(template);
-	   // this.template.convertAndSend("/subscribe/chat/9", chat);
+	    this.template.convertAndSend("/subscribe/chat/24", chat);
 		return chat;
 	}
 
@@ -119,6 +147,9 @@ public class ChatController {
 		model.addAttribute("roomNo", roomNo);
 		model.addAttribute("foodlist", channelmapper.selectfood());
 		model.addAttribute("pickmenu", menumapper.selmenupick(roomNo));
+		
+		System.out.println(channelmapper.selectChat(roomNo));
+		model.addAttribute("chatcontentlist", channelmapper.selectChat(roomNo));
 		if (chtype > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");

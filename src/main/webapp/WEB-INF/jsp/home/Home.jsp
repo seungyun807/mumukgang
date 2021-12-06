@@ -57,19 +57,18 @@
                         <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">채널찾기</span>
                     </a>
-                    <a href="#" class="nav__link"  id="friendlist" onclick="gotoFriendsList()">
-                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">친구목록</span>
-                    </a>
-                     <a href="#"class="nav__link" id="findfriend" onclick="gotoFindFriends()">
-                        <ion-icon name="search-outline" class="nav__icon"></ion-icon>
-                        <span class="nav_name">친구찾기</span>
-                    </a>
                      <a class="nav__link" id="channel"  onclick="gotoChannel()" >
                         <ion-icon name="chatbubble-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">채널</span>
                     </a>
-                
+                    <a href="#"class="nav__link" id="findfriend" onclick="gotoFindFriends()">
+                        <ion-icon name="search-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">친구찾기</span>
+                    </a>
+                    <a href="#" class="nav__link"  id="friendlist" onclick="gotoFriendsList()">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">친구목록</span>
+                    </a>
                 <a href="#" class="nav__link" onclick="gotoLogout()">
                     <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">로그아웃</span>

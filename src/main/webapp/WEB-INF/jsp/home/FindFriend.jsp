@@ -64,7 +64,7 @@
 			<hr>
 				<div id="custom-search-input">
 					<div class="input-group col-md-12">
-						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="이메일 또는 닉네임으로 검색해주세요." onkeyup="if(window.event.keyCode==13){findfriends()}" /> <span class="input-group-btn">
+						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="이메일 또는 닉네임으로 검색해주세요." onkeyup="enterkey()" /> <span class="input-group-btn">
 							<button class="btn btn-info btn-lg" id="findbtn">
 								<ion-icon name="search-outline"></ion-icon>
 							</button>
@@ -131,7 +131,7 @@
 			<div class="content">
 				<div class="good-job">
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-					<div id="test">친구를 찾을수 없습니다.</div>
+					<div id="test">친구를 찾을 수 없습니다.</div>
 				</div>
 			</div>
 		</div>
@@ -166,7 +166,7 @@
 								$("#test").empty();
 								$("#test").append(str);
 							} else if( returnData == null) {
-								var str = "친구를 찾을수 없습니다.";
+								var str = "친구를 찾을 수 없습니다.";
 								$("#test").empty();
 								$("#test").append(str);
 								//$('.modal-wrapper').toggleClass('open');
@@ -205,17 +205,23 @@
 					
 				});
 	}
-
+	function enterkey() {
+        if (window.event.keyCode == 13) {
+        	 $('#searchInput').blur();
+        	 findfriends();
+        }
+	}
 	$(document).ready(function() {
 		$("#findchannel").removeClass("active");
 		$("#friendlist").removeClass("active");
 		$("#findfriend").addClass("active");
 		$("#channel").removeClass("active");
 
+		
 		$('.trigger').click(function() {
 			$('.modal-wrapper').toggleClass('open');
 			var str = "";
-			str += "친구를 찾을수 없습니다.";
+			str += "친구를 찾을 수 없습니다.";
 			setTimeout(function() {
 				$("#test").empty();
 				$("#test").append(str);

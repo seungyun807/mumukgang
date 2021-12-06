@@ -271,6 +271,12 @@
             <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath>
         </dependency>
       -->
+      <!-- Ehcache --> <dependency>
+       <groupId>net.sf.ehcache</groupId>
+       <artifactId>ehcache</artifactId
+       > <version>2.10.2</version> </dependency> <!-- Ehcache 적용을 위한 Spring artifact --> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> <version>4.2.4.RELEASE</version> </dependency> <!-- EHCache Support 모듈, 다른 Caching 지원모듈 --> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context-support</artifactId> <version>4.2.4.RELEASE</version> </dependency>
+
+
 	</dependencies>
 
 	<build>

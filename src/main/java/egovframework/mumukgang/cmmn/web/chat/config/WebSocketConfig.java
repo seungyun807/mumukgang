@@ -2,6 +2,7 @@ package egovframework.mumukgang.cmmn.web.chat.config;
 
 import java.util.List;
 
+import org.apache.taglibs.standard.lang.jstl.test.beans.PublicInterface2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import egovframework.mumukgang.cmmn.web.chat.Messaging;
 import egovframework.mumukgang.cmmn.web.chat.StompHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,9 +30,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
     	@Autowired
     	private StompHandler stompHandler;
     	
+    	@Autowired
+    	private Messaging messaging;
+    	
 		@Override
 		public void configureMessageBroker(MessageBrokerRegistry config) {
-			config.enableSimpleBroker("/subscribe");
+			config.enableSimpleBroker("/subscribe", "/queue");
 			config.setApplicationDestinationPrefixes("/app");
 		}
 		
@@ -45,4 +50,5 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
 	        registration.interceptors(stompHandler);
 	    }
 
+	   
 }

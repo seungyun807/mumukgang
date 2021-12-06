@@ -1,3 +1,6 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="javax.annotation.Resource"%>
+<%@page import="egovframework.mumukgang.cmmn.web.mapper.ChannelMapper"%>
 <%@page import="java.util.Random"%>
 <%@ page contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -18,6 +21,7 @@
 	String roomNo = request.getAttribute("roomNo").toString();
 	int agreecount = 0;
 	session.setAttribute(roomNo, 0);
+
 %>
 <style>
 #pickBox{
@@ -153,6 +157,13 @@ font-size: 12px;
 .menu{
 	margin: 2px;
 }
+.modal{
+	height: 525px !important;
+	top: 40% !important;
+}
+.modal2{
+	top: 43.9% !important;
+}
 </style>
 <body>
 	<jsp:include page="../home/Home.jsp" flush="true"></jsp:include>
@@ -257,7 +268,11 @@ font-size: 12px;
 		<div class="item">
 
 			<div id="chatArea" class="form-control">
-				<div id="chatMessageArea"></div>
+				<div id="chatMessageArea">
+					<c:forEach  var="chatlist" items="${chatcontentlist}" varStatus="status">
+						${chatlist.nickname}: ${chatlist.content}<br>
+					</c:forEach>
+				</div>
 			</div>
 			<br>
 			<div class="inputdiv">
@@ -279,7 +294,7 @@ font-size: 12px;
 				<ul class="jbul">
 				<c:forEach  var="pickmenu" items="${pickmenu}" varStatus="status">
   					<li id='${pickmenu.foodName}' class="jbli">${pickmenu.foodName}</li>
-					<a class="pickdel" name='${pickmenu.foodName}'><ion-icon name="close-outline"></ion-icon></a>
+					<a class="pickdel" name='${pickmenu.foodName}' id='${pickmenu.foodName}a'><ion-icon name="close-outline"></ion-icon></a>
 				</c:forEach>
   				
 					</ul>
@@ -393,6 +408,7 @@ function locationclick(x, y) {
 }
 
 function savepick(roomNo, pickid, del, empty) {
+	console.log('pickmenu');
 		$.ajax({
             url         :   "/pickmenu",
             dataType    :   "json",
@@ -422,11 +438,13 @@ function savepick(roomNo, pickid, del, empty) {
 		$("#friendlist").removeClass("active");
 		$("#findfriend").removeClass("active");
 		$("#channel").addClass("active");
+		$("#chatArea").scrollTop($("#chatArea")[0].scrollHeight);
 		var nickname = "<%=nickname%>";
 		var roomNo = "${roomNo}";
 		var ispick = "";
 		var pickid = "";
 		var result = "";
+		var list = [];
 		var agree = null;
 		var empty = false;
 
@@ -441,8 +459,9 @@ function savepick(roomNo, pickid, del, empty) {
 			//메세지 들어오는곳 == 구독한 채팅 채널
 			//roomNo는 채팅창 접속하는 url에 get방식의 값으로 연결해줌
 			//ex)채팅url?roomNo=13 이면 jsp el태그로 ${roomNo}로 가져와서 사용
+			
 			client.subscribe('/subscribe/chat/' + roomNo, function(chat) {
-		
+				console.log("subscribe");
 				//받은 데이터
 				var content = JSON.parse(chat.body);
 				if(content.agree != null){
@@ -460,18 +479,22 @@ function savepick(roomNo, pickid, del, empty) {
 				
 			});
 			
-			client.subscribe('/subscribe/chat', function(chat) {
-
-				
-			});
+		
 
 		});
 
 		function appendMessage(msg) {
 			if(msg.ispick != ""){
-				
-				$(".jbul").append(msg.ispick);
-				
+				console.log("ispick");
+				console.log(msg.pickid);
+				if($("#pickBox [id="+msg.pickid+"]").text() != ""){
+					console.log("test");
+					$('#'+msg.pickid + "a").remove();
+					$('#'+msg.pickid).remove();
+				}
+				else{
+					$(".jbul").append(msg.ispick);
+				}
 			}
 			else{
 			$("#chatMessageArea").append(
@@ -482,20 +505,7 @@ function savepick(roomNo, pickid, del, empty) {
 			}
 		}
 		
-		function doagree(msg) {
-			$('.modal-wrapper').toggleClass('open');
-			var str = "";
-			str += "<br>";
-			str += msg.memberId;
-			str += "님이 랜덤뽑기를 진행하고자 합니다.";
-			str += "<br>";
-			str += "<br>";
-			str += "동의하십니까?";
-			str += "<button class='btn btn-primary' id='agree' onclick='agree()'>예</button>&nbsp;<button class='btn btn-secondary' id='disagree'>아니요</button>";
-			
-			$("#str").empty();
-			$("#str").append(str);
-		}
+		
 		
 		function doempty() {
 			$('.jbul').empty();
@@ -503,12 +513,25 @@ function savepick(roomNo, pickid, del, empty) {
 		}
 
 		function doresult(msg) {
-			$('#resultBox').text(msg.result+"👀");
+			//$('#resultBox').text(msg.result+"👀");
 			$('#resultBox').css("background-color", "lightyellow");
+			console.log(msg.result);
+			for (var i = 0; i < msg.result.length; i++) {
+				(function(x) {
+					setTimeout(function() {
+						$('#resultBox').text(msg.result[x]);
+							}, 200*x);
+					})(i);
+				}
+			
+			
 		}
+		
+		//메세지 보내기 
 		function sendmsg() {
 			var message = $("#message").val();
 			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
+				roomNo : roomNo,
 				chatContent : message,
 				ispick : ispick,
 				pickid : pickid,
@@ -518,16 +541,18 @@ function savepick(roomNo, pickid, del, empty) {
 			$("#message").val("");
 		}
 		
-		function sendagree() {
+		function sendpick() {
 			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
-				agree : agree,
-				memberId : nickname
+				ispick : ispick,
+				pickid : pickid,
+				memberId : nickname,
+				empty : empty
 			}));
 		}
 		
 		function sendresult() {
 			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
-				result : result
+				result : list
 			}));
 		}
 
@@ -553,7 +578,18 @@ function savepick(roomNo, pickid, del, empty) {
 			$(document).on('click', '.pickdel', function () {
 				savepick(roomNo, $(this).attr("name"), true, false);
 				$(this).remove();
-				$('#'+$(this).attr('name')).remove();
+				$('#'+$(this).attr('id')).remove();
+				
+				console.log($(this));
+				console.log($(this).attr('name'));
+				
+				ispick = "<li id='" + $(this).text()+"' class='jbli'>"+ $(this).text()+" </li><a class='pickdel' name='"+$(this).text()+"' id='"+$(this).text()+"a'><ion-icon name='close-outline'></ion-icon></a>";
+				pickid = $(this).attr("name");
+				sendpick();
+				
+				setTimeout(function() {
+					ispick = "";
+	  			}, 500);
 			})
 			
 			//메뉴 clear
@@ -561,7 +597,7 @@ function savepick(roomNo, pickid, del, empty) {
 				$('.jbul').empty();
 				$('#resultBox').empty();
 				empty = true;
-				sendmsg();
+				sendpick();
 				savepick(roomNo, null, false, true);
 				empty = false;
 			})
@@ -572,9 +608,9 @@ function savepick(roomNo, pickid, del, empty) {
 					alert("중복된 메뉴입니다.");
 				}
 				else {
-					ispick = "<li id='" + $(this).text()+"' class='jbli'>"+ $(this).text()+" </li><a class='pickdel' name='"+$(this).text()+"'><ion-icon name='close-outline'></ion-icon></a>";
+					ispick = "<li id='" + $(this).text()+"' class='jbli'>"+ $(this).text()+" </li><a class='pickdel' name='"+$(this).text()+"' id='"+$(this).text()+"a'><ion-icon name='close-outline'></ion-icon></a>";
 					pickid = $(this).text();
-					sendmsg();
+					sendpick();
 					savepick(roomNo, pickid, false, false);
 				}
 				
@@ -588,24 +624,26 @@ function savepick(roomNo, pickid, del, empty) {
 			//랜덤뽑기
 			$('#randomstart').click(function() {
 				//$('.modal-wrapper').toggleClass('open');
-				$('#resultBox').css("background-color", "transparent");
+				list = [];
+				//$('#resultBox').css("background-color", "transparent");
 				var ele = document.getElementsByTagName('ul')[0];
 				var eleCount = ele.childElementCount;
-				var list = [];
-				for(var i = 0; i < eleCount; i++){
-					list.push($('.jbul').children().eq(i).attr('id'));
+				eleCount = eleCount / 2;
+				if(eleCount == 0){
+					alert("먼저 메뉴를 골라주세요.");
 				}
-				result = list[Math.floor(Math.random() * list.length)];
-				
-					for (var i = 0; i < eleCount; i++) {
-						(function(x) {
-							setTimeout(function() {
-								$('#resultBox').text(list[x]);
-									}, 90*x);
-							})(i);
-						}
+				else {
+					for(var i = 0; i < eleCount; i++){
+						//console.log($('.jbul').children('a').eq(i).attr('name'));
+						list.push($('.jbul').children('a').eq(i).attr('name'));
+					}
 					
-				sendresult();
+					result = list[Math.floor(Math.random() * list.length)];
+					list.push(result + "😋");
+						
+					sendresult();
+				}
+				
 				
 			});
 			
@@ -616,11 +654,13 @@ function savepick(roomNo, pickid, del, empty) {
 				} else{
 					var latitude = sessionStorage.getItem("latitude");
 					var longitude = sessionStorage.getItem("longitude");
+					latitude = "35.1416772";
+					longitude = "126.8357822";
 					console.log(latitude, longitude);
-					if (latitude == null || longitude == null) {
-						alert('위치찾기에 동의해주세요.');
-						getLocation();
-					}else{
+					//if (latitude == null || longitude == null) {
+					//	alert('위치찾기에 동의해주세요.');
+					//	getLocation();
+					//}else{
 				$('.modal-wrapper').toggleClass('open');
 				$.ajax({
 				    url: "https://dapi.kakao.com/v2/local/search/keyword.json?y="+latitude+"&x="+longitude+"&radius=2000",
@@ -629,13 +669,15 @@ function savepick(roomNo, pickid, del, empty) {
 				    type: 'GET'
 				}).done(function(data) {
 				    $('#findplacebox').empty();
+				    console.log( data.documents);
 				    for(var i = 0; i < data.documents.length; i++){
 				    	
 				    	var str = "";
 				    	str += data.documents[i].place_name + "<br>";
 				    	str += data.documents[i].address_name + "<img class='location' onclick='locationclick("+data.documents[i].x+", "+data.documents[i].y+")' title='위치보기' src='/images/egovframework/location.png'/>" + "<br>" ;
 				    	str += data.documents[i].category_name + "<br>";
-				    	str += data.documents[i].phone + "<br><hr>";
+				    	str += data.documents[i].phone + "<br>";
+				    	str += "<a href=" + data.documents[i].place_url + " target='_blank' >자세히 보기</a><br><hr>";
 				    	
 				    	 $('#findplacebox').append(str);
 				    	
@@ -643,7 +685,7 @@ function savepick(roomNo, pickid, del, empty) {
 				    
 				   
 				});
-				}
+			//	}
 				}
 			});
 			
@@ -652,9 +694,9 @@ function savepick(roomNo, pickid, del, empty) {
 				if($("#pickBox [id="+$('#inputmenu').val()+"]").text() != ""){
 					alert("중복된 메뉴입니다.");
 				} else {
-					ispick = "<li id='" + $('#inputmenu').val()+"' class='jbli'>"+ $('#inputmenu').val()+" </li><a class='pickdel' name='"+$('#inputmenu').val()+"'><ion-icon name='close-outline'></ion-icon></a>";
+					ispick = "<li id='" + $('#inputmenu').val()+"' class='jbli'>"+ $('#inputmenu').val()+" </li><a class='pickdel' name='"+$('#inputmenu').val()+"' id='"+$('#inputmenu').val()+"a'><ion-icon name='close-outline'></ion-icon></a>";
 					pickid = $('#inputmenu').val();
-					sendmsg();	
+					sendpick();	
 					savepick(roomNo, pickid, false, false);
 				}
 			
@@ -716,18 +758,11 @@ function savepick(roomNo, pickid, del, empty) {
 					}
 			})
 			
-			// 동의 투표 송신
-			$('#doagree').click(function() {
-					agree = "1";
-					sendagree();
-					$('.modal-wrapper').toggleClass('open');
-			});
+			
 			
 			
 			$('#delchannelbtn').click(function() {
 				if (confirm("채널을 삭제하시겠습니까?")) {
-					
-				
 				$.ajax({
 	                url         :   "/deletechannel",
 	                dataType    :   "json",
@@ -755,23 +790,7 @@ function savepick(roomNo, pickid, del, empty) {
 		});
 
 	});
-	//수신자 동의
-	function agree() {
-			alert("수신자동의");
-		<%
-		session.setAttribute("roomNo", ++agreecount);
-		%>
-		
-		var agreecount = "<%=session.getAttribute("roomNo")%>";
 
-		alert(agreecount);
-		if (agreecount == "${countchmem}" ) {
-			alert("모두동의");
-		}
-		$('.modal-wrapper').toggleClass('open');
-		
-		
-	}
 	
 	function getLocation() {
 		  if (navigator.geolocation) { // GPS를 지원하면

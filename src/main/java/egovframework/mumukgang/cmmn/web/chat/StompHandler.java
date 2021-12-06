@@ -51,11 +51,12 @@ import net.sf.json.JSON;
 @Component
 public class StompHandler extends ChannelInterceptorAdapter {
 
-		
-	 	private SimpMessagingTemplate template;
 
+	 	private final SimpMessagingTemplate template;
+
+	
 	 	@Autowired
-	    public void setTemplate(SimpMessagingTemplate template) {
+	    public StompHandler (SimpMessagingTemplate template) {
 	        this.template = template;
 	    }
 	 	
@@ -69,13 +70,10 @@ public class StompHandler extends ChannelInterceptorAdapter {
 			switch (accessor.getCommand()) {
             	case CONNECT:
             		System.out.println("StompHandler connect = " + sessionId);
-            	
-            		//new Messaging();
-            	
             		
             		//setTemplate(template);
             		chat.setChatContent("hi");
-            		this.template.convertAndSend("/subscribe/chat/11", chat);
+            		this.template.convertAndSend("/subscribe/chat/24", chat);
             		
             		
             		break;

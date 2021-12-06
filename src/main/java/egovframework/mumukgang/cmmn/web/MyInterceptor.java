@@ -24,7 +24,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
 		
 		String loginId = (String)request.getSession().getAttribute("email");
 		
-		System.out.println("preHandle >>>  Controller 실행 전 실행");
+		//System.out.println("preHandle >>>  Controller 실행 전 실행");
 		System.out.println("loginId = " + loginId);
 		if(loginId != null) {return true;}
 		else {
@@ -53,7 +53,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter{
     		logger.info("new login success");
     		httpSession.setAttribute(LOGIN, userVO);
     	}
-    	System.out.println("postHandle >>>  Controller 실행 후 실행");
+    	//System.out.println("postHandle >>>  Controller 실행 후 실행");
     }
  
     @Override

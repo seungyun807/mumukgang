@@ -114,7 +114,7 @@ ion-icon {
 			</form>
 		<form action="/findchannel" method="post">
 			<select class="form-select form-select-sm" name="region" id="region" onchange="this.form.submit()">
-   				 <option value="지역선택" selected>지역선택</option>
+   				 <option value="지역선택" selected="selected">지역선택</option>
    				 <option value="전체">전체</option>
    				 <option value="경기">경기</option>
     			 <option value="서울">서울</option>
@@ -197,8 +197,19 @@ ion-icon {
 		$("#findfriend").removeClass("active");
 		$("#channel").removeClass("active");
 		
-		$("#region").val($.cookie('selectRegion')).prop("selected", true);
-		$('#searchRegion').attr('value', $.cookie('selectRegion'));
+		//$("#region").val($.cookie('selectRegion')).prop("selected", true);
+		console.log('${keyword}');
+		
+		if('${chregion}' != ""){
+			$("#region").val('${chregion}').prop("selected", true);
+			$('#searchRegion').attr('value', '${chregion}');
+		}else{
+			$('#searchRegion').attr('value', '지역선택');
+		}
+		if('${keyword}' != ""){
+			$('#searchInput').attr('value', '${keyword}');
+		}
+		//$('#searchInput').attr('value', $.cookie('searchInput'));
 		
 		
 		$(".enterchbtn").on('click', function() {

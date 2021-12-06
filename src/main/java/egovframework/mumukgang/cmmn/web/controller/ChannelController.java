@@ -255,6 +255,12 @@ public class ChannelController {
 	 * 채널 요청 수락여부
 	 * 
 	 */
+	/**
+	 * @param chnum
+	 * @param aon
+	 * @param session
+	 * @return
+	 */
 	@PostMapping(value="/chreqaon")
 	@ResponseBody
 	public Object chReqAcceptance(@RequestParam(value="chnum") int chnum, @RequestParam(value="acceptornot") boolean aon, HttpSession session) {	
@@ -267,7 +273,7 @@ public class ChannelController {
 		channelMember.setCh_num(chnum);
 		channelMember.setEmail(loginId);
 		channelMember.setJoin_date(latestDate);
-		if (aon) {
+ 		if (aon) {
 			channelMapper.channelmember(channelMember);
 			retVal.put("code", "OK");
 			retVal.put("message",  "초대를 수락하였습니다.");
@@ -335,7 +341,12 @@ public class ChannelController {
 	 * 
 	 * */
 	@RequestMapping(value="/findchannel")
-	public String findChannel(@RequestParam(required = false) HashMap<String, Object> map,  @RequestParam(defaultValue="1") int curPage, @RequestParam(value="mycop", required=false) Boolean cop, Model model, HttpSession session) {
+	public String findChannel(
+			@RequestParam(required = false) HashMap<String, Object> map,  
+			@RequestParam(defaultValue="1") int curPage, 
+			@RequestParam(value="mycop", required=false) Boolean cop,
+			Model model, 
+			HttpSession session) {
 		String keyword = (String) map.get("findchannel");
 		String chregion = (String) map.get("region");
 		System.out.println("/findchannel = " + cop);
@@ -401,6 +412,8 @@ public class ChannelController {
 			
 		}
 		
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("chregion", chregion);
 		return "home/FindChannel";
 		
 	}

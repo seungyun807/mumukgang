@@ -19,11 +19,12 @@
 	</insert>
 	
 	<insert id="channelinvited" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelInvited">
-		INSERT INTO channel_invited VALUES (#{ch_num}, #{ch_name}, #{res_email}, #{req_email}, #{nickname}, #{request_time})
+		INSERT INTO channel_invited select #{ch_num}, #{ch_name}, #{res_email}, #{req_email}, #{nickname}, #{request_time} from dual
+		where not exists (select * from channel_invited where ch_num=#{ch_num} and res_email=#{res_email} and req_email=#{req_email} )
 	</insert>
 	
 	<select id="selectchinvited" parameterType="String" resultType="egovMap">
-		SELECT ch_name, res_email, req_email, nickname, SUBSTR(request_time, 1, 10) request_time FROM channel_invited WHERE res_email = #{email}
+		SELECT ch_num, ch_name, res_email, req_email, nickname, SUBSTR(request_time, 1, 10) request_time FROM channel_invited WHERE res_email = #{email}
 	</select>
 	
 	<select id="authoritychannel" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember" resultType="int">
@@ -126,6 +127,17 @@
 		SELECT COUNT(*) FROM channel_info WHERE ch_type = 1 AND DEL_YN = 'N' and ch_create_email in
 		(select email from user where comp_name in
 		(select comp_name from user where email= #{email}))
+	</select>
+	
+	<insert id="saveChat" parameterType="hashmap">
+		<selectKey keyProperty="chat_ID" resultType="String" order="BEFORE">
+			SELECT MAX(chat_ID)+1 AS chat_ID FROM chat_history
+		</selectKey>
+		INSERT INTO chat_history VALUES(#{chat_ID}, #{ch_num}, #{nickname}, #{content}, NOW());
+	</insert>
+	
+	<select id="selectChat" parameterType="int" resultType="egovMap" >
+		SELECT nickname, content FROM chat_history WHERE ch_num = #{ch_num};
 	</select>
 	
 </mapper>

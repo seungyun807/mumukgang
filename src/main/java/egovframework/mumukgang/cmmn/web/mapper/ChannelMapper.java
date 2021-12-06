@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.antlr.codegen.ObjCTarget;
+import org.apache.commons.validator.routines.checkdigit.VerhoeffCheckDigit;
 
 import egovframework.mumukgang.cmmn.web.vo.Channel;
 import egovframework.mumukgang.cmmn.web.vo.ChannelInvited;
@@ -75,4 +76,8 @@ public interface ChannelMapper {
 	public List<HashMap<String, Object>> findmycop (HashMap<String, Object> map);
 	
 	public int findmycopCnt (String email);
+	
+	public void saveChat(HashMap<String, Object> map);
+	
+	public List<HashMap<String, Object>> selectChat(int ch_num);
 }

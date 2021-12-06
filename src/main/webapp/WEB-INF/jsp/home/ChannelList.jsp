@@ -130,9 +130,11 @@ label {
 	grid-column: 1/4;
 }
 .item:nth-child(4) {
+    width: 570px;
 	grid-column: 1/3;
 }
 .item:nth-child(5) {
+	width: 400px;
 	margin-top:20px;
 	grid-column: 3/4;
 }
@@ -141,8 +143,8 @@ label {
 	flex-direction: row;
 	align-items: center;
 }
-.modal{
-	height: 500px !important;
+.card-body{
+	padding: 1rem 1rem 0rem;
 }
 </style>
 
@@ -231,7 +233,9 @@ label {
 							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
 							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
 						</div>
-						<div id="regiondiv" style="display: none;">
+						<div id="selectpub" style="display: flex; align-items: center; display: inline;">
+							<input id="channelname" type="email" class="form-control" placeholder="채널이름" style="width: 100%" />
+							<div id="regiondiv" style="display: none; width: 25%; margin-left: 2%">
 							<select class="form-select form-select-sm" name="region" id="region">
    								<option value="">지역선택</option>
    								<option value="전체">전체</option>
@@ -251,9 +255,9 @@ label {
     			 				<option value="전북">전북</option>
     			 				<option value="전남">전남</option> 
 							</select>
-						</div>
-						<input id="channelname" type="email" class="form-control" placeholder="채널이름" /> <br>
-
+							</div>
+						</div> 
+							<br>
 						<div class="form-control" id="selectaddfriends">
 							<!-- <nav> -->
 							<ul class="mylist2">
@@ -463,10 +467,14 @@ function updatechannel() {
 			$("input[name='chtype']:checked").each(function(){	
 				if ($(this).val() == "onlyfriend") {
 					chtype = false;
+					$('#selectpub').css('display', 'inline');
 					$('#regiondiv').css('display', 'none');
+					$('#channelname').css('width', '100%');
 				}else{
 					chtype = true;
+					$('#selectpub').css('display', 'flex');
 					$('#regiondiv').css('display', 'inline');
+					$('#channelname').css('width', '73%');
 				}
 			});
 			
@@ -506,9 +514,11 @@ function updatechannel() {
 		
 		//채널 설정
 		$(".setting").on('click', function() {
+			console.log($(this));
 			var str = "";
-			str += "<button class='btn btn-primary' id='updatechannel' onclick='updatechannel()'>수정</button>";
-			str += "<button class='btn btn-danger' id='deletechannel' onclick='deletechannel()'>채널삭제</button>";
+			str += "<div class = 'btn-group' role='group'>";
+			str += "<button class='btn btn-primary' id='updatechannel' onclick='updatechannel()' style='font-size:13px;'>수정</button>";
+			str += "<button class='btn btn-danger' id='deletechannel' onclick='deletechannel()' style='font-size:13px;'>채널삭제</button></div>";
 			$('#modaldiv').empty();
 			$('#modaldiv').append(str);
 			
@@ -543,6 +553,7 @@ function updatechannel() {
 								
 								if (returnData.ch_type) {
 									$('#public').prop('checked', true);
+									$('#public').trigger('click');
 									$('#regiondiv').css('display', 'inline');
 									$('#region').val(returnData.ch_region).attr("selected", true);
 								} else {

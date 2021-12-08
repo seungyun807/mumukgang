@@ -46,6 +46,14 @@
 		SELECT food_name FROM menu WHERE food_kinds = '분식'
 	</select>
 	
+	<select id="selectDessert" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '카페디저트' AND food_subkinds = ""
+	</select>
+	
+	<select id="dessertbrand" resultType="egovMap">
+		SELECT food_name FROM menu WHERE food_kinds = '카페디저트' AND food_subkinds = "프랜차이즈"
+	</select>
+	
 	<insert id="menupick" parameterType="hashmap">
 		INSERT INTO menu_pick VALUES(#{ch_num}, #{food_name})
 	</insert>

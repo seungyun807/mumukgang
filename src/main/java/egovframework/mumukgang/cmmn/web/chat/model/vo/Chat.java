@@ -22,7 +22,8 @@ public class Chat{ //implements Serializable {
 	private List<String> result;
 	private Date sendDate;
 	private boolean empty;
-	
+	private boolean del;
+	private boolean out;
 	
 	//private String vaildYN;
 }

@@ -83,7 +83,7 @@ public class IntroController {
 			session.setAttribute("mypage", false);
 			return "member/MyPage";
 		} else {
-			return "chat/authorityrefuse";
+			return "channel/authorityrefuse";
 		}
 	}
 }

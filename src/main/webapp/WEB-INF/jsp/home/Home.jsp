@@ -37,9 +37,11 @@
 	}
 	
 	function gotoLogout(){
-		var link = "/logout";
-		sessionStorage.clear();
-		location.href = link;
+		if(confirm("로그아웃 하시겠습니까?")){
+			var link = "/logout";
+			sessionStorage.clear();
+			location.href = link;
+		}
 	}
 	
 	

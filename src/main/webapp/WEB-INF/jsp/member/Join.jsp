@@ -134,10 +134,10 @@ $(function() {
             	if(status == "success") {
     				if(returnData.usedCnt > 0 ){
     					$("#id_check").css("color", "red");
-    					$("#id_check").text("사용할수 없는 아이디입니다.");
+    					$("#id_check").text("사용할수 없는 이메일입니다.");
     				}else{
     					$("#id_check").css("color", "blue");
-    					$("#id_check").text("사용가능한 아이디입니다.");
+    					$("#id_check").text("사용가능한 이메일입니다.");
     				}
     			}else{ alert("ERROR!" + error);return;} 
             }
@@ -213,10 +213,10 @@ $(function() {
 
 function checkId() {
 	 var idcheck = $('#id_check').text();
-	 if((idcheck == "사용가능한 아이디입니다.") || kakaojoin){
+	 if((idcheck == "사용가능한 이메일입니다.") || kakaojoin){
 		 return true;
 	 } else {
-		 alert('사용할수 없는 아이디입니다.')
+		 alert('사용할수 없는 이메일입니다.')
 		 return false;
 	 }
 }

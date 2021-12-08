@@ -168,13 +168,13 @@ a {
 <body>
 
 <div class="intro">
-<img alt="" src="../../images/egovframework/logo.png" style="background-color: white; padding: 10px">
+<img alt="" src="../../images/egovframework/logo.png" style="background-color: white; padding: 10px; padding-top: 30px;">
 	<form action="/login" method="post">
 	<div class="firstdiv">
 		<h5>로그인</h5>
 		<br>
 		 <div class="form-group">
-            <input name="email" type="text" class="form-control" placeholder="아이디" />
+            <input name="email" type="text" class="form-control" placeholder="이메일" />
             <br>
             <input name="password" type="password" class="form-control" placeholder="비밀번호"/>
         </div>
@@ -190,7 +190,7 @@ a {
 	
     	<c:if test="${map.msg == 'failure'}">
     		<script type="text/javascript">
-    			alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+    			alert('이메일 또는 비밀번호가 일치하지 않습니다.');
     		</script>
     	</c:if>
 	<div class="seconddiv">

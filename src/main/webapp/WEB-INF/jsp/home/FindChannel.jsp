@@ -114,8 +114,7 @@ ion-icon {
 			</form>
 		<form action="/findchannel" method="post">
 			<select class="form-select form-select-sm" name="region" id="region" onchange="this.form.submit()">
-   				 <option value="지역선택" selected="selected">지역선택</option>
-   				 <option value="전체">전체</option>
+   				 <option value="전체" selected="selected">전체</option>
    				 <option value="경기">경기</option>
     			 <option value="서울">서울</option>
     			 <option value="인천">인천</option>

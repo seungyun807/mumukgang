@@ -29,7 +29,11 @@ public interface MenuMapper {
 	public List<HashMap<String, Object>> selectFastFood();
 	
 	public List<HashMap<String, Object>> selectBunsick();
+	
+	public List<HashMap<String, Object>> selectDessert();
 
+	public List<HashMap<String, Object>> dessertbrand();
+	
 	public void menupick (HashMap<String, Object> map);
 	
 	public void delmenupick (HashMap<String, Object> map);

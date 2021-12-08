@@ -75,15 +75,15 @@ public class ChatController {
 		return chat;
 	}
 	
-	@MessageMapping("/test/{roomNo}")
-	@SendTo("/subscribe/chat/{roomNo}")
-	public Chat test(Chat chat) {
-		chat.setSendDate(new Date());
-		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
-		//setTemplate(template);
-	    this.template.convertAndSend("/subscribe/chat/24", chat);
-		return chat;
-	}
+//	@MessageMapping("/test/{roomNo}")
+//	@SendTo("/subscribe/chat/{roomNo}")
+//	public Chat test(Chat chat) {
+//		chat.setSendDate(new Date());
+//		System.out.println("chatContent = " + chat +" nick = " + chat.getMemberId());
+//		//setTemplate(template);
+//	    this.template.convertAndSend("/subscribe/chat/24", chat);
+//		return chat;
+//	}
 
 	@RequestMapping("/enter/chat/{roomNo}")
 	public String enterChat (@PathVariable ("roomNo") int roomNo, Model model, HttpSession session) {
@@ -94,6 +94,7 @@ public class ChatController {
 		List<HashMap<String, Object>> jjigae;
 		List<HashMap<String, Object>> myeon;
 		List<HashMap<String, Object>> haejang;
+		List<HashMap<String, Object>> dessertbrand;
 		
 		List<HashMap<String, Object>> japan;
 		List<HashMap<String, Object>> china;
@@ -101,12 +102,14 @@ public class ChatController {
 		List<HashMap<String, Object>> convenience;
 		List<HashMap<String, Object>> fastfood;
 		List<HashMap<String, Object>> bunsick;
+		List<HashMap<String, Object>> dessert;
 		
 		jjim = menumapper.jjim();
 		guktang = menumapper.guktang();
 		jjigae = menumapper.jjigae();
 		myeon = menumapper.myeon();
 		haejang = menumapper.haejang();
+		dessertbrand = menumapper.dessertbrand();
 		
 		japan = menumapper.selectJapanese();
 		china = menumapper.selectChinese();
@@ -114,12 +117,14 @@ public class ChatController {
 		convenience = menumapper.selectConvenience();
 		fastfood = menumapper.selectFastFood();
 		bunsick = menumapper.selectBunsick();
+		dessert = menumapper.selectDessert();
 		
 		model.addAttribute("jjim", jjim);
 		model.addAttribute("guktang", guktang);
 		model.addAttribute("jjigae", jjigae);
 		model.addAttribute("myeon", myeon);
 		model.addAttribute("haejang", haejang);
+		model.addAttribute("dessertbrand", dessertbrand);
 		
 		model.addAttribute("japan", japan);
 		model.addAttribute("china", china);
@@ -127,6 +132,7 @@ public class ChatController {
 		model.addAttribute("convenience", convenience);
 		model.addAttribute("fastfood", fastfood);
 		model.addAttribute("bunsick", bunsick);
+		model.addAttribute("dessert", dessert);
 		
 		
 		ChannelMember channelmember = new ChannelMember();
@@ -156,18 +162,18 @@ public class ChatController {
 			//String chtype = (String)channelmapper.selectchtype(map).get("ch_type");
 			model.addAttribute("chname", chname);
 			model.addAttribute("chtype", Integer.toString(chtype));
-			return "chat/chatting";
+			return "channel/Channel";
 		}
 		else if(result > 0) {
 			map.put("ch_num", roomNo);
 			String chname = (String)channelmapper.selectchname(map).get("ch_name");
 			model.addAttribute("chtype", Integer.toString(chtype));
 			model.addAttribute("chname", chname);
-			return "chat/chatting";
+			return "channel/Channel";
 		}
 		else {
 			
-			return "chat/authorityrefuse";
+			return "channel/authorityrefuse";
 		}
 		
 		

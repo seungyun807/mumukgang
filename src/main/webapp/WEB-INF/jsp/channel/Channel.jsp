@@ -119,12 +119,12 @@ input{
 }
 #delchannelbtn{
 	font-size: 12px;
-	margin-top: 10px;
+	margin-top: 220px;
 	float: right;
 }
 #outbtn{
 font-size: 12px;
-	margin-top: 10px;
+	margin-top: 220px;
 	float: right;
 }
 .jbul{
@@ -158,8 +158,8 @@ font-size: 12px;
 	margin: 2px;
 }
 .modal{
-	height: 525px !important;
-	top: 40% !important;
+	height: 565px !important;
+	top: 38% !important;
 }
 .modal2{
 	top: 43.9% !important;
@@ -259,8 +259,21 @@ font-size: 12px;
 									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${convenience.foodName}</button>
 								</c:forEach>
 							</div>
+						<button class="btn btn-warning menu" id="dessert"><span class="emoji">🍰</span>카페·디저트</button>
+							<div class="col-md-5" id="dessertDiv" style="display: none;">
+								<button class="btn btn-dark menu" id="dstbrand" >프랜차이즈</button>
+									<div id="dstbrandDiv" class="col-md-5" style="display: none;" onclick="inline()">
+										<c:forEach var="dessertbrand" items="${dessertbrand}" varStatus="status">
+											<button class="btn btn-secondary foodbtn">${dessertbrand.foodName}</button>
+										</c:forEach>
+									</div>
+							 	<c:forEach var="dessert" items="${dessert}" varStatus="status">
+									<button class="btn btn-secondary foodbtn" style="margin: 2px;">${dessert.foodName}</button>
+								</c:forEach>
+							 
+							</div>
 					
-						
+					
 				</div>
 			</div>
 			
@@ -315,8 +328,8 @@ font-size: 12px;
 			</div>
 		</div>
 		<div class="item">
-		<span>온라인 친구</span>
-		<div class="form-control" id="onlineDiv"></div>
+	<!-- 	<span>온라인 친구</span>
+		<div class="form-control" id="onlineDiv"></div> -->
 				<c:set var = "roomNo" scope = "session" value = "${roomNo}"/>
 					<c:forEach var="chcreater" items="${chcreater}" varStatus="status">
 			 			<c:set var = "chcreaternum" scope = "session" value = "${chcreater.chNum}"/>
@@ -447,7 +460,7 @@ function savepick(roomNo, pickid, del, empty) {
 		var list = [];
 		var agree = null;
 		var empty = false;
-
+		var del = false;
 		
 		var messageInput = $("#message").val();	
 		var sock = new SockJS("${pageContext.request.contextPath}/endpoint");
@@ -464,6 +477,7 @@ function savepick(roomNo, pickid, del, empty) {
 				console.log("subscribe");
 				//받은 데이터
 				var content = JSON.parse(chat.body);
+				console.log(content);
 				if(content.agree != null){
 					doagree(content);
 				}
@@ -472,6 +486,12 @@ function savepick(roomNo, pickid, del, empty) {
 				}
 				else if (content.empty == true) {
 					doempty();
+				}
+				else if (content.del == true){
+					dodel();
+				}
+				else if (content.out == true){
+					doout(content);
 				}
 				else{
 					appendMessage(content);
@@ -506,7 +526,6 @@ function savepick(roomNo, pickid, del, empty) {
 		}
 		
 		
-		
 		function doempty() {
 			$('.jbul').empty();
 			$('#resultBox').empty();
@@ -522,9 +541,23 @@ function savepick(roomNo, pickid, del, empty) {
 						$('#resultBox').text(msg.result[x]);
 							}, 200*x);
 					})(i);
-				}
-			
-			
+			}
+		}
+		
+		//나가기 메시지
+		function doout(msg){
+			$("#chatMessageArea").append(
+					"<b>" + msg.memberId +  msg.chatContent +"</b><br>");
+			var chatAreaHeight = $("#chatArea").height();
+			var maxScroll = $("#chatMessageArea").height() - chatAreaHeight;
+			$("#chatArea").scrollTop(maxScroll);
+		}
+		
+		//채널 삭제
+		function dodel() {
+			alert("채널이 삭제되었습니다.");
+			var link = "/channel";
+            location.href = link;
 		}
 		
 		//메세지 보내기 
@@ -541,6 +574,7 @@ function savepick(roomNo, pickid, del, empty) {
 			$("#message").val("");
 		}
 		
+		//클릭한 메뉴 전송
 		function sendpick() {
 			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
 				ispick : ispick,
@@ -550,9 +584,27 @@ function savepick(roomNo, pickid, del, empty) {
 			}));
 		}
 		
+		//랜덤뽑기 결과 전송
 		function sendresult() {
 			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
 				result : list
+			}));
+		}
+		
+		//메세지 보내기 
+		function sendout() {
+			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
+				roomNo : roomNo,
+				chatContent : "님이 채널에서 나가셨습니다.",
+				memberId : nickname,
+				out : true
+			}));
+		}
+		
+		//삭제 소켓 전송
+		function senddel() {
+			client.send('/app/hello/' + roomNo, {}, JSON.stringify({
+				del : true
 			}));
 		}
 
@@ -670,20 +722,33 @@ function savepick(roomNo, pickid, del, empty) {
 				}).done(function(data) {
 				    $('#findplacebox').empty();
 				    console.log( data.documents);
-				    for(var i = 0; i < data.documents.length; i++){
+				    if (data.documents.length == 0) {
+				    	var str = "찾으시는 메뉴의 음식점이 없습니다.";
 				    	
+				    	 $('#findplacebox').append(str);
+					} else{
+				    for(var i = 0; i < data.documents.length; i++){
+						var distance = data.documents[i].distance;
+						
 				    	var str = "";
-				    	str += data.documents[i].place_name + "<br>";
+				    	str += "<b>" + data.documents[i].place_name + "</b><br>";
+				    	str += "<div style='font-size:14px; margin-top:10px; margin-bottom:10px;'>" + data.documents[i].category_group_name + "<br>";
 				    	str += data.documents[i].address_name + "<img class='location' onclick='locationclick("+data.documents[i].x+", "+data.documents[i].y+")' title='위치보기' src='/images/egovframework/location.png'/>" + "<br>" ;
-				    	str += data.documents[i].category_name + "<br>";
-				    	str += data.documents[i].phone + "<br>";
-				    	str += "<a href=" + data.documents[i].place_url + " target='_blank' >자세히 보기</a><br><hr>";
+				    	if (distance > 999) {
+							distance = distance / 1000;
+							distance = distance.toFixed(1);
+							str += "여기서부터 " + distance + "km<br></div>";
+						} else{
+							str += "여기서부터 " + distance + "m<br></div>";
+						}
+				    	
+				    	str += "<a style='font-size:14px;' href=" + data.documents[i].place_url + " target='_blank' >자세히 보기</a><hr>";
 				    	
 				    	 $('#findplacebox').append(str);
 				    	
 					}
 				    
-				   
+					}
 				});
 			//	}
 				}
@@ -728,7 +793,9 @@ function savepick(roomNo, pickid, del, empty) {
 			
 			//채널 나가기
 			if(document.getElementById('delchannelbtn') == null){
-				$('#outbtndiv').append("<button class='btn btn-danger' id='outbtn'  >채널나가기</button>");
+				if('${chtype}' == 0){
+					$('#outbtndiv').append("<button class='btn btn-danger' id='outbtn'  >채널나가기</button>");
+				}
 			}
 			$(document).on('click', '#outbtn', function () {
 				if (confirm("채널을 나가시겠습니까?")) {
@@ -743,6 +810,7 @@ function savepick(roomNo, pickid, del, empty) {
 		                success     :   function(retVal){
 
 		                    if(retVal.code == "OK") {
+		                    	sendout();
 		                        alert(retVal.message);
 		                        var link = "/channel";
 		                        location.href = link;
@@ -772,9 +840,10 @@ function savepick(roomNo, pickid, del, empty) {
 	                success     :   function(retVal){
 
 	                    if(retVal.code == "OK") {
-	                        alert(retVal.message);
-	                        var link = "/channel";
-	                        location.href = link;
+	                        //alert(retVal.message);
+	                        senddel(true);
+	                        //var link = "/channel";
+	                        //location.href = link;
 	                    } else {
 	                        alert(retVal.message);
 	                    }

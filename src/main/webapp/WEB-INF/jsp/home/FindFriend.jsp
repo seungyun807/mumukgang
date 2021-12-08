@@ -41,6 +41,7 @@
 } 
 
 .modal{
+	width: 500px !important;
 	height: 300px !important;
 }
 .content{

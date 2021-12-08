@@ -50,7 +50,7 @@ public class LoginController {
 	}
 	
 	/***
-	 * 아이디 중복확인
+	 * 이메일 중복확인
 	 * 
 	 */
 	@RequestMapping(value="/idcheck")
@@ -129,7 +129,7 @@ public class LoginController {
 			  map.put("msg", "success");
 			  
 	      } else {
-	    	  System.out.println("아이디 또는 비밀번호가 일치하지 않습니다.");
+	    	  System.out.println("이메일 또는 비밀번호가 일치하지 않습니다.");
 	    	  map.put("msg", "failure");
 	    	  return "forward:/intro";
 	      }

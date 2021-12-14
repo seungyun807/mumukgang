@@ -350,7 +350,9 @@ font-size: 12px;
 			</div>
 			<div class="content">
 				<div class="good-job">
+					
 					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+					<div style="margin-bottom: 5px; margin-right: -40px;"><span style="font-size: 12px; float: right;">현재 위치에서 2km 이내로 검색합니다.</span><br></div>
 					<div class="form-group" id="findplacebox">
 					</div>
 				</div>

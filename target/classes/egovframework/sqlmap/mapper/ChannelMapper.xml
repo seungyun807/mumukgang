@@ -86,6 +86,7 @@
 	<update id="delchannel" parameterType="hashmap">
 		UPDATE channel_member SET DEL_YN = 'Y' WHERE ch_num = #{roomNo};
 		UPDATE channel_info SET DEL_YN = 'Y' WHERE ch_num = #{roomNo};
+		DELETE FROM channel_invited WHERE ch_num = #{roomNo};
 		<!-- DELETE * FROM channel_info WHERE ch_num = #{roomNo} -->
 	</update>
 	
@@ -114,7 +115,7 @@
 	</update>
 	
 	<update id="updatedelchmember" parameterType="egovframework.mumukgang.cmmn.web.vo.ChannelMember">
-		UPDATE channel_member SET DEL_YN= 'Y' WHERE email = #{email} AND ch_num = #{ch_num}
+		UPDATE channel_member SET DEL_YN= 'Y', out_date = NOW() WHERE email = #{email} AND ch_num = #{ch_num}
 	</update>
 	
 	<select id="findmycop" parameterType="hashmap" resultType="egovMap" >

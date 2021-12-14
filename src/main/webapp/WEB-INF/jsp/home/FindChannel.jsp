@@ -203,7 +203,7 @@ ion-icon {
 			$("#region").val('${chregion}').prop("selected", true);
 			$('#searchRegion').attr('value', '${chregion}');
 		}else{
-			$('#searchRegion').attr('value', '지역선택');
+			$('#searchRegion').attr('value', '전체');
 		}
 		if('${keyword}' != ""){
 			$('#searchInput').attr('value', '${keyword}');

@@ -134,7 +134,7 @@ $(function() {
             	if(status == "success") {
     				if(returnData.usedCnt > 0 ){
     					$("#id_check").css("color", "red");
-    					$("#id_check").text("사용할수 없는 이메일입니다.");
+    					$("#id_check").text("사용할 수 없는 이메일입니다.");
     				}else{
     					$("#id_check").css("color", "blue");
     					$("#id_check").text("사용가능한 이메일입니다.");
@@ -166,7 +166,7 @@ $(function() {
             	if(status == "success") {
     				if(returnData.usedCnt > 0 ){
     					$("#nickname_check").css("color", "red");
-    					$("#nickname_check").text("사용할수 없는 닉네임입니다.");
+    					$("#nickname_check").text("사용할 수 없는 닉네임입니다.");
     				}else{
     					$("#nickname_check").css("color", "blue");
     					$("#nickname_check").text("사용가능한 닉네임입니다.");
@@ -216,7 +216,7 @@ function checkId() {
 	 if((idcheck == "사용가능한 이메일입니다.") || kakaojoin){
 		 return true;
 	 } else {
-		 alert('사용할수 없는 이메일입니다.')
+		 alert('사용할 수 없는 이메일입니다.')
 		 return false;
 	 }
 }
@@ -226,7 +226,7 @@ function checkNickName() {
 	 if(nickname == "사용가능한 닉네임입니다."){
 		 return true;
 	 } else {
-		 alert('사용할수 없는 닉네임입니다.')
+		 alert('사용할 수 없는 닉네임입니다.')
 		 return false;
 	 }
 }

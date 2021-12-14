@@ -146,6 +146,12 @@ label {
 .card-body{
 	padding: 1rem 1rem 0rem;
 }
+.modal2{
+	height: 365px !important;
+}
+.modal-wrapper2.open .modal2{
+	margin-top: -140px !important;
+}
 </style>
 
 <body>
@@ -230,14 +236,14 @@ label {
 
 					<div class="form-group">
 						<div id="radio">
-							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" checked="checked"><label for="onlyfriend">비공개방(친구만 초대가능)</label>
-							<input type="radio" id="public" value="public" name="chtype"><label for="public">공개방(모두 초대가능)</label>
+							<input type="radio" id="public" value="public" name="chtype" checked="checked"><label for="public">공개방(모두 입장 가능)</label>
+							<input type="radio" id="onlyfriend" value="onlyfriend" name="chtype" ><label for="onlyfriend">비공개방(친구만 초대가능)</label>
 						</div>
 						<div id="selectpub" style="display: flex; align-items: center; display: inline;">
 							<input id="channelname" type="email" class="form-control" placeholder="채널이름" style="width: 100%" />
 							<div id="regiondiv" style="display: none; width: 25%; margin-left: 2%">
 							<select class="form-select form-select-sm" name="region" id="region">
-   								<option value="">지역선택</option>
+   								<option value="지역선택">지역선택</option>
    								<option value="전체">전체</option>
    				 				<option value="경기">경기</option>
     			 				<option value="서울">서울</option>
@@ -265,7 +271,7 @@ label {
 							<!-- </nav> -->
 						</div>
 						
-								<button class="btn trigger2" id="addfriend" style="float: right;">친구추가＋</button>
+								<button class="btn trigger2" id="addfriend" style="float: right;" disabled="true">친구초대＋</button>
 						
 						<br> <br>
 						<div id='modaldiv'>
@@ -285,16 +291,7 @@ label {
 			</div>
 			<div class="content">
 				<div class="good-job">
-					<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-					<div class="input-group col-md-12">
-						<input name="nickname" type="text" class="form-control input-lg" id="searchInput" placeholder="닉네임으로 검색해주세요" /> <span class="input-group-btn">
-							<button class="btn btn-info btn-lg" id="findbtn">
-								<ion-icon name="search-outline"></ion-icon>
-							</button>
-						</span>
-					</div>
-
-					<br>
+				
 					<div class="form-control" id="createfriendslist">
 						<!-- <nav> -->
 						<ul class="mylist">
@@ -351,7 +348,7 @@ function chcreateORupdate(state) {
 	for(var i = 0; i < localStorage.length; i++){
 		array.push(localStorage.getItem(localStorage.key(i)));
 	}
-	
+	console.log(chregion);
 	var objParams = {
 			"channelname" : $('#channelname').val(),
 			"chtype" : chtype,
@@ -443,7 +440,8 @@ function updatechannel() {
 			$('#modaldiv').empty();
 			$('#modaldiv').append(str);
 			
-			
+			$('#public').trigger('click');
+			$('#region').val('지역선택').attr("selected", true);
 			setTimeout(function() {
 	  				$('li').removeClass('change_back');
 	  				$("#channelname").val('');
@@ -467,11 +465,13 @@ function updatechannel() {
 			$("input[name='chtype']:checked").each(function(){	
 				if ($(this).val() == "onlyfriend") {
 					chtype = false;
+					$('#addfriend').attr("disabled", false);
 					$('#selectpub').css('display', 'inline');
 					$('#regiondiv').css('display', 'none');
 					$('#channelname').css('width', '100%');
 				}else{
 					chtype = true;
+					$('#addfriend').attr("disabled", true);
 					$('#selectpub').css('display', 'flex');
 					$('#regiondiv').css('display', 'inline');
 					$('#channelname').css('width', '73%');
@@ -552,12 +552,16 @@ function updatechannel() {
 								
 								
 								if (returnData.ch_type) {
+									console.log(returnData.ch_region);
+									chregion = returnData.ch_region;
 									$('#public').prop('checked', true);
 									$('#public').trigger('click');
 									$('#regiondiv').css('display', 'inline');
 									$('#region').val(returnData.ch_region).attr("selected", true);
+									
 								} else {
 									$('#onlyfriend').prop('checked', true);
+									$('#onlyfriend').trigger('click');
 									$('#regiondiv').css('display', 'none');
 									$('#region').val('지역선택').attr("selected", true);
 								}

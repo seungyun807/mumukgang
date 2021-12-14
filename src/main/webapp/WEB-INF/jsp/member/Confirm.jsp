@@ -64,7 +64,7 @@ span {
 						<label>비밀번호</label>
 						<div style="display: flex;">
 							<input name="password" type="password" id="pw" class="form-control" />
-							<button class="btn btn-secondary" style="width: 70px;">확인</button>
+							<button class="btn btn-secondary" style="width: 70px;" id="confirmbtn">확인</button>
 						</div>
 
 					</div>
@@ -93,7 +93,7 @@ function confirmpw() {
             if(retVal.code == 'OK') {
             	gotomypage();
             } else {
-            	 alert(retVal.message);
+            	alert(retVal.message);
             }
              
         },
@@ -110,6 +110,9 @@ $(document).ready(function() {
 			confirmpw();
 		}
 		event.stopPropagation();
+	});
+	$('#confirmbtn').click(function() {
+			confirmpw();
 	});
 })
 </script>

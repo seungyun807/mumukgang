@@ -5,6 +5,7 @@
 직장인들의 점심 메뉴 선택과 위치 정보<br>
 점심 시간을 위한 커뮤니티 웹 서비스
 <br><br>
+
 ## 배경
 직장인들은 항상 메뉴를 고민한다 그리고 메뉴 선택에 어려움을 겪을 때가 종종 있다. 또 서로 의견이 안 맞아 뭘 먹어야 할지 고민한다. 이런 부분을 해소시키고 메뉴 선택에 있어서 좀 더 쉽고 재미있게 하기 위해서이다. 또 사내 친목 그룹이 이미 존재해 다른 인원들과 점심을 잘 먹지 않게 되어 사내 소통이 단절되는 경우도 있다. 이러한 복합적인 점심 문화의 문제점에 해결 방안을 제시하고자 한다.
 
@@ -19,20 +20,19 @@
 <br><br>
 
 ## 개발환경
-<div>
-<img src="https://user-images.githubusercontent.com/76242399/145910565-dcf399d0-3892-4652-a60b-9fc87868f598.png" width="20%"/>
-<img src="https://user-images.githubusercontent.com/76242399/145914788-f05dfe65-8eac-455e-aaff-da309fa71187.png" width="20%"/>
-<img src="https://user-images.githubusercontent.com/76242399/145910584-e6f355f4-91c3-4f47-851e-499cd214accc.png" width="20%"/>
-<img src="https://user-images.githubusercontent.com/76242399/145910598-e9b6c802-1e4c-494d-92bd-febcb7723cd6.png" width="10%"/>
-<img src="https://user-images.githubusercontent.com/76242399/145910603-518992f5-36d3-4301-be0a-9074997282c8.png" width="20%"/>
-</div>
+![image](https://user-images.githubusercontent.com/76242399/146107059-26acdc70-0f50-4eae-9a24-e26da2428397.png)
 
+* Java
 * 전자정부프레임워크
 * 스프링
 * stomp
 * 톰캣
 * mariaDB
 <br><br>
+
+## 구조도
+![image](https://user-images.githubusercontent.com/76242399/146108633-863a45df-ef44-44f6-86bb-ad6bc3ab308c.png)
+
 ## 기능
 - [로그인](#로그인)
 - [마이페이지](#마이페이지)
@@ -48,6 +48,7 @@
 <img src="https://user-images.githubusercontent.com/76242399/145936008-0a5ffb9d-1fff-4126-8e38-8367004f7310.png" width="30%"/>
 <img src="https://user-images.githubusercontent.com/76242399/145936012-583d9162-907a-43fc-a198-001e04749c8d.png" width="30%"/>
 </div>
+<br>
 - 이메일과 비밀번호로 로그인 가능하다.<br>
 - 카카오톡으로 로그인 및 가입 가능하다.<br>
 - 회원가입 항목으로는 이메일(중복불가), 비밀번호, 닉네임(중복불가), 회사명이 존재한다.

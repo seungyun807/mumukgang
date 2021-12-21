@@ -25,13 +25,15 @@
 * Java
 * 전자정부프레임워크
 * 스프링
-* stomp
+* Stomp
+* MyBatis
+* MariaDB
+* jQuery
 * 톰캣
-* mariaDB
 <br><br>
 
 ## 📌구조도
-![image](https://user-images.githubusercontent.com/76242399/146108633-863a45df-ef44-44f6-86bb-ad6bc3ab308c.png)
+![image](https://user-images.githubusercontent.com/76242399/146853645-671e44ee-299c-4a52-a3bf-db1df018fe55.png)
 
 ## 📌기능
 - [로그인](#로그인)

@@ -20,7 +20,7 @@
 <br><br>
 
 ## 📌개발환경
-![image](https://user-images.githubusercontent.com/76242399/146107059-26acdc70-0f50-4eae-9a24-e26da2428397.png)
+![image](https://user-images.githubusercontent.com/76242399/146853743-62c8f2bc-458c-4601-a131-ae10647ac064.png)
 
 * Java
 * 전자정부프레임워크
@@ -33,7 +33,7 @@
 <br><br>
 
 ## 📌구조도
-![image](https://user-images.githubusercontent.com/76242399/146853645-671e44ee-299c-4a52-a3bf-db1df018fe55.png)
+![image](https://user-images.githubusercontent.com/76242399/146853732-bf8687a7-7d39-4987-9e70-ff8bc3bc5ba5.png)
 
 ## 📌기능
 - [로그인](#로그인)

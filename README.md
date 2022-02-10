@@ -1,5 +1,6 @@
 # 머먹GANG
-![logo](https://user-images.githubusercontent.com/76242399/145909545-6c99c6a8-7340-435c-a780-e0378cb8255c.png)
+![logo](https://user-images.githubusercontent.com/76242399/145909545-6c99c6a8-7340-435c-a780-e0378cb8255c.png)<br><br>
+📃 PDF 파일 (더 자세한 기능 설명)<br> https://drive.google.com/file/d/11dLrcWOCsIvIG33GsAlJm-4nyxdx4s56/view?usp=sharing
 <br><br>
 ## 📌개요
 직장인들의 점심 메뉴 선택과 위치 정보<br>
